@@ -1,35 +1,52 @@
 <body>
-
+<script type="text/javascript" src="/js/jquery.basictable.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-    var visitors_signs = [
-        {visitor_sign_id: "0001", person_id: "", person_image_url: "images/1527685900000_robert_johnson.jpg", first_visit: "yes", update_contact: false, person_name: "Robert Johnson", company: "Go Veterans", phone: "233-444-7777", email: "robert.johnson@goveterans.org", reason: "2", person_visiting: "Frank Tucker", citizen: "yes", classified: "yes", person_signature_url: "signatures/1527685900000_robert_johnson.jpg", datetime_in: "1527685900000", datetime_out: "1527699900000"},
+    var visitors_signs = [ ]
+    <% @visitors.each do |v| %>
+       visitors_signs.push( {
+           visitor_sign_id: '<%= v.id %>',
+           person_id: "",
+           person_image_url: "<%= v.avatar %>",
+           first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
+           update_contact: false,
+           person_name: "<%= v.name %>",
+           company: "<%= v.company %>",
+           phone: "<%= v.phone %>",
+           email: "<%= v.email %>",
+           reason: "<%= v.last_visit.visit_reason %>",
+           person_visiting: "<%= v.last_visit.person.try(:name) %>",
+           citizen: "<%= v.us_citizen? %>",
+           classified: "<%= v.last_visit.classified? %>",
+           person_signature_url: "",
+           datetime_in: "1527685900000",
+           datetime_out: "1527699900000"}
+       )
+    <% end %>
 
-        {visitor_sign_id: "0012", person_id: "0002", person_image_url: "images/1527688800000_jane_smith.jpg", first_visit: "no", update_contact: false, person_name: "Jane Smith", company: "HealthFit", phone: "444-333-0000", email: "jane.smith@healthfit.org", reason: "1", person_visiting: "Claude Hines", citizen: "yes", classified: "no", person_signature_url: "signatures/1527688800000_jane_smith.jpg", datetime_in: "1527688800000", datetime_out: "1527690590000"},
-
-        {visitor_sign_id: "0020", person_id: "0003", person_image_url: "images/1527690250000_luke_richards.jpg", first_visit: "no", update_contact: true, person_name: "Luke Richards", company: "Go Veterans", phone: "233-444-7700", email: "luke.richards@goveterans.org", reason: "2", person_visiting: "Page McNall", citizen: "yes", classified: "no", person_signature_url: "signatures/1527690250000_luke_richards.jpg", datetime_in: "1527690250000", datetime_out: ""},
-
-        {visitor_sign_id: "0031", person_id: "0004", person_image_url: "images/1527697250000_mark_matthews.jpg", first_visit: "no", update_contact: false, person_name: "Mark Matthews", company: "Go Veterans", phone: "544-377-9870", email: "mark.matthews@goveterans.org", reason: "1", person_visiting: "Frank Tucker", citizen: "yes", classified: "no", person_signature_url: "signatures/1527697250000_mark_matthews.jpg", datetime_in: "1527697250000", datetime_out: "1527704950000"},
-        {visitor_sign_id: "0032", person_id: "0004", person_image_url: "images/1527697250000_mark_matthews.jpg", first_visit: "no", update_contact: false, person_name: "Mark Matthews", company: "Go Veterans", phone: "544-377-9870", email: "mark.matthews@goveterans.org", reason: "1", person_visiting: "Frank Tucker", citizen: "yes", classified: "no", person_signature_url: "signatures/1527697250000_mark_matthews.jpg", datetime_in: "1527773490000", datetime_out: ""},
-    ];
-
-
-    var visitors_transactions = [
-        {trans_id: "0001", visitor_sign_id: "0001", person_id: "", status: "00000", recorded_by: "", datetime: ""},
-
-        {trans_id: "0002", visitor_sign_id: "0012", person_id: "0002", status: "10000", recorded_by: "", datetime: ""}]
+    var visitors_transactions = [ ]
+    <% VisitorVisitInformation.all.each do |visit| %>
+    visitors_transactions.push({
+        trans_id: "<%= visit.id %>",
+        visitor_sign_id: "<%= visit.visitor_id %>",
+        person_id: "",
+        status: "<%= visit.status %>",
+        recorded_by: "",
+        datetime: ""
+    })
+    <% end %>
 
 </script>
-
+<script src="/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $('#filter_date_from, #filter_date_to, #record_datetime_in, #record_datetime_out, #export_date_from, #export_date_to').datetimepicker({
             format: 'l, LTS'
         });
         $("#person_visiting_filter").autocomplete({
-            source: personnel
+            source: <%= raw Person.pluck :name %>
         });
         $("#company_filter").autocomplete({
-            source: companies
+            source: <%= raw Visitor.pluck(:company).uniq %>
         });
     });
 
@@ -159,12 +176,7 @@
             <label for="reason_visiting">Visit Reason:</label>
           </div>
           <div class="col-xs-12 col-sm-9 col-md-9">
-            <input type="text" class="form-control" id="reason_visiting" name="reason_visiting" disabled>
-            <select class="form-control" id="record_reason" name="record_reason">
-              <option value="0">Select</option>
-              <option value="1">Reason 1</option>
-              <option value="2">Reason 2</option>
-            </select>
+            <input type="text" class="form-control" id="record_reason" name="record_reason">
           </div>
         </div>
 
@@ -254,13 +266,13 @@
 
   <!--- *******************************************************************************************  -->
 
-<%= render 'visitor_log/partials/filter_from_div' %>
+  <%= render 'visitor_log/partials/filter_from_div' %>
 
 
   <!-- ***********************************************************************************************   -->
 
 
- <%= render 'visitor_log/partials/export_from_div' %>
+  <%= render 'visitor_log/partials/export_from_div' %>
 
 
   <!--- *******************************************************************************************  -->
@@ -369,7 +381,7 @@
         for (v = visitors_signs.length - 1; v >= 0; v -= 1) {
             //  alert('hi');
             newinput = "";
-            thisreason = $("#record_reason option[value='" + visitors_signs[v].reason + "']").text();
+            thisreason =  visitors_signs[v].reason ;
             d = new Date(Number(visitors_signs[v].datetime_in));
             thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
             if (visitors_signs[v].datetime_out !== "") {
@@ -391,9 +403,9 @@
                 }
             }
             if (transfound === true) {
-                newinput = '<tr id="' + visitors_signs[v].visitor_sign_id + '"><td scope="row"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '"></td><td class="personid hideme" hidden>' + visitors_signs[v].person_id + '</td>';
+                newinput = '<tr id=" + visitors_signs[v].visitor_sign_id + "><td scope="row"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '" style="width: 41px; height: 86px;"></td><td class="personid hideme" hidden>' + visitors_signs[v].person_id + '</td>';
                 if (visitors_transactions[t].person_id !== "") {
-                    newinput = newinput + '<td><a href="/visitor_transactions.html?personid=' + visitors_transactions[t].person_id + '&visitorsignid=' + visitors_signs[v].visitor_sign_id + '">' + visitors_signs[v].person_name + '</a></td>';
+                    newinput = newinput + '<td><a href="visitor_transactions.html?personid=' + visitors_transactions[t].person_id + '&visitorsignid=' + visitors_signs[v].visitor_sign_id + '">' + visitors_signs[v].person_name + '</a></td>';
                 } else {
                     newinput = newinput + '<td>' + visitors_signs[v].person_name + '</td>';
                 }
