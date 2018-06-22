@@ -83,7 +83,6 @@ $(document).ready(function () {
     $("#visit_summary").hide();
 
     var signinbtn = document.getElementById("signin_btn");
-    var signoutbtn = document.getElementById("signout_btn");
     var missedbtn = document.getElementById("missed_btn");
 
     if (window.location.href.indexOf("signin") > 0) {
@@ -98,16 +97,7 @@ $(document).ready(function () {
             jpeg_quality: 90
         });
         Webcam.attach( '#person_image_camera' );
-        signoutbtn.style.display = "none";
-        $("#capture_photo").show();
-    } else {
-        $(".recognize_instructions").hide();
-        document.getElementById("person_image").src = "/images/recognize_photo.jpg";
-        $("#signin_capture_msg").hide();
-        $("#signin_check_visit").hide();
-        $("#signout_capture_msg").show();
-        missedbtn.style.display = "none";
-        signinbtn.style.display = "none";
+
         $("#capture_photo").show();
     }
 
@@ -116,8 +106,7 @@ $(document).ready(function () {
             document.getElementById("display_company").innerHTML = $("#company").val().trim();
             document.getElementById("display_phone").innerHTML = $("#phone").val().trim();
             document.getElementById("display_email").innerHTML = $("#email").val().trim();
-            var j = document.getElementById("reason").selectedIndex;
-            document.getElementById("display_reason").innerHTML = document.getElementsByTagName("option")[j].value;
+            document.getElementById("display_reason").innerHTML = $('#reason').val();
             document.getElementById("display_personvisit").innerHTML = $("#person_visiting").val().trim();
             if (document.getElementById("citizen_yes").checked === true) {
                 document.getElementById("display_citizen").innerHTML = "yes";
@@ -166,12 +155,8 @@ $(document).ready(function () {
             $("#datetime_out").val(thistime);
         }
         if (window.location.href.indexOf("signout") > 0) {
-            signinbtn.style.display = "none";
-            signoutbtn.style.display = "inline-block";
-            $("#display_date_div").show();
         } else {
             signinbtn.style.display = "inline-block";
-            signoutbtn.style.display = "none";
         }
         if (window.location.href.indexOf("signin") < 0) {
             document.getElementById("summary_back_btn").style.display = "none";
@@ -457,25 +442,6 @@ $(document).ready(function () {
         // localStorage.setItem("visitors_transactions", visitors_transactions);
         //  alert(visitors_transactions[visitors_transactions.length - 1].trans_id + "; " + visitors_transactions[visitors_transactions.length - 1].person_id + "; " + visitors_transactions[visitors_transactions.length - 1].status);
           });
-    $("#signout_btn").click(function (e) {
-        e.preventDefault();
-        var thistime, validTimeout = true;
-        if (window.location.href.indexOf("missed") < 0) {
-            thistime = Date.now();
-        } else {
-            if ($("#datetime_out").val() !== "") {
-                thistime = $("#datetime_out").val();
-                thistime = Date.parse(thistime);
-            } else {
-                validTimeout = false;
-                alert("Must input Time Out!");
-            }
-        }
-        if (validTimeout === true) {
-            $("#datetime_out").val(thistime);
-            alert('Visitor Signed Out; Make Badge Inactive');
-            window.location.href = "visitor_bye.html?person_name=" + document.getElementById("display_name").innerHTML + "&person_visiting=" + document.getElementById("display_personvisit").innerHTML + "&time_out=" + $("#datetime_out").val();
-        }
-    });
+
 
 });

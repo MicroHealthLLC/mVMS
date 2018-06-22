@@ -1,5 +1,6 @@
 class WelcomeController < ApplicationController
   before_action :authenticate_user!
+
   def index
   end
 
@@ -8,6 +9,25 @@ class WelcomeController < ApplicationController
   end
 
   def visitors
+
+  end
+
+  def visitor_signout
+    if params[:visitor_id]
+      @visitor = Visitor.find(params[:visitor_id])
+      @visitor.last_visit.update_attributes({sign_out_date: Time.now })
+      redirect_to root_path
+      return
+    end
+    @visitors = Visitor.joins(:visitor_visit_informations).merge(VisitorVisitInformation.where(sign_out_date: nil))
+    if request.post?
+      name = params[:name]
+      @visitor = @visitors.where(name: name).first
+      if @visitor.nil?
+        flash[:error] = 'No Visitor found with this name'
+        redirect_to "/visitor_signout"
+      end
+    end
 
   end
 

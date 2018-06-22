@@ -4,4 +4,8 @@ class Visitor < ApplicationRecord
   def personvisiting
     visitor_visit_informations.last.try(:person_visiting)
   end
+
+  def last_visit
+    visitor_visit_informations.last || VisitorVisitInformation.new
+  end
 end
