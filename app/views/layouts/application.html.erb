@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>mVMS</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="/js/jquery-3.2.1.min.js"></script>
+  <script src="/js/moment.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/bootstrap-theme2.css">
+  <link rel="stylesheet" href="/css/mvms_style.css">
+
+  <%= csrf_meta_tags %>
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+  <style>
+    @media print {
+      .no_print {
+        display: none;
+      }
+      .myDivToPrint {
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<%= yield %>
+</body>
+</html>
