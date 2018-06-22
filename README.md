@@ -61,6 +61,12 @@ rails db:setup
 
 rake assets:precompile
 
+#generate your secrets for config/secrets.yml
+
+rake secret
+
+put that output in config/secretys.yml
+
 # Configure Nginx repo for CentOS 7
 
 nano /etc/yum.repos.d/nginx.repo
