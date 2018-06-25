@@ -12,7 +12,7 @@ class VisitorLogController < ApplicationController
     @visitors = Visitor.all
   end
 
-  def visitor_lof_all_statuses
-
+  def visitors_log_all_statuses
+    @visitors = Visitor.all
   end
 end

@@ -6,7 +6,9 @@ var validform;
 function validatePhoto() {
     validform = true;
     var thisimage = $(document.getElementById("person_image")).find('img').attr("src");
-    if (($("#capture_person_name").val().trim() === "") || (thisimage.indexOf("images/click_photo.jpg") > -1) || (thisimage.indexOf("images/recognize_photo.jpg") > -1)) {
+    if(thisimage === undefined)
+        return false
+    if (($("#capture_person_email").val().trim() === "") || (thisimage.indexOf("images/click_photo.jpg") > -1) || (thisimage.indexOf("images/recognize_photo.jpg") > -1)) {
         validform = false;
     }
     if ((window.location.href.indexOf("signin") > 0) && (document.getElementById("first_visit_no").checked === false) && (document.getElementById("first_visit_yes").checked === false)) {
@@ -161,7 +163,7 @@ $(document).ready(function () {
         if (window.location.href.indexOf("signin") < 0) {
             document.getElementById("summary_back_btn").style.display = "none";
         }
-        document.getElementById("display_name").innerHTML = $("#capture_person_name").val().trim();
+        document.getElementById("display_name").innerHTML = $("#person_name").val().trim();
         $("#visit_summary").show();
     }
 
@@ -202,19 +204,38 @@ $(document).ready(function () {
         if (window.location.href.indexOf("signin") > 0) {
             var validUser = validatePhoto();
             if (validUser === true) {
-                $("#capture_complete_msg").hide();
-                $("#capture_photo").hide();
-                $("#person_name").val($("#capture_person_name").val().trim());
-                if ((document.getElementById("first_visit_no").checked === true) && (document.getElementById("update_contact").checked === false)) {
-                    document.getElementById("company").readOnly = true;
-                    document.getElementById("phone").readOnly = true;
-                    document.getElementById("email").readOnly = true;
-                } else {
-                    document.getElementById("company").readOnly = false;
-                    document.getElementById("phone").readOnly = false;
-                    document.getElementById("email").readOnly = false;
-                }
-                $("#contact_info").show();
+                $.ajax({
+                    url: "/check_visitor.json",
+                    type: "post",
+                    data: {email: $("#capture_person_email").val().trim(),
+                        first_visit: (document.getElementById("first_visit_yes").checked === true)},
+                    success: function(json, d){
+                        if(!json['success'])
+                            alert(json['message'])
+                        document.getElementById("company").value = json['company']
+                        document.getElementById("phone").value = json['phone']
+                        document.getElementById("person_name").value = json['name']
+                        document.getElementById("email").value = $("#capture_person_email").val().trim()
+                        document.getElementById("citizen_yes").value = json['us_citizen']
+                        document.getElementById("citizen_yes").value = !json['us_citizen']
+                        $("#capture_complete_msg").hide();
+                        $("#capture_photo").hide();
+                        if ((document.getElementById("first_visit_no").checked === true) && (document.getElementById("update_contact").checked === false)) {
+                            document.getElementById("company").readOnly = true;
+                            document.getElementById("phone").readOnly = true;
+                            document.getElementById("person_name").readOnly = true;
+                        } else {
+                            document.getElementById("company").readOnly = false;
+                            document.getElementById("phone").readOnly = false;
+                            document.getElementById("person_name").readOnly = false;
+                        }
+                        document.getElementById("email").readOnly = true;
+                        document.getElementById("person_name").readOnly = false;
+                        $("#contact_info").show();
+
+                    }
+                })
+
 
             } else {
                 $("#capture_complete_msg").show();
@@ -227,8 +248,8 @@ $(document).ready(function () {
             setupSummary();
         }
     });
-    $("#capture_person_name").change(function () {
-        if ($("#capture_person_name").val().trim() !== "") {
+    $("#capture_person_email").change(function () {
+        if ($("#capture_person_email").val().trim() !== "") {
             setTimeout(function () {
                 document.getElementById("person_image").src = "/images/person.jpg";
             }, 1200);
@@ -435,7 +456,10 @@ $(document).ready(function () {
             data: thissign,
             success: function(json, d){
                 console.log(json);
-                window.location.href = "/visitor_badge?visitor_id="+json["visitor"];
+                if(json['success'])
+                    window.location.href = "/visitor_badge?visitor_id="+json["visitor"];
+                else
+                    alert(json['errors'])
             }
         })
         // localStorage.setItem("visitors_signs", visitors_signs);

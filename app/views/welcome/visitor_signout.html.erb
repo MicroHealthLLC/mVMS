@@ -6,7 +6,7 @@
 
 <!--  <script src="js/seeds.js"></script> -->
 <script type="text/javascript">
-    var visitors = <%= raw @visitors.pluck(:name) %>
+    var visitors = <%= raw @visitors.pluck(:email) %>
         $(function () {
             $("#capture_person_name").autocomplete({
                 source: visitors

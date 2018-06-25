@@ -8,10 +8,10 @@ production:
 
 development:
   adapter: mysql2
-  database: mvms_prod
+  database: mvms_dev
   host: localhost
   username: root
-  password: S1mul4ti0n!!!
+  password: admin
   encoding: utf8
   pool: 25
 

@@ -35,24 +35,64 @@ class WelcomeController < ApplicationController
 
   end
 
+  def check_visitor
+    visitor = Visitor.where({
+                                email: params[:email].to_s.strip
+                            }).first_or_initialize
+    json = if params[:first_visit].to_s == 'false' and visitor.persisted?
+             {success: true}
+           elsif params[:first_visit].to_s == 'true' and visitor.persisted?
+             {success: false, message: "It seems that this is not your first visit. You can update your data."}
+           elsif params[:first_visit].to_s == 'false' and visitor.new_record?
+             {success: false, message: "We didn't find your email in our DB, we will create a new record. "}
+           else
+             {success: true}
+           end
+    json.merge!({
+                    phone: visitor.phone,
+                    company: visitor.company,
+                    name: visitor.name,
+                    us_citizen: visitor.us_citizen?
+                })
+      render json:  json
+  end
+
   def create_visitor
     visitor = Visitor.where({
-                                email: params[:email],
-                                phone: params[:phone],
-                                company: params[:company],
-                                name: params[:person_name],
-                                us_citizen: params[:us_citizen]
+                                email: params[:email].to_s.strip
                             }).first_or_initialize
-    visitor.avatar ||= params[:person_image_url]
+    if params[:update_contact].to_s == 'true'
+      if visitor.persisted?
+        visitor.attributes = {
+            phone: params[:phone],
+            company: params[:company],
+            name: params[:person_name],
+            us_citizen: params[:us_citizen]
+        }
+        visitor.avatar = params[:person_image_url]
+      end
+    else
+      visitor.attributes = {
+          phone: params[:phone],
+          company: params[:company],
+          name: params[:person_name],
+          us_citizen: params[:us_citizen]
+      }
+      visitor.avatar ||= params[:person_image_url]
+    end
+    visitor.save
+    if visitor.persisted?
+      visitor.visitor_visit_informations.create({
+                                                    visit_reason: params[:reason],
+                                                    classified: params[:classified],
+                                                    person_visiting_id: Person.find_by_name(params[:person_visiting]).try(:id),
+                                                    sign_in_date: Time.now
+                                                })
+      render json: {success: true, visitor: visitor.id }
+    else
+      render json: {success: false, errors: visitor.errors.full_messages  }
+    end
 
-    visitor.save if visitor.new_record?
-    visitor.visitor_visit_informations.create({
-                                                  visit_reason: params[:reason],
-                                                  classified: params[:classified],
-                                                  person_visiting_id: Person.find_by_name(params[:person_visiting]).try(:id),
-                                                  sign_in_date: Time.now
-                                              })
-    render json: {success: true, visitor: visitor.id }
   end
 
   def visitor_badge

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   get '/visitors', to: 'welcome#visitors'
   get '/visitor_bye', to: 'welcome#visitor_bye'
   match '/visitor_signout', to: 'welcome#visitor_signout', via: [:get, :post]
+  match '/check_visitor', to: 'welcome#check_visitor', via: [:get, :post]
   get '/visitor_sign_form', to: 'welcome#visitor_sign_form'
   get '/visitor_badge', to: 'welcome#visitor_badge'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
