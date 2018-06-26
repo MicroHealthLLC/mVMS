@@ -123,16 +123,6 @@
             <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" readonly>
           </div>
         </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-2 col-md-2">
-            <label for="person_image_src">Person Image Link:</label>
-          </div>
-          <div class="col-xs-12 col-sm-10 col-md-10">
-            <input type="text" class="form-control" id="person_image_src" name="person_image_src" readonly>
-          </div>
-        </div>
-
         <div class="buttonrow">
           <button type="reset" id="visitor_cancel_btn" class="btn btn-warning">Cancel</button>
           <button type="submit" id="visitor_submit_btn" class="btn btn-success">Create</button>
@@ -244,15 +234,6 @@
           </div>
           <div class="col-xs-12 col-sm-9">
             <input type="text" class="form-control" id="record_datetime_out" name="record_datetime_out" readonly>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            <label for="visit_image_src">Visit Image Link:</label>
-          </div>
-          <div class="col-xs-12 col-sm-9">
-            <input type="text" class="form-control" id="visit_image_src" name="visit_image_src" readonly>
           </div>
         </div>
 
@@ -734,14 +715,12 @@
 
         $(".first_visitin_btn, .first_visitout_btn, .update_visitin_btn, " +
             ".update_visitout_btn, .missed_fv_btn, .missed_uv_btn").click(function () {
-            var thisimage = $(this).closest('tr').find("img").attr("src");
             setTimeout(function () {
                 $("#visitor_form #visitor_person_id").val(document.getElementById("visitors_log_table").rows[thisrow].cells[1].innerText);
                 $("#visitor_form #visitor_person_name").val(document.getElementById("visitors_log_table").rows[thisrow].cells[2].innerText);
                 $("#visitor_form #company").val(document.getElementById("visitors_log_table").rows[thisrow].cells[3].innerText);
                 $("#visitor_form #phone").val(document.getElementById("visitors_log_table").rows[thisrow].cells[4].innerText);
                 $("#visitor_form #email").val(document.getElementById("visitors_log_table").rows[thisrow].cells[5].innerText);
-                $("#visitor_form #person_image_src").val(thisimage);
                 if ($("#visitor_form #visitor_person_id").val() !== "") {
                     document.getElementById("visitor_submit_btn").innerHTML = "Update";
                 } else {
@@ -761,7 +740,6 @@
                 document.getElementById("record_datetime_out").readOnly = true;
             }
             var x = this.parentNode;
-            var thisimage = $(this).closest('tr').find("img").attr("src");
             x = x.parentNode;
             x = x.parentNode;
             setTimeout(function () {
@@ -787,7 +765,6 @@
                 }
                 $("#record_visit_form #record_datetime_in").val(document.getElementById("visitors_log_table").rows[thisrow].cells[11].innerText);
                 $("#record_visit_form #record_datetime_out").val(document.getElementById("visitors_log_table").rows[thisrow].cells[12].innerText);
-                $("#record_visit_form #visit_image_src").val(thisimage);
                 var thistransid = document.getElementById("visitors_log_table").rows[thisrow].cells[15].innerText;
                 if ((thistransid === "01110") || (thistransid === "10110") || (thistransid === "21110") || (thistransid === "01102") || (thistransid === "10102") || (thistransid === "21102")) {
                     document.getElementById("record_visit_submit_btn").innerHTML = "Update";
