@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :people
   get 'admin', to: 'visitor_log#index'
   get 'visitor_log/index'
   get '/visitor_log', to: 'visitor_log#index'
