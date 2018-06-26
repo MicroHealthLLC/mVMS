@@ -1,9 +1,8 @@
-<p id="notice"><%= notice %></p>
-
+<%= link_to 'Edit', edit_person_path(@person), class: 'btn btn-success pull-right' %>
+<%= link_to 'Back', people_path, class: 'btn btn-warning pull-right' %>
 <p>
   <strong>Name:</strong>
   <%= @person.name %>
 </p>
 
-<%= link_to 'Edit', edit_person_path(@person) %> |
-<%= link_to 'Back', people_path %>
+

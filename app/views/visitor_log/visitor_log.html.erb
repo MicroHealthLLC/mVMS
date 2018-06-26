@@ -2,25 +2,25 @@
 <script type="text/javascript" src="/js/jquery.basictable.min.js"></script>
 <script type="text/javascript" charset="utf-8">
     var visitors_signs = [ ]
-    <% @visitors.each do |v| %>
-       visitors_signs.push( {
-           visitor_sign_id: '<%= v.id %>',
-           person_id: "",
-           person_image_url: "<%= v.avatar %>",
-           first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
-           update_contact: false,
-           person_name: "<%= v.name %>",
-           company: "<%= v.company %>",
-           phone: "<%= v.phone %>",
-           email: "<%= v.email %>",
-           reason: "<%= v.last_visit.visit_reason %>",
-           person_visiting: "<%= v.status || v.last_visit.person.try(:name) %>",
-           citizen: "<%= v.us_citizen? %>",
-           classified: "<%= v.last_visit.classified? %>",
-           person_signature_url: "",
-           datetime_in: "<%= v.last_visit.sign_in_date.to_i %>000",
-           datetime_out: "<%=  v.last_visit.sign_out_date ? v.last_visit.sign_out_date.to_i * 1000 : '' %>"}
-       )
+    <% Visitor.all.each do |v| %>
+    visitors_signs.push( {
+        visitor_sign_id: '<%= v.id %>',
+        person_id: '<%= v.id %>',
+        person_image_url: "<%= v.avatar %>",
+        first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
+        update_contact: false,
+        person_name: "<%= v.name %>",
+        company: "<%= v.company %>",
+        phone: "<%= v.phone %>",
+        email: "<%= v.email %>",
+        reason: "<%= v.last_visit.visit_reason %>",
+        person_visiting: "<%=  v.last_visit.person.try(:name) %>",
+        citizen: "<%= v.us_citizen? %>",
+        classified: "<%= v.last_visit.classified? %>",
+        person_signature_url: "",
+        datetime_in: "<%= v.last_visit.sign_in_date.to_i %>000",
+        datetime_out: "<%=  v.last_visit.sign_out_date ? v.last_visit.sign_out_date.to_i * 1000 : '' %>"}
+    )
     <% end %>
 </script>
 <script type="text/javascript" charset="utf-8">
@@ -29,14 +29,15 @@
     visitors_transactions.push({
         trans_id: "<%= visit.id %>",
         visitor_sign_id: "<%= visit.visitor_id %>",
-        person_id: "",
+        person_id: '<%= visit.visitor_id %>',
         status: "<%= visit.status %>",
-        recorded_by: "",
-        datetime: ""
+        recorded_by: "<%= visit.recorded_by %>",
+        datetime: "<%= visit.updated_at.to_i*1000 %>"
     })
     <% end %>
 
 </script>
+
 <script src="/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
     $(function () {
@@ -70,180 +71,13 @@
 
 <div id="main3" class="container">
 
-  <div id="visitor_form_div">
-    <button id="close_visitor_form_btn"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-    <form id="visitor_form">
-      <div class="form-group">
-        <h2>Visitor Form</h2>
 
-        <div class="row" hidden>
-          <div class="col-xs-12">
-            <input type="text" class="form-control" id="visitor_sign_id" name="visitor_sign_id" readonly>
-          </div>
-        </div>
 
-        <div class="row" hidden>
-          <div class="col-xs-12">
-            <input type="text" class="form-control" id="visitor_person_id" name="visitor_person_id" readonly>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-2 col-md-2">
-            <label for="visitor_person_name">Name:</label>
-          </div>
-          <div class="col-xs-12 col-sm-10 col-md-10">
-            <input type="text" class="form-control" id="visitor_person_name" name="visitor_person_name" readonly>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-2 col-md-2">
-            <label for="company">Company:</label>
-          </div>
-          <div class="col-xs-12 col-sm-10 col-md-10">
-            <input type="text" class="form-control" id="company" name="company" readonly>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-2 col-md-2">
-            <label for="phone">Phone:</label>
-          </div>
-          <div class="col-xs-12 col-sm-10 col-md-10">
-            <input type="text" class="form-control" id="phone" name="phone" readonly>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-2 col-md-2">
-            <label for="email">Email:</label>
-          </div>
-          <div class="col-xs-12 col-sm-10 col-md-10">
-            <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" readonly>
-          </div>
-        </div>
-        <div class="buttonrow">
-          <button type="reset" id="visitor_cancel_btn" class="btn btn-warning">Cancel</button>
-          <button type="submit" id="visitor_submit_btn" class="btn btn-success">Create</button>
-        </div>
-      </div>
-    </form>
-  </div><!-- visitor_div  -->
-
+  <%= render 'visitor_log/partials/visitor_form_div' %>
 
   <!-- ***********************************************************************************************   -->
 
-
-  <div id="record_visit_form_div">
-    <button id="close_record_visit_form_btn"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-    <form id="record_visit_form">
-      <div class="form-group">
-        <h2>Record Person Visit</h2>
-
-        <div class="row" hidden>
-          <div class="col-xs-12">
-            <input type="text" class="form-control" id="record_visit_id" name="record_visit_id" readonly>
-          </div>
-        </div>
-
-        <div class="row" hidden>
-          <div class="col-xs-12">
-            <input type="text" class="form-control" id="record_person_id" name="record_person_id" readonly>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-3 col-md-3">
-            <label for="record_person_name">Name:</label>
-          </div>
-          <div class="col-xs-12 col-sm-9 col-md-9">
-            <input type="text" class="form-control" id="record_person_name" name="record_person_name" readonly>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-3 col-md-3">
-            <label for="reason_visiting">Visit Reason:</label>
-          </div>
-          <div class="col-xs-12 col-sm-9 col-md-9">
-            <input type="text" class="form-control" id="record_reason" name="record_reason">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-3 col-md-3">
-            <label for="person_visiting">Person Visiting:</label>
-          </div>
-          <div class="col-xs-12 col-sm-9 col-md-9">
-            <input type="text" class="form-control" id="person_visiting" name="person_visiting" readonly>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-4 col-sm-3">
-            <p class="formlabel">U.S. Citizen:</p>
-          </div>
-          <div class="col-xs-4 col-sm-5">
-            <div class="form-check">
-              <label class="form-check-label" for="citizen_yes" id="citizen_yes_label">
-                <input type="radio" class="form-check-input" name="citizen" id="citizen_yes" value="yes">
-                Yes</label>
-            </div>
-          </div>
-          <div class="col-xs-4">
-            <div class="form-check">
-              <label class="form-check-label" for="citizen_no" id="citizen_no_label">
-                <input type="radio" class="form-check-input" name="citizen" id="citizen_no" value="no">
-                No</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-4 col-sm-3">
-            <p class="formlabel">Classified:</p>
-          </div>
-          <div class="col-xs-4 col-sm-5">
-            <div class="form-check">
-              <label class="form-check-label" for="classified_yes" id="classified_yes_label">
-                <input type="radio" class="form-check-input" name="classified" id="classified_yes" value="yes">
-                Yes</label>
-            </div>
-          </div>
-          <div class="col-xs-4 col-sm-4">
-            <div class="form-check">
-              <label class="form-check-label" for="classified_no" id="classified_no_label">
-                <input type="radio" class="form-check-input" name="classified" id="classified_no" value="no">
-                No</label>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            <label for="record_datetime_in">Signed In:</label>
-          </div>
-          <div class="col-xs-12 col-sm-9">
-            <input type="text" class="form-control" id="record_datetime_in" name="record_datetime_in" readonly>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-3">
-            <label for="record_datetime_out">Signed Out:</label>
-          </div>
-          <div class="col-xs-12 col-sm-9">
-            <input type="text" class="form-control" id="record_datetime_out" name="record_datetime_out" readonly>
-          </div>
-        </div>
-
-        <div class="buttonrow">
-          <button type="reset" id="record_visit_cancel_btn" class="btn btn-warning">Cancel</button>
-          <button type="submit" id="record_visit_submit_btn" class="btn btn-success">Create</button>
-        </div>
-      </div>
-    </form>
-  </div><!-- record_visit_div  -->
+  <%= render 'visitor_log/partials/record_visit_form_div' %>
 
   <!--- *******************************************************************************************  -->
 
@@ -379,9 +213,9 @@
                 }
             }
             if (transfound === true) {
-                newinput = '<tr id=" + visitors_signs[v].visitor_sign_id + "><td scope="row"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '" style="width: 41px; height: 86px;"></td><td class="personid hideme" hidden>' + visitors_signs[v].person_id + '</td>';
+                newinput = '<tr id="' + visitors_signs[v].visitor_sign_id + '"><td scope="row"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '" style="width: 41px; height: 86px;"></td><td class="personid hideme" hidden>' + visitors_signs[v].person_id + '</td>';
                 if (visitors_transactions[t].person_id !== "") {
-                    newinput = newinput + '<td><a href="visitor_transactions.html?personid=' + visitors_transactions[t].person_id + '&visitorsignid=' + visitors_signs[v].visitor_sign_id + '">' + visitors_signs[v].person_name + '</a></td>';
+                    newinput = newinput + '<td><a href="/visitor_log/visitor_transactions?personid=' + visitors_transactions[t].person_id + '&visitorsignid=' + visitors_signs[v].visitor_sign_id + '">' + visitors_signs[v].person_name + '</a></td>';
                 } else {
                     newinput = newinput + '<td>' + visitors_signs[v].person_name + '</td>';
                 }
@@ -721,6 +555,7 @@
                 $("#visitor_form #company").val(document.getElementById("visitors_log_table").rows[thisrow].cells[3].innerText);
                 $("#visitor_form #phone").val(document.getElementById("visitors_log_table").rows[thisrow].cells[4].innerText);
                 $("#visitor_form #email").val(document.getElementById("visitors_log_table").rows[thisrow].cells[5].innerText);
+                $("#visitor_form").attr('action', '/update_visitor?visitor_id=' + document.getElementById("visitors_log_table").rows[thisrow].cells[5].innerText);
                 if ($("#visitor_form #visitor_person_id").val() !== "") {
                     document.getElementById("visitor_submit_btn").innerHTML = "Update";
                 } else {
@@ -746,22 +581,24 @@
                 $("#record_visit_form #record_visit_id").val(x.id);
                 $("#record_visit_form #record_person_id").val(document.getElementById("visitors_log_table").rows[thisrow].cells[1].innerText);
                 $("#record_visit_form #record_person_name").val(document.getElementById("visitors_log_table").rows[thisrow].cells[2].innerText);
+                $("#record_visit_form").attr('action', '/update_visitor/');
+
                 $("#reason_visiting").val(document.getElementById("visitors_log_table").rows[thisrow].cells[7].innerText);
                 document.getElementById("record_reason").value = document.getElementById("visitors_log_table").rows[thisrow].cells[6].innerText;
-                $("#record_visit_form #person_visiting").val(document.getElementById("visitors_log_table").rows[thisrow].cells[8].innerText);
+                $("#record_visit_form #person_visiting").find('option[value="'+ document.getElementById("visitors_log_table").rows[thisrow].cells[8].innerText+'"]').attr('selected', 'selected');
                 if (document.getElementById("visitors_log_table").rows[thisrow].cells[9].innerText === "yes") {
                     $("#record_visit_form #citizen_yes").prop("checked", "true");
-                    $("#record_visit_form #citizen_no").prop("disabled", "true");
+//                    $("#record_visit_form #citizen_no").prop("disabled", "true");
                 } else {
                     $("#record_visit_form #citizen_no").prop("checked", "true");
-                    $("#record_visit_form #citizen_yes").prop("disabled", "true");
+//                    $("#record_visit_form #citizen_yes").prop("disabled", "true");
                 }
                 if (document.getElementById("visitors_log_table").rows[thisrow].cells[10].innerText === "yes") {
                     $("#record_visit_form #classified_yes").prop("checked", "true");
-                    $("#record_visit_form #classified_no").prop("disabled", "true");
+//                    $("#record_visit_form #classified_no").prop("disabled", "true");
                 } else {
                     $("#record_visit_form #classified_no").prop("checked", "true");
-                    $("#record_visit_form #classified_yes").prop("disabled", "true");
+//                    $("#record_visit_form #classified_yes").prop("disabled", "true");
                 }
                 $("#record_visit_form #record_datetime_in").val(document.getElementById("visitors_log_table").rows[thisrow].cells[11].innerText);
                 $("#record_visit_form #record_datetime_out").val(document.getElementById("visitors_log_table").rows[thisrow].cells[12].innerText);

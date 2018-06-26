@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   match '/create_visitor', to: 'welcome#create_visitor', via: [:get, :post]
 
+  get '/update_visitor', to: 'welcome#update_visitor'
   get '/visitors', to: 'welcome#visitors'
   get '/visitor_bye', to: 'welcome#visitor_bye'
   match '/visitor_signout', to: 'welcome#visitor_signout', via: [:get, :post]

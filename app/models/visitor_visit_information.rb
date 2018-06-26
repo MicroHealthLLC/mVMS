@@ -9,6 +9,7 @@ class VisitorVisitInformation < ApplicationRecord
       return '02222'
     end
     if sign_out_date.nil?
+      return '10002' if sign_in_date.nil?
       if sign_in_date.to_date < Date.today.to_date
         '10002'
       else

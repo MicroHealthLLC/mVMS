@@ -44,7 +44,7 @@ h1 {margin-top:0;text-align:right;}
 #visitor_form label, #record_visit_form label, #export_form label, #filter_signlog_form label, #filter_trans_form label  {clear:both;margin-top:20px;margin-bottom:10px;}
 #record_visit_form p.formlabel, #filter_signlog_form p.formlabel, #filter_trans_form p.formlabel {margin-top:25px;margin-bottom:10px;font-weight:normal;font-weight:bold;}
 #filter_signlog_form p.formlabel,#filter_trans_form p.formlabel {margin-top:5px;}
-#record_reason {display:none;}
+
 #main3 h2 {font-size:1.75em;font-family:Verdana,Arial,Helvetica,sans-serif;text-align:left;color:#419641;}
 
 table {border:1px solid #666666;}

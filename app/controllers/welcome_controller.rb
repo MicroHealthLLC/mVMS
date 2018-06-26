@@ -31,6 +31,20 @@ class WelcomeController < ApplicationController
 
   end
 
+  def update_visitor
+    visitor = Visitor.find_by_id params[:record_visit_id]
+    if visitor
+      last_visit = visitor.last_visit
+      last_visit.sign_out_date = Time.at(params[:record_datetime_out][0..-4].to_i)
+      last_visit.visit_reason =  params[:record_reason]
+      last_visit.classified =  params[:classified] == 'yes'
+      last_visit.us_citizen =  params[:citizen]== 'yes'
+      last_visit.person_visiting_id = Person.find_by_name( params[:person_visiting]).id
+      last_visit.recorded_by = current_user.full_name
+      last_visit.save
+    end
+    redirect_to '/admin'
+  end
   def visitor_bye
 
   end
@@ -70,6 +84,14 @@ class WelcomeController < ApplicationController
             us_citizen: params[:us_citizen]
         }
         visitor.avatar = params[:person_image_url]
+      else
+        visitor.attributes = {
+            phone: params[:phone],
+            company: params[:company],
+            name: params[:person_name],
+            us_citizen: params[:us_citizen]
+        }
+        visitor.avatar ||= params[:person_image_url]
       end
     else
       visitor.attributes = {

@@ -4,10 +4,10 @@
 <script type="text/javascript" src="/js/jquery.basictable.min.js"></script>
 <script type="text/javascript" charset="utf-8">
     var visitors_signs = [ ]
-    <% @visitors.each do |v| %>
+    <% Visitor.all.each do |v| %>
     visitors_signs.push( {
         visitor_sign_id: '<%= v.id %>',
-        person_id: "",
+        person_id: '<%= v.id %>',
         person_image_url: "<%= v.avatar %>",
         first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
         update_contact: false,
@@ -16,7 +16,7 @@
         phone: "<%= v.phone %>",
         email: "<%= v.email %>",
         reason: "<%= v.last_visit.visit_reason %>",
-        person_visiting: "<%= v.status || v.last_visit.person.try(:name) %>",
+        person_visiting: "<%=  v.last_visit.person.try(:name) %>",
         citizen: "<%= v.us_citizen? %>",
         classified: "<%= v.last_visit.classified? %>",
         person_signature_url: "",
@@ -31,14 +31,15 @@
     visitors_transactions.push({
         trans_id: "<%= visit.id %>",
         visitor_sign_id: "<%= visit.visitor_id %>",
-        person_id: "",
+        person_id: '<%= visit.visitor_id %>',
         status: "<%= visit.status %>",
-        recorded_by: "",
-        datetime: ""
+        recorded_by: "<%= visit.recorded_by %>",
+        datetime: "<%= visit.updated_at.to_i*1000 %>"
     })
     <% end %>
 
 </script>
+
 <script src="/js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
     $(function () {

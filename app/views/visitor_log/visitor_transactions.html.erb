@@ -1,5 +1,61 @@
 <body>
+<script type="text/javascript">
+    $(function () {
+        $('#filter_date_from, #filter_date_to, #record_datetime_in, #record_datetime_out, #export_date_from, #export_date_to').datetimepicker({
+            format: 'l, LTS'
+        });
+        $("#person_visiting_filter").autocomplete({
+            source: <%= raw Person.pluck :name %>
+        });
+        $("#company_filter").autocomplete({
+            source: <%= raw Visitor.pluck(:company).uniq %>
+        });
+    });
 
+</script>
+<link rel="stylesheet" href="/css/jquery-ui.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basictable.css">
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme2.css">
+<link rel="stylesheet" href="/css/autocomplete.css">
+<link rel="stylesheet" href="/css/mvms_style.css">
+<script type="text/javascript" charset="utf-8">
+    var visitors_signs = [ ]
+    <% Visitor.all.each do |v| %>
+    visitors_signs.push( {
+        visitor_sign_id: '<%= v.id %>',
+        person_id: '<%= v.id %>',
+        person_image_url: "<%= v.avatar %>",
+        first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
+        update_contact: false,
+        person_name: "<%= v.name %>",
+        company: "<%= v.company %>",
+        phone: "<%= v.phone %>",
+        email: "<%= v.email %>",
+        reason: "<%= v.last_visit.visit_reason %>",
+        person_visiting: "<%=  v.last_visit.person.try(:name) %>",
+        citizen: "<%= v.us_citizen? %>",
+        classified: "<%= v.last_visit.classified? %>",
+        person_signature_url: "",
+        datetime_in: "<%= v.last_visit.sign_in_date.to_i %>000",
+        datetime_out: "<%=  v.last_visit.sign_out_date ? v.last_visit.sign_out_date.to_i * 1000 : '' %>"}
+    )
+    <% end %>
+</script>
+<script type="text/javascript" charset="utf-8">
+    var visitors_transactions = [ ]
+    <% VisitorVisitInformation.all.each do |visit| %>
+    visitors_transactions.push({
+        trans_id: "<%= visit.id %>",
+        visitor_sign_id: "<%= visit.visitor_id %>",
+        person_id: '<%= visit.visitor_id %>',
+        status: "<%= visit.status %>",
+        recorded_by: "<%= visit.recorded_by %>",
+        datetime: "<%= visit.updated_at.to_i*1000 %>"
+    })
+    <% end %>
+
+</script>
 
 <div class="header">
   <!-- NOTE: Has hidden display because preregistration is not being used for now!
@@ -406,7 +462,8 @@
                     thistrans = thistrans + '</div>';
 
                     $("#display_visitor_transactions").append(thistrans);
-                } else {
+                }
+                else {
                     alert('visitor sign not found');
                 }
             }
