@@ -3,24 +3,40 @@ var visitors_transactions = [];
 
 var validform;
 
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
 function validatePhoto() {
     validform = true;
     var thisimage = $(document.getElementById("person_image")).find('img').attr("src");
     if(thisimage === undefined)
-        return false
-    if (($("#capture_person_email").val().trim() === "") || (thisimage.indexOf("images/click_photo.jpg") > -1) || (thisimage.indexOf("images/recognize_photo.jpg") > -1)) {
-        validform = false;
+        return 'You must provide picture screenshot'
+    if ($("#capture_person_email").val().trim() === "") {
+        return validform = 'Email should not be blank';
     }
+    if (!validateEmail($("#capture_person_email").val().trim()) ){
+        return validform = 'Email is not valid';
+    }
+
     if ((window.location.href.indexOf("signin") > 0) && (document.getElementById("first_visit_no").checked === false) && (document.getElementById("first_visit_yes").checked === false)) {
-        validform = false;
+        validform = 'First visit should not be empty';
     }
     return validform;
 }
 
 function validateContactInfo() {
     validform = true;
-    if (($("#person_name").val().trim() === "") || ($("#company").val().trim() === "") || ($("#phone").val().trim() === "") || ($("#email").val().trim() === "")) {
-        validform = false;
+    if ($("#person_name").val().trim() === "")
+        validform = 'Name field should not be empty.';
+    if ($("#company").val().trim() === "")
+        validform = 'Company field should not be empty.';
+    if ($("#phone").val().trim() === "")
+        validform = 'Phone field should not be empty.';
+    if($("#email").val().trim() === "")
+    {
+        validform = 'Email field should not be empty.';
     }
     return validform;
 }
@@ -29,12 +45,18 @@ function validateContactInfo() {
 
 function validateVisitInfo() {
     validform = true;
-    if ((document.getElementById("reason").selectedIndex === 0) || ($("#person_visiting").val().trim() === "") || ((document.getElementById("citizen_yes").checked === false) && (document.getElementById("citizen_no").checked === false)) || ((document.getElementById("classified_yes").checked === false) && (document.getElementById("classified_no").checked === false))) {
-        validform = false;
+    if (document.getElementById("reason").selectedIndex === 0)
+        validform = 'Reason should not be empty';
+    if ($("#person_visiting").val().trim() === "")
+        validform = 'Person visiting should not be empty';
+    if ((document.getElementById("citizen_yes").checked === false) && (document.getElementById("citizen_no").checked === false))
+        validform = 'Citizen visiting should not be empty';
+    if ((document.getElementById("classified_yes").checked === false) && (document.getElementById("classified_no").checked === false)) {
+        validform = 'Classified visiting should not be empty';
     }
     if (personnel.indexOf($("#person_visiting").val().trim()) < 0) {
         $("#person_visiting").val("");
-        validform = false;
+        validform = 'Person visiting should not be empty';
     }
     return validform;
 }
@@ -238,6 +260,7 @@ $(document).ready(function () {
 
 
             } else {
+                $("#capture_complete_msg").html(validUser);
                 $("#capture_complete_msg").show();
             }
         }
@@ -248,6 +271,7 @@ $(document).ready(function () {
             setupSummary();
         }
     });
+
     $("#capture_person_email").change(function () {
         if ($("#capture_person_email").val().trim() !== "") {
             setTimeout(function () {
@@ -283,6 +307,7 @@ $(document).ready(function () {
             $("#visit_info").show();
             styleRadios();
         } else {
+            $("#contact_complete_msg").html(validContact);
             $("#contact_complete_msg").show();
         }
     });
@@ -325,6 +350,7 @@ $(document).ready(function () {
             $("#visit_info").hide();
             $("#visitor_signature").show();
         } else {
+            $("#visit_complete_msg").html(validVisit);
             $("#visit_complete_msg").show();
         }
     });
@@ -380,23 +406,19 @@ $(document).ready(function () {
         window.location.href = "visitors.html";
     });
 
-    $('#make_screenshot').on('click', function(){
+    $('#person_image_camera').on('click', function(){
         $('#person_image_camera').hide()
         Webcam.snap( function(data_uri) {
             // display results in page
             document.getElementById('person_image').innerHTML = '<img src="'+data_uri+'"/>';
             document.getElementById('display_photo_div').innerHTML = '<img src="'+data_uri+'"/>';
         } );
-        $('#make_screenshot').hide();
         $( '#person_image' ).show()
-        $('#retry_screenshot').show();
     })
 
-    $('#retry_screenshot').on('click', function(){
+    $('#person_image').on('click', function(){
         $( '#person_image' ).hide()
         $('#person_image_camera').show()
-        $('#make_screenshot').show();
-        $('#retry_screenshot').hide()
     })
 
     $("#signin_btn").click(function (e) {
@@ -404,12 +426,6 @@ $(document).ready(function () {
         var thistime = Date.now();
         $("#datetime_in").val(thistime);
         //NOTE: Will be changed to submit form later, but for now just seed test
-        var i, j, signin_status;
-        if (visitors_signs.length > 0) {
-            i = Number(visitors_signs[visitors_signs.length - 1].visitor_sign_id) + 1;
-        } else {
-            i = "0000";
-        }
         var firstvisit = $("input[name='first_visit']:checked").val();
         if (document.getElementById("update_contact").checked === true) {
             updatecontact = true;
@@ -417,7 +433,6 @@ $(document).ready(function () {
             updatecontact = false;
         }
         var thissign = {
-            visitor_sign_id: i,
             person_id: $("#person_id").val(),
             person_image_url: $('#display_photo_div').find('img').attr('src'),
             first_visit: firstvisit,
@@ -426,30 +441,14 @@ $(document).ready(function () {
             company: $("#company").val().trim(),
             phone: $("#phone").val().trim(),
             email: $("#email").val().trim(),
-            reason: "2",
+            reason: $('#reason').val(),
             person_visiting: $("#person_visiting").val().trim(),
             citizen: $("input[name='citizen']:checked").val(),
             classified: $("input[name='classified']:checked").val(),
-            person_signature_url: "signatures/signature.jpg",
+            person_signature_url: $('#person_signature').val(),
             datetime_in: $("#datetime_in").val(),
             datetime_out: $("#datetime_out").val()
         };
-        // visitors_signs.push(thissign);
-        // //  alert(visitors_signs[visitors_signs.length - 1].visitor_sign_id + "; " + visitors_signs[visitors_signs.length - 1].person_name + "; " + visitors_signs[visitors_signs.length - 1].first_visit + "; " + visitors_signs[visitors_signs.length - 1].update_contact + "; " + visitors_signs[visitors_signs.length - 1].company + "; " + visitors_signs[visitors_signs.length - 1].phone + "; " + visitors_signs[visitors_signs.length - 1].email + "; " + visitors_signs[visitors_signs.length - 1].person_visiting + "; " + visitors_signs[visitors_signs.length - 1].citizen + "; " + visitors_signs[visitors_signs.length - 1].classified + "; " + visitors_signs[visitors_signs.length - 1].datetime_in);
-        // if (visitors_transactions.length > 0) {
-        //     j = Number(visitors_transactions[visitors_transactions.length - 1].trans_id) + 1;
-        // } else {
-        //     j = "0000";
-        // }
-        // if (firstvisit === "yes") {
-        //     signin_status = "00000";
-        // } else if (updatecontact === true) {
-        //     signin_status = "20000";
-        // } else {
-        //     signin_status = "10000";
-        // }
-        // var thistrans = {trans_id: j, visitor_sign_id: i, person_id: $("#person_id").val(), status: signin_status, recorded_by: "", datetime: ""};
-        // visitors_transactions.push(thistrans);
         $.ajax({
             url: "/create_visitor.json",
             type: "post",
@@ -462,10 +461,7 @@ $(document).ready(function () {
                     alert(json['errors'])
             }
         })
-        // localStorage.setItem("visitors_signs", visitors_signs);
-        // localStorage.setItem("visitors_transactions", visitors_transactions);
-        //  alert(visitors_transactions[visitors_transactions.length - 1].trans_id + "; " + visitors_transactions[visitors_transactions.length - 1].person_id + "; " + visitors_transactions[visitors_transactions.length - 1].status);
-          });
+    });
 
 
 });

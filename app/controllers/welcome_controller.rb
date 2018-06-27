@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  before_action :authenticate_user!
+  # before_action :authenticate_user!
 
   def index
   end
@@ -75,32 +75,15 @@ class WelcomeController < ApplicationController
     visitor = Visitor.where({
                                 email: params[:email].to_s.strip
                             }).first_or_initialize
-    if params[:update_contact].to_s == 'true'
-      if visitor.persisted?
+    if params[:update_contact].to_s == 'true' or visitor.new_record?
         visitor.attributes = {
             phone: params[:phone],
             company: params[:company],
             name: params[:person_name],
-            us_citizen: params[:us_citizen]
+            us_citizen: params[:us_citizen],
+            person_signature: params[:person_signature],
+            avatar: params[:person_image_url]
         }
-        visitor.avatar = params[:person_image_url]
-      else
-        visitor.attributes = {
-            phone: params[:phone],
-            company: params[:company],
-            name: params[:person_name],
-            us_citizen: params[:us_citizen]
-        }
-        visitor.avatar ||= params[:person_image_url]
-      end
-    else
-      visitor.attributes = {
-          phone: params[:phone],
-          company: params[:company],
-          name: params[:person_name],
-          us_citizen: params[:us_citizen]
-      }
-      visitor.avatar ||= params[:person_image_url]
     end
     visitor.save
     if visitor.persisted?
