@@ -1,4 +1,5 @@
 class VisitorLogController < ApplicationController
+  before_action :authenticate_user!
   def index
     @visitors = Visitor.all
     render 'visitor_log/visitor_log'

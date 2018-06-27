@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180622145255) do
+ActiveRecord::Schema.define(version: 20180627203230) do
 
   create_table "companies", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "name"
@@ -26,6 +26,13 @@ ActiveRecord::Schema.define(version: 20180622145255) do
 
   create_table "reasons", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
     t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "settings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1" do |t|
+    t.string "name"
+    t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -64,6 +71,7 @@ ActiveRecord::Schema.define(version: 20180622145255) do
     t.datetime "updated_at", null: false
     t.datetime "sign_in_date"
     t.datetime "sign_out_date"
+    t.string "recorded_by"
     t.index ["visitor_id"], name: "index_visitor_visit_informations_on_visitor_id"
   end
 
@@ -76,6 +84,7 @@ ActiveRecord::Schema.define(version: 20180622145255) do
     t.datetime "updated_at", null: false
     t.string "us_citizen"
     t.text "avatar"
+    t.text "person_signature"
   end
 
 end

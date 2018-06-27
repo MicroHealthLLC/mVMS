@@ -5,7 +5,7 @@
 
   <div class="row">
     <div class="col-xs-12">
-      <textarea class="form-control" id="signature_agreement" rows="10" readonly></textarea>
+      <textarea class="form-control" id="signature_agreement" rows="10" readonly><%= Setting.first.try(:value) %></textarea>
     </div>
   </div>
 

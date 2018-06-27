@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!, only: [:update_visitor]
 
   def index
   end
