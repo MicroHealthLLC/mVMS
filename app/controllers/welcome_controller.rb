@@ -71,6 +71,21 @@ class WelcomeController < ApplicationController
       render json:  json
   end
 
+  def get_visitor_info
+    @visitor = Visitor.find_by_email(params[:email])
+    if @visitor
+      if @visitor.has_visit_missed?
+        render json: {success: true, data: @visitor.to_json}
+      else
+        render json: {success: false, errors: 'There is not missed visit found'}
+      end
+
+    else
+      render json: {success: false, errors: 'User not found'}
+    end
+
+  end
+
   def create_visitor
     visitor = Visitor.where({
                                 email: params[:email].to_s.strip
@@ -98,6 +113,19 @@ class WelcomeController < ApplicationController
       render json: {success: false, errors: visitor.errors.full_messages  }
     end
 
+  end
+
+  def update_visitor_visit
+    visitor = Visitor.where({
+                                email: params[:email].to_s.strip
+                            }).first_or_initialize
+    if visitor.persisted? and last_visit = visitor.last_missed_visit
+
+      last_visit.update({     sign_out_date: Time.at(params[:datetime_out].to_i/1000) })
+      render json: {success: true, visitor: visitor.id }
+    else
+      render json: {success: false, errors: 'Visitor Not found or no missed visit found' }
+    end
   end
 
   def visitor_badge

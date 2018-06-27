@@ -107,12 +107,14 @@ $(document).ready(function () {
     $("#visit_summary").hide();
 
     var signinbtn = document.getElementById("signin_btn");
+    var signoutbtn = document.getElementById("signout_btn");
     var missedbtn = document.getElementById("missed_btn");
 
     if (window.location.href.indexOf("signin") > 0) {
         $("#signin_capture_msg").show();
         $("#signin_check_visit").show();
         $("#signout_capture_msg").hide();
+        signoutbtn.style.display = "none";
 
         Webcam.set({
             width: 320,
@@ -122,6 +124,14 @@ $(document).ready(function () {
         });
         Webcam.attach( '#person_image_camera' );
 
+        $("#capture_photo").show();
+    }
+    else {
+        $("#signin_capture_msg").hide();
+        $("#signin_check_visit").hide();
+        $("#signout_capture_msg").show();
+        missedbtn.style.display = "none";
+        signinbtn.style.display = "none";
         $("#capture_photo").show();
     }
 
@@ -143,32 +153,6 @@ $(document).ready(function () {
                 document.getElementById("display_classified").innerHTML = "no";
             }
         } else {
-            document.getElementById("display_company").innerHTML = "Company Name";
-            document.getElementById("display_phone").innerHTML = "000-000-0000";
-            document.getElementById("display_email").innerHTML = "person@company.com";
-            document.getElementById("display_reason").innerHTML = "reason reason reason";
-            document.getElementById("display_personvisit").innerHTML = "John Doe";
-            document.getElementById("display_citizen").innerHTML = "yes";
-            document.getElementById("display_classified").innerHTML = "no";
-            document.getElementById("display_date_in").innerHTML = "Apr. 25, 2018";
-            document.getElementById("display_time_in").innerHTML = "09:30";
-            /*****  NOTE: Hold for when real input can be read from a record
-             const monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
-             var d = new Date(Number($("#datetime_in").val()));
-             var thisvisit = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
-             document.getElementById("display_date_in").innerHTML = thisvisit;
-             thisvisit = ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-             document.getElementById("display_time_in").innerHTML = thisvisit;
-             */
-            $("#display_date_div").show();
-            if (window.location.href.indexOf("missed") > 0) {
-
-                $("#time_out_div").show();
-                $("#datetime_out").prop("readOnly", false);
-            } else {
-                var thistime = Date.now();
-                $("#datetime_out").val(thistime);
-            }
         }
         if (window.location.href.indexOf("missed") > 0) {
             $("#missed_signout_msg").show();
@@ -180,7 +164,8 @@ $(document).ready(function () {
         }
         if (window.location.href.indexOf("signout") > 0) {
         } else {
-            signinbtn.style.display = "inline-block";
+            signinbtn.style.display = "none";
+            signoutbtn.style.display = "inline-block";
         }
         if (window.location.href.indexOf("signin") < 0) {
             document.getElementById("summary_back_btn").style.display = "none";
@@ -193,10 +178,55 @@ $(document).ready(function () {
 
     $("#missed_btn").click(function(e) {
         e.preventDefault();
-        var newurl = window.location.href.slice(0,-2) + "out_missed";
-        window.history.pushState("", "", newurl);
-        $("#capture_photo").hide();
-        setupSummary();
+        email = $("#capture_person_email").val().trim()
+        if(email == "")
+            alert("Please check your email")
+        else {
+            $.ajax({
+                url: "/get_visitor_info.json",
+                type: "post",
+                data: {email: email},
+                success: function (json, d) {
+                    console.log(json);
+                    if (json['success']) {
+                        var newurl = window.location.href.slice(0, -2) + "out_missed";
+                        window.history.pushState("", "", newurl);
+                        $("#capture_photo").hide();
+                        signinbtn.style.display = "none";
+                        signoutbtn.style.display = "inline-block";
+                        setupSummary();
+                        person = json['data'];
+                        document.getElementById('display_photo_div').innerHTML = '<img src="'+person['avatar']+'"/>';
+                        document.getElementById("display_name").innerHTML = person['display_name'];
+                        document.getElementById("display_company").innerHTML = person['display_company'];
+                        document.getElementById("display_phone").innerHTML = person['display_phone'];
+                        document.getElementById("display_email").innerHTML = person['display_email'];
+                        document.getElementById("display_reason").innerHTML = person['display_reason'];
+                        document.getElementById("display_personvisit").innerHTML = person['display_personvisit'];
+                        document.getElementById("display_citizen").innerHTML = person['display_citizen'];
+                        document.getElementById("display_classified").innerHTML = person['display_classified'];
+                        document.getElementById("display_date_in").innerHTML = person['display_date_in'];
+                        document.getElementById("display_time_in").innerHTML = person['display_time_in'];
+                        /*****  NOTE: Hold for when real input can be read from a record
+                         const monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
+                         var d = new Date(Number($("#datetime_in").val()));
+                         var thisvisit = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
+                         document.getElementById("display_date_in").innerHTML = thisvisit;
+                         thisvisit = ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+                         document.getElementById("display_time_in").innerHTML = thisvisit;
+                         */
+                        $("#display_date_div").show();
+
+                        $("#time_out_div").show();
+                        $("#datetime_out").prop("readOnly", false);
+                    }
+                    else {
+                        alert(json['errors'])
+                    }
+                }
+
+            })
+        }
     });
 
 
@@ -461,6 +491,42 @@ $(document).ready(function () {
                     alert(json['errors'])
             }
         })
+    });
+
+    $("#signout_btn").click(function (e) {
+        e.preventDefault();
+        var thistime, validTimeout = true;
+        if (window.location.href.indexOf("missed") < 0) {
+            thistime = Date.now();
+        } else {
+            if ($("#datetime_out").val() !== "") {
+                thistime = $("#datetime_out").val();
+                thistime = Date.parse(thistime);
+            } else {
+                validTimeout = false;
+                alert("Must input Time Out!");
+            }
+        }
+        if (validTimeout === true) {
+            $("#datetime_out").val(thistime);
+            data = {email: $("#capture_person_email").val().trim(),
+                datetime_out: $("#datetime_out").val()
+            }
+
+            $.ajax({
+                url: "/update_visitor_visit.json",
+                type: "post",
+                data: data,
+                success: function(json, d){
+                    console.log(json);
+                    if(json['success'])
+                        window.location.href = "visitor_bye.html?person_name=" + document.getElementById("display_name").innerHTML + "&person_visiting=" + document.getElementById("display_personvisit").innerHTML + "&time_out=" + $("#datetime_out").val();
+
+                    else
+                        alert(json['errors'])
+                }
+            })
+        }
     });
 
 
