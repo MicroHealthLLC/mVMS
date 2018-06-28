@@ -164,8 +164,8 @@ $(document).ready(function () {
         }
         if (window.location.href.indexOf("signout") > 0) {
         } else {
-            signinbtn.style.display = "none";
-            signoutbtn.style.display = "inline-block";
+            signinbtn.style.display = "inline-block";
+            signoutbtn.style.display = "none";
         }
         if (window.location.href.indexOf("signin") < 0) {
             document.getElementById("summary_back_btn").style.display = "none";
@@ -282,7 +282,7 @@ $(document).ready(function () {
                             document.getElementById("person_name").readOnly = false;
                         }
                         document.getElementById("email").readOnly = true;
-                        document.getElementById("person_name").readOnly = false;
+
                         $("#contact_info").show();
 
                     }
