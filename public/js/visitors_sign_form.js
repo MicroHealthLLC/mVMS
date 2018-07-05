@@ -119,8 +119,18 @@ $(document).ready(function () {
         Webcam.set({
             width: 320,
             height: 240,
+            dest_width: 320,
+            dest_height: 240,
             image_format: 'jpeg',
-            jpeg_quality: 90
+            jpeg_quality: 90,
+            user_callback: function(data_uri) {
+                // display results in page
+
+                document.getElementById('person_image').innerHTML =      '<img src="'+data_uri+'"/>';
+                document.getElementById('display_photo_div').innerHTML = '<img src="'+data_uri+'"/>';
+                $('#person_image_camera').hide();
+                $( '#person_image' ).show()
+            }
         });
         Webcam.attach( '#person_image_camera' );
 
@@ -436,15 +446,6 @@ $(document).ready(function () {
         window.location.href = "visitors.html";
     });
 
-    $('#person_image_camera').on('click', function(){
-        $('#person_image_camera').hide()
-        Webcam.snap( function(data_uri) {
-            // display results in page
-            document.getElementById('person_image').innerHTML = '<img src="'+data_uri+'"/>';
-            document.getElementById('display_photo_div').innerHTML = '<img src="'+data_uri+'"/>';
-        } );
-        $( '#person_image' ).show()
-    })
 
     $('#person_image').on('click', function(){
         $( '#person_image' ).hide()
