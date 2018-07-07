@@ -213,7 +213,7 @@
                 }
             }
             if (transfound === true) {
-                newinput = '<tr id="' + visitors_signs[v].visitor_sign_id + '"><td scope="row"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '" style="width: 41px; height: 86px;"></td><td class="personid hideme" hidden>' + visitors_signs[v].person_id + '</td>';
+                newinput = '<tr id="' + visitors_signs[v].visitor_sign_id + '"><td scope="row"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '" style="width: 75px;"></td><td class="personid hideme" hidden>' + visitors_signs[v].person_id + '</td>';
                 if (visitors_transactions[t].person_id !== "") {
                     newinput = newinput + '<td><a href="/visitor_log/visitor_transactions?personid=' + visitors_transactions[t].person_id + '&visitorsignid=' + visitors_signs[v].visitor_sign_id + '">' + visitors_signs[v].person_name + '</a></td>';
                 } else {

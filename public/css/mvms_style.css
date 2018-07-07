@@ -29,7 +29,7 @@ h1 {margin-top:0;text-align:right;}
 .visitor_transactions_div {width:100%;margin:20px 0;border:5px solid #cccccc; padding:10px 10px 5px 10px;}
 .visitor_transactions_div .row {padding:5px;}
 .visitor_transactions_div .datetimerecord {border-top:1px solid #dddddd;}
-.thumbpict {width:70px;height:85px;}
+.thumbpict {width:75px;}
 #filter_form_div, #export_form_div, #visitor_form_div, #record_visit_form_div {z-index:1000;width:100%;max-width:600px;margin:20px auto 10px 0;padding:10px 20px 0px 20px;border:1px solid #666;display:none;}
 #visitor_form h2, #export_form h2, #record_visit_form h2, #filter_signlog_form h2, #filter_trans_form h2 {margin:0 auto 20px auto;font-size:1.5em;font-family:Verdana,Arial,Helvetica,sans-serif;text-align:left;color:#419641;}
 #close_visitor_form_btn, #close_record_visit_form_btn, #close_export_div_btn, #close_filter_div_btn {float:right;background:transparent;border:none;}
