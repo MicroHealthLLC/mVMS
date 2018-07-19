@@ -18,7 +18,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'uglifier', '>= 1.3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
-
+gem 'jquery-rails'
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails', '~> 4.2'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
@@ -56,3 +56,13 @@ gem 'mysql2'
 gem "jpeg_camera", "~> 1.3.2"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
+gem 'jquery-datatables-rails'
+gem 'ajax-datatables-rails', '~>0.3.1'
+gem 'momentjs-rails'
+gem 'request_store'
+gem 'breadcrumbs_on_rails'
+gem 'mini_magick'
+gem 'carrierwave'

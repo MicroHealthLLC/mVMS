@@ -1,4 +1,4 @@
-class SetupController < ApplicationController
+class SetupController < BaseController
   before_action :authenticate_user!
   def index
     if request.post?

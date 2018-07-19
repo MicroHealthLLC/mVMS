@@ -11,6 +11,35 @@ Rails.application.routes.draw do
   resources :reasons
 
   devise_for :users
+  resources :employees, path: :persons, except: [:edit] do
+    member do
+      get 'log_in'
+    end
+    get 'home/index', as: 'home'
+  end
+
+  resources :users, only: [:index, :show, :destroy] do
+    collection do
+      match 'recently_connected', via: [:post, :get]
+      match 'active', via: [:post, :get]
+      match 'audit', via: [ :get]
+    end
+    member do
+      get 'require_change_password'
+      get 'restore'
+      get 'lock'
+      get 'unlock'
+      put 'change_password'
+      put 'change_basic_info'
+      put 'attachments'
+      post 'image_upload'
+      get 'remove_image'
+    end
+
+
+  end
+
+
   root to: 'welcome#visitors'
 
   match '/create_visitor', to: 'welcome#create_visitor', via: [:get, :post]

@@ -1,4 +1,4 @@
-class PeopleController < ApplicationController
+class PeopleController < BaseController
   before_action :authenticate_user!
   before_action :set_person, only: [:show, :edit, :update, :destroy]
 
