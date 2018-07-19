@@ -49,7 +49,7 @@ table tr td {font-size:1.25em;}
 .buttonrow {margin-top:10px;text-align:right;}
 .buttonrow2 {margin-top:0px;text-align:center;}
 #visitor_badge {width:384px;height:223px;margin:0px auto 20px auto;padding-top:20px;border:1px solid gray;background-color:#ffffff;}
-#visitor_badge p {font-size:1.25em;font-family:Arial,Helvetica,sans-serif;font-weight:normal;color:black;text-align:left;border:none;box-shadow:none;margin:0 0 10px 60px;padding:0;}
+#visitor_badge p {font-size:1.25em;font-family:Arial,Helvetica,sans-serif;font-weight:normal;color:black;text-align:left;border:none; box-shadow:none;margin:0 0 10px 25px; padding:0;  font-size: larger; line-height: normal;}
 .nobreak {white-space: nowrap;}
 
 #signin_message h4, #signout_message h4 {margin:30px auto 20px auto;font-size:1.5em;font-family:Arial,Helvetica,sans-serif;text-align:center;color:#333333;}
