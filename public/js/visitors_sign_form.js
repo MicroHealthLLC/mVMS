@@ -118,11 +118,11 @@ $(document).ready(function () {
         iOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
         if(iOS)
             Webcam.set({
-                width: 320,
+                width: 250,
                 constraints: { facingMode: "user" },
-                height: 240,
-                dest_width: 320,
-                dest_height: 240,
+                height: 320,
+                dest_width: 250,
+                dest_height: 320,
                 image_format: 'jpeg',
                 jpeg_quality: 90,
                 user_callback: function(data_uri) {
@@ -137,8 +137,10 @@ $(document).ready(function () {
         else
         {
             Webcam.set({
-                width: 320,
-                height: 240,
+                width: 250,
+                height: 320,
+                dest_width: 250,
+                dest_height: 320,
                 image_format: 'jpeg',
                 jpeg_quality: 90
             });
