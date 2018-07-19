@@ -12,13 +12,19 @@
     <h4>Please print the badge below,<br>and don&rsquo;t forget to sign&nbsp;out before&nbsp;you&nbsp;leave.</h4>
   </div>
 
-  <div id="visitor_badge" class="container myDivToPrint" style="width: 550px; height: 300px; overflow: hidden">
-    <img src="<%= @visitor.avatar %>" width="250px" style="float: left"/>
-    <p>MicroHealth, LLC</p>
-    <hr>
-    <p>Name: <span id="badge_person_name"></span></p>
-    <p>Destination: <span id="badge_person_visiting"></span></p>
-    <p>Date: <span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.strftime('%d, %B %Y %I:%M %p') %></span></p>
+  <div id="visitor_badge" class="container  myDivToPrint" style="width: 550px; height: 300px; overflow: hidden">
+    <div class="row">
+      <div class="col-xs-6">
+        <img src="<%= @visitor.avatar %>" width="100%"/>
+      </div>
+      <div class="col-xs-6" id="content_badge">
+        <p>MicroHealth, LLC</p>
+        <hr>
+        <p>Name: <span id="badge_person_name"></span></p>
+        <p>Destination: <span id="badge_person_visiting"></span></p>
+        <p>Date: <span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.strftime('%d, %B %Y %I:%M %p') %></span></p>
+      </div>
+    </div>
   </div>
 
   <div id="footer" class="no_print">
