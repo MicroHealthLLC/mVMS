@@ -17,7 +17,6 @@ body {font-family:Arial,Helvetica,sans-serif;font-size:1.75em;}
 #signin_message h1, #signout_message h1 {margin:0 auto 20px -6%;text-align:center;}
 #signin_message h2, #signout_message h2 {margin:0 auto 10px auto;font-size:2em;font-family:Verdana,Arial,Helvetica,sans-serif;text-align:center;color:#419641;}
 #signin_message h3, #signout_message h3 {margin:0 auto 0 auto;font-size:1.75em;font-family:Arial,Helvetica,sans-serif;text-align:center;color:#265a88;}
-}
 
 p.badgelogo {text-align:center;}
 #header {background-color:black;width:100%;}

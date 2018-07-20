@@ -130,5 +130,6 @@ class WelcomeController < ApplicationController
 
   def visitor_badge
     @visitor = Visitor.find(params[:visitor_id])
+
   end
 end
