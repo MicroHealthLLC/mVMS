@@ -29,5 +29,6 @@
 //= require moment
 //= require bootstrap-datetimepicker.js
 //= require plugin/select2/select2.min.js
+//= require lightbox2
 
 

@@ -39,4 +39,5 @@
  *
  * Lock screen related styles
  *= require admin/lockscreen
+ *= require jquery.fancybox-2.1.5
  */
