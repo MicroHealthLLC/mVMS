@@ -413,6 +413,14 @@ $(document).ready(function () {
             $("#visit_complete_msg").hide();
             $("#visit_info").hide();
             $("#visitor_signature").show();
+            $(document).ready(function() {
+                var x = $('#person_signature_sig');
+                x.jSignature();
+                x.change(function(){
+                    $('#person_signature').val(x.jSignature('getData'));
+                });
+
+            });
         } else {
             $("#visit_complete_msg").html(validVisit);
             $("#visit_complete_msg").show();
