@@ -133,27 +133,6 @@ class WelcomeController < ApplicationController
     respond_to do |format|
       format.html{}
       format.pdf{
-        # pdf = print_badge(@visitor)
-        #
-        # # create a pdf
-        # # pdf = render_to_string pdf: "some_file_name", template: "templates/pdf", encoding: "UTF-8"
-        #
-        # # # then save to a file
-        # # # save_path = Rails.root.join('pdfs','filename.pdf')
-        pdf = Prawn::Document.new
-        pdf.text "Help! I am trapped in a PDF factory!"
-        pdf.print
-        File.open(File.join(Rails.root, 'public', 'pdfs', "filename.pdf"), 'wb') { |f| f.write pdf }
-        # # system("lpr", "#{Rails.root}/public/pdfs/filename.pdf")
-        # send_data pdf.render, filename:'visitor.pdf', type: "application/pdf", disposition: "inline"
-        # pdf.print
-        #
-        # ff = "/tmp/prawn_autoprint.pdf"
-        #
-        # pdf = Prawn::Document.new
-        # pdf.text "Help! I am trapped in a PDF factory!"
-        # pdf.print
-        # pdf.render_file ff
       }
     end
 
