@@ -50,5 +50,5 @@
                     borders: []
                 })
 
-      pdf.print
+      pdf.autoprint
     end
