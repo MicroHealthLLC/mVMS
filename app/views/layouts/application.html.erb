@@ -18,53 +18,58 @@
 
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-
   <style>
     @media print {
-    #visitor_badge{
-      width: 800px !important;
-      height: 500px !important;
-      padding-top: 0px !important;
-    }
-    #visitor_badge img {
-     width: 450px !important;
-    }
+      @page { size: auto;  margin: 0mm; }
+      #visitor_badge{
+        width: 1050px !important;
+        height: 700px !important;
+        padding-top: 0px !important;
+      }
+      #visitor_badge img {
+        width: 500px !important;
+      }
       .no_print {
         display: none;
       }
       .myDivToPrint {
-        border: 0 !important;
         -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
         -o-transform: rotate(-90deg);
         -ms-transform: rotate(-90deg);
         transform: rotate(-90deg);
+        border: 0 !important;
         background-color: white;
         height: 100%;
         width: 100%;
         position: fixed;
-        margin-top: 170px !important;
+        margin-top: 150px !important;
+        margin-left: -150px !important;
         left: 0;
         padding: 15px;
         font-size: 14px;
         line-height: 18px;
       }
-    .myDivToPrint img{height: 420px!important;}
-    .myDivToPrint p{
-      padding-top: 30px!important;
-      line-height: 40px}
-    .myDivToPrint .col-xs-6{
-      overflow: hidden;
-      padding-top: 10px;
-    }
-    #content_badge{
-      font-size: 22px;
-      padding-top: 51px;
-    }
-    #main{
-      padding: 0!important;
-      margin: 0!important;
-    }
+      .myDivToPrint img{height: 500px !important;}
+      .myDivToPrint p{
+        padding-top: 30px !important;
+        line-height: 40px}
+      .myDivToPrint .col-xs-6{
+        overflow: hidden;
+        padding-top: 10px;
+      }
+      #title_badge{
+        font-size: 74px !important;
+        padding-bottom: 40px;
+      }
+      #content_badge p{
+        font-size: 70px !important;
+        padding-top: 51px;
+      }
+      #main{
+        padding: 0!important;
+        margin: 0!important;
+      }
     }
 
   </style>

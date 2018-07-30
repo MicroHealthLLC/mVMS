@@ -2,7 +2,7 @@
 <body class="ltblueback">
 <link rel="stylesheet" href="/css/mvms_visitors_style.css">
 
-<div id="main" class="container">
+<div>
 
   <div id="signin_message" class="no_print">
     <h1><a href='/'> <img class="smlogo" src="/images/microhealth-logo.svg" /></a>
@@ -14,15 +14,17 @@
 
   <div id="visitor_badge" class="container  myDivToPrint" style="width: 550px; height: 300px; overflow: hidden">
     <div class="row">
-      <div class="col-xs-4">
-        <img src="<%= @visitor.avatar %>" width="100%" height="250px"/>
+      <p style="font-size: 50px;text-align: center;" id="title_badge"><b>MicroHealth, LLC</b></p>
+      <hr>
+      <div class="col-xs-5">
+        <img src="<%= @visitor.avatar %>" width="100%" height="150px"/>
       </div>
-      <div class="col-xs-8" id="content_badge">
-        <p style="font-size: 38px;"><b>MicroHealth, LLC</b></p>
-        <hr>
-        <p style="font-size: xx-large;">Name: <span id="badge_person_name"></span></p>
-        <p>Destination: <span id="badge_person_visiting"></span></p>
-        <p>Date: <span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.strftime('%d, %B %Y %I:%M %p') %></span></p>
+      <div class="col-xs-7" id="content_badge">
+
+        <p style="font-size: 48px;">Name: <span id="badge_person_name"></span></p>
+        <p>Destination: <span id="badge_person_visiting"></span> </p>
+        <p><span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.strftime('%d, %B %Y') %></span></p>
+        <p>Time: <span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.strftime('%I:%M %p') %></span></p>
       </div>
     </div>
   </div>
@@ -31,12 +33,13 @@
     <div class="buttonrow2">
       <p>
         <button id="exit_btn" class="btn btn-warning">Exit</button>
-        <a href="/visitor_badge.pdf?visitor_id=<%= @visitor.id %>" target="_blank" class="btn btn-success">Print</a>
+        <button id="print_btn" class="btn btn-success">Print</button>
       </p>
     </div>
   </div>
 </div>
-</div>
+
+
 <script src="/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -48,7 +51,21 @@
         document.getElementById("badge_person_visiting").innerHTML = personvisiting;
         const monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
         $("#print_btn").click(function () {
-           window.print()
+            var css = '@page { size: landscape; }',
+                head = document.head || document.getElementsByTagName('head')[0],
+                style = document.createElement('style');
+
+            style.type = 'text/css';
+            style.media = 'print';
+
+            if (style.styleSheet){
+                style.styleSheet.cssText = css;
+            } else {
+                style.appendChild(document.createTextNode(css));
+            }
+
+            head.appendChild(style);
+            window.print()
         });
         $("#exit_btn").click(function () {
             window.location.href = "/visitors";
