@@ -22,18 +22,31 @@
   <style>
     @media print {
       @page{
-        margin: 0mm;
-      size: 60mm 80mm}
+        margin: 0mm;  }
+      html, body {
+        /*changing width to 100% causes huge overflow and wrap*/
+        height: 90%;
+        overflow: hidden;
+        background: #FFF;
+        font-size: 9.5pt;
+      }
+      body, html { margin: 0 !important; padding: 0 !important; }
+
       #visitor_badge{
         width: 210px !important;
         height: 180px !important;
         padding-top: 0px !important;
+        margin: 10px 10px 10px 10px;
+        page-break-before: none;
+        page-break-after: none;
+        page-break-inside: avoid;
+        overflow: hidden;
       }
       .no_print {
         display: none;
       }
       .myDivToPrint {
-        border: 1px solid black !important;
+        border: 0 !important;
         -webkit-transform: rotate(-90deg);
         -moz-transform: rotate(-90deg);
         -o-transform: rotate(-90deg);
