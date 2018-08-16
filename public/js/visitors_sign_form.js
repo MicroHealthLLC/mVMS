@@ -131,7 +131,7 @@ $(document).ready(function () {
 
             Webcam.set({
                 width: 280,
-                constraints: { facingMode: { exact: "environment" }  },
+                constraints: { facingMode: { exact: "user" }  },
                 height: 300,
                 dest_width: 280,
                 dest_height: 300,
