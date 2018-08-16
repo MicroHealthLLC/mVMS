@@ -116,10 +116,22 @@ $(document).ready(function () {
         $("#signout_capture_msg").hide();
         signoutbtn.style.display = "none";
         iOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-        if(iOS)
+        if(iOS){
+            // var cameras = new Array(); //create empty array to later insert available devices
+            // navigator.mediaDevices.enumerateDevices() // get the available devices found in the machine
+            //     .then(function(devices) {
+            //         devices.forEach(function(device) {
+            //             var i = 0;
+            //             if(device.kind=== "videoinput"){ //filter video devices only
+            //                 cameras[i]= device.deviceId; // save the camera id's in the camera array
+            //                 i++;
+            //             }
+            //         });
+            //     })
+
             Webcam.set({
                 width: 280,
-                constraints: { facingMode: "user" },
+                constraints: { facingMode: { exact: "environment" }  },
                 height: 300,
                 dest_width: 280,
                 dest_height: 300,
@@ -134,6 +146,14 @@ $(document).ready(function () {
                     $( '#person_image' ).show()
                 }
             });
+
+            // Webcam.set( 'constraints', { //set the constraints and initialize camera device (0 or 1 for back and front - varies which is which depending on device)
+            //     width: 1920,
+            //     height: 1080,
+            //
+            // } );
+        }
+
         else
         {
             Webcam.set({
