@@ -495,7 +495,7 @@ $(document).ready(function () {
             thisscreen = "unsure";
         }
         alert('Log cancel event on ' + thisprocess + ' - ' + thisscreen + ' screen!');
-        window.location.href = "visitors.html";
+        window.location.href = "/";
     });
 
 
