@@ -23,7 +23,7 @@ class Setting < ApplicationRecord
   # cached_cleared_on = Time.now
 
   def self.theme(use_admin=true)
-    use_admin ?  admin : client
+    admin
   end
 
   def self.admin
@@ -48,10 +48,14 @@ class Setting < ApplicationRecord
 
   def self.client_theme
     where(setting_type: 'client_cms_theme').first_or_initialize
+  rescue StandardError => e
+    new
   end
 
   def self.admin_theme
     where(setting_type: 'cms_theme').first_or_initialize
+  rescue StandardError => e
+    new
   end
 
   def self.theme_style(use_admin = true)

@@ -16,7 +16,7 @@
   * 'container'         - boxed layout mode (non-responsive: will not work with fixed-navigation & fixed-ribbon)
 -->
 
-<body class="<%= Setting.theme().values.join(' ') %>" data-user-id="<%= user_signed_in? ? current_user.id : ''  %>">
+<body class="<%= Setting.theme.values.join(' ') %>" data-user-id="<%= user_signed_in? ? current_user.id : ''  %>">
 
 <!-- HEADER -->
 <%= render partial: 'shared/header' %>
