@@ -22,7 +22,7 @@ class WelcomeController < ApplicationController
     @visitors = Visitor.joins(:visitor_visit_informations).merge(VisitorVisitInformation.where(sign_out_date: nil))
     if request.post?
       name = params[:name]
-      @visitor = @visitors.where(name: name).first
+      @visitor = @visitors.where(email: name).first
       if @visitor.nil?
         flash[:error] = 'No Visitor found with this name'
         redirect_to "/visitor_signout"
