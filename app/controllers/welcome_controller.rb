@@ -95,7 +95,7 @@ class WelcomeController < ApplicationController
             phone: params[:phone],
             company: params[:company],
             name: params[:person_name],
-            us_citizen: params[:us_citizen],
+            us_citizen: params[:citizen],
             person_signature: params[:person_signature],
             avatar: params[:person_image_url]
         }
@@ -104,7 +104,7 @@ class WelcomeController < ApplicationController
     if visitor.persisted?
       visitor.visitor_visit_informations.create({
                                                     visit_reason: params[:reason],
-                                                    classified: params[:classified],
+                                                    classified: !(params[:classified]== 'no'),
                                                     person_visiting_id: Person.find_by_name(params[:person_visiting]).try(:id),
                                                     sign_in_date: Time.now
                                                 })

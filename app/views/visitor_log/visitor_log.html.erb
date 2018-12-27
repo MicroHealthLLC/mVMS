@@ -15,8 +15,8 @@
         email: "<%= v.email %>",
         reason: "<%= v.last_visit.visit_reason %>",
         person_visiting: "<%=  v.last_visit.person.try(:name) %>",
-        citizen: "<%= v.us_citizen? %>",
-        classified: "<%= v.last_visit.classified? %>",
+        citizen: "<%= v.us_citizen %>",
+        classified: "<%= v.last_visit.classified %>",
         person_signature_url: "",
         datetime_in: "<%= v.last_visit.sign_in_date.to_i %>000",
         datetime_out: "<%=  v.last_visit.sign_out_date ? v.last_visit.sign_out_date.to_i * 1000 : '' %>"}
