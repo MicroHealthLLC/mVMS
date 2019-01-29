@@ -129,4 +129,10 @@ add these
 # restart nginx
 service nginx restart
 
+# Setup
+go to https://your-url/admin
+
+login with temp account admin with password Admin@2018
+
+Change, configure and customize your instance
 
