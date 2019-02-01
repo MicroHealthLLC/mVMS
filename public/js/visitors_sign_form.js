@@ -327,15 +327,15 @@ $(document).ready(function () {
                         $("#capture_complete_msg").hide();
                         $("#capture_photo").hide();
                         if ((document.getElementById("first_visit_no").checked === true) && (document.getElementById("update_contact").checked === false)) {
-                            document.getElementById("company").readOnly = true;
-                            document.getElementById("phone").readOnly = true;
-                            document.getElementById("person_name").readOnly = true;
+                            // document.getElementById("company").readOnly = true;
+                            // document.getElementById("phone").readOnly = true;
+                            // document.getElementById("person_name").readOnly = true;
                         } else {
                             document.getElementById("company").readOnly = false;
                             document.getElementById("phone").readOnly = false;
                             document.getElementById("person_name").readOnly = false;
                         }
-                        document.getElementById("email").readOnly = true;
+                        // document.getElementById("email").readOnly = true;
 
                         $("#contact_info").show();
 
