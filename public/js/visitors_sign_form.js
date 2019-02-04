@@ -16,12 +16,8 @@ function validatePhoto() {
     if ($("#capture_person_email").val().trim() === "") {
         return validform = 'Email should not be blank';
     }
-    if (!validateEmail($("#capture_person_email").val().trim()) ){
+    if (!validateEmail($("#capture_person_email").val().trim())){
         return validform = 'Email is not valid';
-    }
-
-    if ((window.location.href.indexOf("signin") > 0) && (document.getElementById("first_visit_no").checked === false) && (document.getElementById("first_visit_yes").checked === false)) {
-        validform = 'First visit should not be empty';
     }
     return validform;
 }
@@ -62,13 +58,6 @@ function validateVisitInfo() {
 }
 
 function styleRadios() {
-    if (document.getElementById("first_visit_yes").checked === true) {
-        document.getElementById("first_visit_yes_label").style.backgroundColor = "#5bc0de";
-    } else {
-        if (document.getElementById("first_visit_no").checked === true) {
-            document.getElementById("first_visit_no_label").style.backgroundColor = "#5bc0de";
-        }
-    }
     if (document.getElementById("update_contact").checked === true) {
         document.getElementById("update_contact_label").style.backgroundColor = "#5bc0de";
     } else {
@@ -283,21 +272,6 @@ $(document).ready(function () {
         }
     });
 
-
-
-    $("#visitor_sign_form input[name='first_visit']").click(function () {
-        if (document.getElementById("first_visit_yes").checked === true) {
-            document.getElementById("first_visit_yes_label").style.backgroundColor = "#5bc0de";
-            document.getElementById("first_visit_no_label").style.backgroundColor = "#dddddd";
-            document.getElementById("update_contact").checked = false;
-            document.getElementById("update_contact_label").style.backgroundColor = "#dddddd";
-            $("#update_contact_info_div").hide();
-        } else {
-            document.getElementById("first_visit_yes_label").style.backgroundColor = "#dddddd";
-            document.getElementById("first_visit_no_label").style.backgroundColor = "#5bc0de";
-            $("#update_contact_info_div").show();
-        }
-    });
     $("#visitor_sign_form #update_contact").click(function () {
         if (document.getElementById("update_contact").checked === true) {
             document.getElementById("update_contact_label").style.backgroundColor = "#5bc0de";
@@ -314,7 +288,7 @@ $(document).ready(function () {
                     url: "/check_visitor.json",
                     type: "post",
                     data: {email: $("#capture_person_email").val().trim(),
-                        first_visit: (document.getElementById("first_visit_yes").checked === true)},
+                    },
                     success: function(json, d){
                         if(!json['success'])
                             alert(json['message'])
@@ -326,16 +300,11 @@ $(document).ready(function () {
                         document.getElementById("citizen_yes").value = !json['us_citizen']
                         $("#capture_complete_msg").hide();
                         $("#capture_photo").hide();
-                        if ((document.getElementById("first_visit_no").checked === true) && (document.getElementById("update_contact").checked === false)) {
-                            // document.getElementById("company").readOnly = true;
-                            // document.getElementById("phone").readOnly = true;
-                            // document.getElementById("person_name").readOnly = true;
-                        } else {
-                            document.getElementById("company").readOnly = false;
-                            document.getElementById("phone").readOnly = false;
-                            document.getElementById("person_name").readOnly = false;
-                        }
-                        // document.getElementById("email").readOnly = true;
+                        document.getElementById("company").readOnly = false;
+                        document.getElementById("phone").readOnly = false;
+                        document.getElementById("person_name").readOnly = false;
+
+                        document.getElementById("email").readOnly = true;
 
                         $("#contact_info").show();
 
@@ -509,7 +478,6 @@ $(document).ready(function () {
         var thistime = Date.now();
         $("#datetime_in").val(thistime);
         //NOTE: Will be changed to submit form later, but for now just seed test
-        var firstvisit = $("input[name='first_visit']:checked").val();
         if (document.getElementById("update_contact").checked === true) {
             updatecontact = true;
         } else {
@@ -518,7 +486,6 @@ $(document).ready(function () {
         var thissign = {
             person_id: $("#person_id").val(),
             person_image_url: $('#display_photo_div').find('img').attr('src'),
-            first_visit: firstvisit,
             update_contact: updatecontact,
             person_name: $("#person_name").val().trim(),
             company: $("#company").val().trim(),
