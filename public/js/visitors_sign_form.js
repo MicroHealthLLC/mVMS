@@ -478,11 +478,8 @@ $(document).ready(function () {
         var thistime = Date.now();
         $("#datetime_in").val(thistime);
         //NOTE: Will be changed to submit form later, but for now just seed test
-        if (document.getElementById("update_contact").checked === true) {
-            updatecontact = true;
-        } else {
-            updatecontact = false;
-        }
+        updatecontact = true;
+
         var thissign = {
             person_id: $("#person_id").val(),
             person_image_url: $('#display_photo_div').find('img').attr('src'),
