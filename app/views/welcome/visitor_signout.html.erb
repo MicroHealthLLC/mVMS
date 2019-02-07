@@ -47,8 +47,17 @@
           </div><!-- capture_photo  -->
         </div>
       </form>
+      <script>
+          $(document).ready(function(){
+              $(document).keypress(function(e) {
+                  var keycode = (e.keyCode ? e.keyCode : e.which);
+                  if (keycode == '13') {
+                      $('#capture_next_btn').trigger('click')
+                  }
+              });
+          })
+      </script>
   <% else %>
-
       <!-- ********************************************************************************************  -->
       <div id="visit_summary">
         <h1><a href='/'> <img class="smlogo" src="/images/microhealth-logo.svg" /></a></h1>
