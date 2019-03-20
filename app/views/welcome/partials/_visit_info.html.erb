@@ -8,7 +8,8 @@
       <label for="reason">Visit Reason:</label>
     </div>
     <div class="col-xs-12 col-sm-9 col-md-9">
-      <input type="text" class="form-control" id="reason" name="reason" />
+      <!--<input type="text" class="form-control" id="reason" name="reason" />-->
+      <%= select_tag :reason, options_for_select(Reason.pluck(:name) ), class: "form-control" %>
     </div>
   </div>
 

@@ -41,8 +41,8 @@ function validateContactInfo() {
 
 function validateVisitInfo() {
     validform = true;
-    if (document.getElementById("reason").selectedIndex === 0)
-        validform = 'Reason should not be empty';
+    // if (document.getElementById("reason").selectedIndex === 0)
+    //     validform = 'Reason should not be empty';
     if ($("#person_visiting").val().trim() === "")
         validform = 'Person visiting should not be empty';
     if ((document.getElementById("citizen_yes").checked === false) && (document.getElementById("citizen_no").checked === false))
