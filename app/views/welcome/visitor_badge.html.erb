@@ -25,7 +25,7 @@
       </div>
       <div class="col-xs-7" id="content_badge">
 
-        <p style="font-size: 48px;">Name: <span id="badge_person_name"></span></p>
+        <p style="font-size: 48px; white-space: nowrap; overflow-x: auto">Name: <span id="badge_person_name"></span></p>
         <p>Destination: <span id="badge_person_visiting"></span> </p>
         <p><span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.strftime('%d, %B %Y') %></span></p>
         <p>Time: <span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.strftime('%I:%M %p') %></span></p>
