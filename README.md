@@ -1,3 +1,9 @@
+
+
+![Landing-Page](landing.png)
+
+![Photo](photo.png)
+
 # update centos
 
 yum update
