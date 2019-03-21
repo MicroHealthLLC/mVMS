@@ -1,4 +1,4 @@
-# Simple visitor management system that you can brand.  Simple check in works on any chrome based browser.  Few check in screens that is mobile friendly.  We have it working on older ipads.  Print out works on inexpensive label printers. We use the Brother desktop label printer.  The admin screen shows a list of everyone who visted, when, why, their photo, dates and times etc.
+## Simple visitor management system that you can brand.  Simple check in works on any chrome based browser.  Few check in screens that is mobile friendly.  We have it working on older ipads.  Print out works on inexpensive label printers. We use the Brother desktop label printer.  The admin screen shows a list of everyone who visted, when, why, their photo, dates and times etc.
 
 ![Landing-Page](landing.png)
 
