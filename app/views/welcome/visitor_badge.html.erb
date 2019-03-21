@@ -27,8 +27,8 @@
 
         <p style="font-size: 48px; white-space: nowrap; overflow-x: auto">Name: <span id="badge_person_name"></span></p>
         <p>Destination: <span id="badge_person_visiting"></span> </p>
-        <p><span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.strftime('%d, %B %Y') %></span></p>
-        <p>Time: <span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.strftime('%I:%M %p') %></span></p>
+        <p><span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.in_time_zone('Eastern Time (US & Canada)').strftime('%d, %B %Y') %></span></p>
+        <p>Time: <span id="badge_time_in"><%= @visitor.last_visit.sign_in_date.in_time_zone('Eastern Time (US & Canada)').strftime('%I:%M %p') %></span></p>
       </div>
     </div>
   </div>
