@@ -8,7 +8,6 @@
         <div id="section-1" class="col-xs-12 col-sm-6">
           <%= image_tag section_1_image(@page_content) %>
           <p><%= @page_content.section_1_body  if @page_content.present? %></p>
-          <%= link_to 'drop off', 'javascript:void(0)', class: 'btn btn-danger', id: 'btn-drop-off' %>
         </div>
         <div id="section-2" class="col-xs-12 col-sm-6">
           <%= image_tag section_2_image(@page_content) %>
