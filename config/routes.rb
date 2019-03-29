@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :companies
   resources :reasons
 
-  devise_for :users
+  devise_for :users, :controllers => { omniauth_callbacks: 'callbacks' }
   resources :employees, path: :persons, except: [:edit] do
     member do
       get 'log_in'
