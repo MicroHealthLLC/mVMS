@@ -70,23 +70,7 @@
         <%= image_tag '/images/icon-saml.jpg' %>
         <br>
         <br>
-        <div class="social-media-icons">
-          <%= link_to 'javascript:void(0)' do %>
-            <%= image_tag '/images/icon-gplus.jpg' %>
-          <% end %>
-          <%= link_to 'javascript:void(0)' do %>
-            <%= image_tag '/images/icon-facebook.jpg' %>
-          <% end %>
-          <%= link_to 'javascript:void(0)' do %>
-            <%= image_tag '/images/icon-twitter.jpg' %>
-          <% end %>
-          <%= link_to 'javascript:void(0)' do %>
-            <%= image_tag '/images/icon-linkedin.jpg' %>
-          <% end %>
-          <%= link_to 'javascript:void(0)' do %>
-            <%= image_tag '/images/icon-windows.jpg' %>
-          <% end %>
-        </div>
+        <%= render 'social_links' %>
       </div>
     </div>
   </div>

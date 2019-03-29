@@ -53,6 +53,17 @@ group :development do
 end
 
 gem 'devise'
+# Use Omniauth Facebook plugin
+gem 'omniauth-facebook', '~> 4.0'
+# Use Omniauth Github plugin
+gem 'omniauth-github', '~> 1.1', '>= 1.1.2'
+# Use Omniauth Google plugin
+gem 'omniauth-google-oauth2', '~> 0.4.1'
+# Use Omniauth Twitter plugin
+gem 'omniauth-twitter', '~> 1.2', '>= 1.2.1'
+# Use Omniauth linkedin plugin
+gem 'omniauth-linkedin-oauth2'
+gem "omniauth-office365", github: 'jcarbo/omniauth-office365'
 gem "mysql2"
 gem "jpeg_camera", "~> 1.3.2"
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -70,3 +81,5 @@ gem 'carrierwave'
 gem 'prawn-rails'
 gem 'prawn-table'
 gem 'prawn-print'
+# Environment variables
+gem 'figaro' 
