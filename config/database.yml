@@ -3,7 +3,7 @@ production:
   database: mvms_prod
   host: localhost
   username: root
-  password: S1mul4ti0n!!!
+  password: admin
   encoding: utf8
 
 development:
