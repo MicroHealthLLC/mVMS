@@ -60,4 +60,5 @@ Rails.application.routes.draw do
       post :update
     end
   end
+  resources :social_keys, only: [:new,:create]
 end
