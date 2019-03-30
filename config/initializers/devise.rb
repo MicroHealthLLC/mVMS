@@ -280,9 +280,9 @@ Devise.setup do |config|
   # When using OmniAuth, Devise cannot automatically set OmniAuth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
-  config.omniauth :linkedin, Setting['LINKEDIN_KEY'],Setting['LINKEDIN_SECRET']
-  config.omniauth :facebook, Setting['FACEBOOK_KEY'],Setting['FACEBOOK_SECRET']
-  config.omniauth :twitter, Setting['TWITTER_KEY'],Setting['TWITTER_SECRET']
-  config.omniauth :office365, Setting['OFFICE365_KEY'],Setting['OFFICE365_SECRET'], :scope => 'https://outlook.office.com/mail.read'
-  config.omniauth :google_oauth2, Setting['GOOGLE_KEY'],Setting['GOOGLE_SECRET']
+  config.omniauth :linkedin, (Setting['LINKEDIN_KEY'] rescue ENV['LINKEDIN_KEY']),(Setting['LINKEDIN_SECRET'] rescue ENV['LINKEDIN_SECRET'])
+  config.omniauth :facebook, (Setting['FACEBOOK_KEY'] rescue ENV['FACEBOOK_KEY']),(Setting['FACEBOOK_SECRET'] rescue ENV['FACEBOOK_SECRET'])
+  config.omniauth :twitter, (Setting['TWITTER_KEY'] rescue ENV['TWITTER_KEY']),(Setting['TWITTER_SECRET'] rescue ENV['TWITTER_SECRET']) , scope: 'user:email'
+  config.omniauth :office365, (Setting['OFFICE365_KEY'] rescue ENV['OFFICE365_KEY']),(Setting['OFFICE365_SECRET'] rescue ENV['OFFICE365_SECRET']), scope: 'openid profile email https://outlook.office.com/mail.read'
+  config.omniauth :google_oauth2, (Setting['GOOGLE_KEY'] rescue ENV['GOOGLE_KEY']),(Setting['GOOGLE_SECRET'] rescue ENV['GOOGLE_SECRET'])
 end
