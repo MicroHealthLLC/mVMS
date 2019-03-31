@@ -1,17 +1,27 @@
 <div class="social-media-icons">
-  <%= link_to '/users/auth/google_oauth2' do %>
-    <%= image_tag '/images/icon-gplus.jpg' %>
+  <% if Setting['GOOGLE_KEY'].present? and Setting['GOOGLE_SECRET'].present? %>
+    <%= link_to '/users/auth/google_oauth2' do %>
+      <%= image_tag '/images/icon-gplus.jpg' %>
+    <% end %>
   <% end %>
-  <%= link_to '/users/auth/facebook' do %>
-    <%= image_tag '/images/icon-facebook.jpg' %>
+  <% if Setting['FACEBOOK_KEY'].present? and Setting['FACEBOOK_SECRET'].present? %>
+    <%= link_to '/users/auth/facebook' do %>
+      <%= image_tag '/images/icon-facebook.jpg' %>
+    <% end %>
   <% end %>
-  <%= link_to '/users/auth/twitter' do %>
-    <%= image_tag '/images/icon-twitter.jpg' %>
+  <% if Setting['TWITTER_KEY'].present? and Setting['TWITTER_SECRET'].present? %>
+    <%= link_to '/users/auth/twitter' do %>
+      <%= image_tag '/images/icon-twitter.jpg' %>
+    <% end %>
   <% end %>
-  <%= link_to '/users/auth/linkedin' do %>
-    <%= image_tag '/images/icon-linkedin.jpg' %>
+  <% if Setting['LINKEDIN_KEY'].present? and Setting['LINKEDIN_SECRET'].present? %>
+    <%= link_to '/users/auth/linkedin' do %>
+      <%= image_tag '/images/icon-linkedin.jpg' %>
+    <% end %>
   <% end %>
-  <%= link_to '/users/auth/office365' do %>
-    <%= image_tag '/images/icon-windows.jpg' %>
+  <% if Setting['OFFICE365_KEY'].present? and Setting['OFFICE365_SECRET'].present? %>
+    <%= link_to '/users/auth/office365' do %>
+      <%= image_tag '/images/icon-windows.jpg' %>
+    <% end %>
   <% end %>
 </div>
