@@ -63,7 +63,7 @@ class User < ApplicationRecord
   end
 
   def self.safe_attributes
-    [:full_name, :state, :email, :role_id, :time_zone,:password_confirmation,  :password]
+    [:full_name, :state, :email, :role_id, :time_zone,:password_confirmation,  :password,:admin]
   end
 
   def name; full_name; end

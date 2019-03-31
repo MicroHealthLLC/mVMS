@@ -82,4 +82,4 @@ gem 'prawn-rails'
 gem 'prawn-table'
 gem 'prawn-print'
 # Environment variables
-gem 'figaro' 
+gem 'figaro'
