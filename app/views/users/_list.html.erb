@@ -2,21 +2,20 @@
   <thead>
   <tr>
     <th>#</th>
-    <th><%= t :login %></th>
     <th><%= t :email %></th>
-
+    <th><%= t :actions %></th>
 
 
   </tr>
   </thead>
 
   <tbody>
-  <% User.all.each do |user| %>
-  <tr>
-    <td><%= link_to user.id, user %></td>
-    <td><%= user.email %></td>
-    <td><%= user.name %></td>
-  </tr>
+  <% User.where.not(id: current_user.id).each do |user| %>
+    <tr>
+      <td><%= link_to user.id, user %></td>
+      <td><%= user.email %></td>
+      <td><%= link_to "Delete",user_path(user),method: "delete",confirm: "Are you sure?",class: "btn btn-warning" %></td>
+    </tr>
   <% end %>
 
   </tbody>

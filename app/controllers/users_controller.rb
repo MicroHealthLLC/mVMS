@@ -71,8 +71,9 @@ class UsersController < BaseController
 
   def destroy
     @user.destroy
-    flash[:notice] = I18n.t('notice_successful_delete')
-    redirect_to :back
+    #flash[:notice] = I18n.t('notice_successful_delete')
+    flash[:notice] = "User deleted successfully."
+    redirect_to users_path
   end
 
   # authorized by manage roles
