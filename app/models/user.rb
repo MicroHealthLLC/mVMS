@@ -29,7 +29,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:facebook, :linkedin, :twitter, :google_oauth2,:office365]
-
+       
   def self.from_omniauth(auth)
     if where(email: auth.info.email || "#{auth.uid}@#{auth.provider}.com").present?
       return where(email: auth.info.email || "#{auth.uid}@#{auth.provider}.com").first
@@ -41,11 +41,10 @@ class User < ApplicationRecord
       user.password = Devise.friendly_token[0,20]
     end
   end
-
+  
   def self.get_user(auth)
-    unscoped.where(provider: auth.provider, uid: auth.uid).or(User.unscoped.where(email: auth.info.email || "#{auth.uid}@#{auth.provider}.com")).first
+    unscoped.where(provider: auth.provider, uid: auth.uid,admin: true).or(User.unscoped.where(email: auth.info.email || "#{auth.uid}@#{auth.provider}.com",admin: true)).first
   end
-
 
   def self.current=(user)
     RequestStore.store[:current_user] = user
