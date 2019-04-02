@@ -1,2 +1,18 @@
 application_name:
   default: "mVMS"
+whitelist_ip:
+  default: '*.*.*.*'
+blacklist_ip:
+  default: ''
+user_default_state:
+  default: 'false'
+remember_for:
+  default: 2
+expire_after:
+  default: 180
+timeout_in:
+  default: 15
+maximum_attempts:
+  default: 5
+unlock_in:
+  default: 60

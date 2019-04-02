@@ -1,0 +1,99 @@
+<%= form_tag(authentication_setup_path, method: 'post', id: 'save_details_form',  class: 'form-horizontal' ) do |f| %>
+
+    <div class="form-group">
+      <%= label_tag "default_auth_user", "Default User Status: ", class: 'col-md-2 control-label' %>
+      <div class="col-md-9">
+        <%= select_tag :user_default_state, options_for_select(User::STATUS, selected: Setting['user_default_state']), {class: 'form-control'} %>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <%= label_tag "remember_for", "Remember For (Weeks): ", class: 'col-md-2 control-label', title: "The time the user will be remembered without asking for credentials again." %>
+      <div class="col-md-9">
+        <%= number_field_tag :remember_for, Setting['remember_for'], {class: 'form-control', step: 1, require: true} %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag "timeout_in", "Timeout (Minutes): ", class: 'col-md-2 control-label', title: "The time you want to timeout the user session without activity. After this time the user will be asked for credentials again" %>
+      <div class="col-md-9">
+        <%= number_field_tag :timeout_in, Setting['timeout_in'], {class: 'form-control', step: 1, require: true} %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag "maximum_attempts", "Maximum Attempts: ", class: 'col-md-2 control-label', title: "Number of authentication tries before locking an account if lock_strategy is failed attempts." %>
+      <div class="col-md-9">
+        <%= number_field_tag :maximum_attempts, Setting['maximum_attempts'],  {class: 'form-control', step: 1, require: true} %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag "unlock_in", "Unlock In (Minutes): ", class: 'col-md-2 control-label', title: "Time interval to unlock the account" %>
+      <div class="col-md-9">
+        <%= number_field_tag :unlock_in, Setting['unlock_in'],  {class: 'form-control', step: 1, require: true} %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag "expire_after", "Password Expire In (days): ", class: 'col-md-2 control-label', title: "Time interval to unlock the account" %>
+      <div class="col-md-9">
+        <%= number_field_tag :expire_after, Setting['expire_after'],  {class: 'form-control', step: 1, require: true} %>
+      </div>
+    </div>
+
+
+    <div class="form-group">
+      <%= label_tag "whitelist_ip", "Whitelist ip: ", class: 'col-md-2 control-label' %>
+      <div class="col-md-9">
+        <%= text_field_tag :whitelist_ip, Setting['whitelist_ip'],  {class: 'form-control tags'} %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= label_tag "blacklist_ip", "Blacklist ip: ", class: 'col-md-2 control-label' %>
+      <div class="col-md-9">
+        <%= text_field_tag :blacklist_ip, Setting['blacklist_ip'],  {class: 'form-control tags'} %>
+      </div>
+    </div>
+
+
+    <div class="form-group margin-top-10" >
+      <div class="col-xs-12">
+        <%= submit_tag "Save", class: 'btn btn-success pull-right', id: 'btn_save_details_form' %>
+      </div>
+    </div>
+<% end %>
+<%= javascript_include_tag 'jquery.tagsinput' %>
+<%= stylesheet_link_tag 'jquery.tagsinput' %>
+<script>
+    $(document).ready(function(){
+        $('.tags').tagsInput({defaultText: 'Ip'});
+        $('#btn_save_details_form').click(function(e){
+            e.preventDefault();
+            if(ip_valid( $('#whitelist_ip').val().trim() ) && ip_valid( $('#blacklist_ip').val().trim()))
+                $('#save_details_form').submit();
+            else
+                alert("whitelist or blacklist ip not valid")
+        })
+    });
+
+    ip_valid = function(val){
+        t = val.split(',');
+        all_match = true
+        for(i=0; i< t.length; i++ )
+        {
+            v = t[i].trim()
+            if(v.length > 0)
+            {
+                m = v.match(/^(\*|\d{1,3})\.(\*|\d{1,3})\.(\*|\d{1,3})\.(\*|\d{1,3})$/);
+                if(m == null) {
+                    all_match = false;
+                    break;
+                }
+            }
+        }
+        return all_match
+    }
+</script>

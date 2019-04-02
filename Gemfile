@@ -54,6 +54,7 @@ group :development do
 end
 
 gem 'devise'
+gem 'devise_security_extension', github: 'rubyroidlabs/devise_security_extension'
 # Use Omniauth Facebook plugin
 gem 'omniauth-facebook', '~> 4.0'
 # Use Omniauth Github plugin

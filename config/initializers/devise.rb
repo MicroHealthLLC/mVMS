@@ -149,7 +149,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :rememberable
   # The time the user will be remembered without asking for credentials again.
-  # config.remember_for = 2.weeks
+  config.remember_for = Setting['remember_for'].to_i.weeks
 
   # Invalidates all the remember me tokens when the user signs out.
   config.expire_all_remember_me_on_sign_out = true
@@ -173,7 +173,7 @@ Devise.setup do |config|
   # ==> Configuration for :timeoutable
   # The time you want to timeout the user session without activity. After this
   # time the user will be asked for credentials again. Default is 30 minutes.
-  # config.timeout_in = 30.minutes
+  config.timeout_in = Setting['timeout_in'].to_i.minutes
 
   # ==> Configuration for :lockable
   # Defines which strategy will be used to lock an account.
@@ -193,10 +193,10 @@ Devise.setup do |config|
 
   # Number of authentication tries before locking an account if lock_strategy
   # is failed attempts.
-  # config.maximum_attempts = 20
+  config.maximum_attempts = Setting['maximum_attempts'].to_i
 
   # Time interval to unlock the account if :time is enabled as unlock_strategy.
-  # config.unlock_in = 1.hour
+  config.unlock_in = Setting['unlock_in'].to_i.minutes
 
   # Warn on the last attempt before the account is locked.
   # config.last_attempt_warning = true
@@ -285,4 +285,19 @@ Devise.setup do |config|
   config.omniauth :twitter, (Setting['TWITTER_KEY'] rescue ENV['TWITTER_KEY']),(Setting['TWITTER_SECRET'] rescue ENV['TWITTER_SECRET']) , scope: 'user:email'
   config.omniauth :office365, (Setting['OFFICE365_KEY'] rescue ENV['OFFICE365_KEY']),(Setting['OFFICE365_SECRET'] rescue ENV['OFFICE365_SECRET']), scope: 'openid profile email https://outlook.office.com/mail.read'
   config.omniauth :google_oauth2, (Setting['GOOGLE_KEY'] rescue ENV['GOOGLE_KEY']),(Setting['GOOGLE_SECRET'] rescue ENV['GOOGLE_SECRET'])
+
+
+
+  # Should the password expire (e.g 3.months)
+  config.expire_password_after = Setting['expire_after'].to_i.days
+
+  # Need 1 char of A-Z, a-z and 0-9
+  config.password_regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/
+
+  # How many passwords to keep in archive
+  config.password_archiving_count = 5
+
+  # Deny old password (true, false, count)
+  config.deny_old_passwords = true
+
 end

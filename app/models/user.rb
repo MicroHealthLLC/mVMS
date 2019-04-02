@@ -29,7 +29,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:facebook, :linkedin, :twitter, :google_oauth2,:office365]
-       
+
+
+  STATUS = [['Active', true],['Inactive', false]]
+
   def self.from_omniauth(auth)
     if where(email: auth.info.email || "#{auth.uid}@#{auth.provider}.com").present?
       return where(email: auth.info.email || "#{auth.uid}@#{auth.provider}.com").first
@@ -37,6 +40,8 @@ class User < ApplicationRecord
     where(provider: auth.provider, uid: auth.uid).first_or_create do |user|
       user.provider = auth.provider
       user.uid = auth.uid
+      user.state = Setting['user_default_state']
+      user.admin = false
       user.email = auth.info.email || "#{auth.uid}@#{auth.provider}.com"
       user.password = Devise.friendly_token[0,20]
     end
@@ -61,6 +66,15 @@ class User < ApplicationRecord
       'male.png'
     end
   end
+
+  def active_for_authentication?
+    # Uncomment the below debug statement to view the properties of the returned self model values.
+    # logger.debug self.to_yaml
+
+    super && account_active?
+  end
+
+  def account_active?; state?; end
 
   def self.safe_attributes
     [:full_name, :state, :email, :role_id, :time_zone,:password_confirmation,  :password,:admin]

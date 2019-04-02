@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   get 'setup/index'
   match '/setup', to: 'setup#index', via: [:get, :post]
-
+  match '/authentication_setup', to: 'settings#authentication', via: [:get, :post]
   resources :people
   get 'admin', to: 'visitor_log#index'
   get 'visitor_log/index'
