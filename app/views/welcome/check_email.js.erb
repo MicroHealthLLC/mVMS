@@ -1,0 +1,9 @@
+<% if @visitor %>
+  $('#person_image_camera').hide();
+  $('#person_image' ).show();
+  $('#person_image').html("<img src='<%= @visitor.avatar %>' />")
+<% else %>
+$('#person_image_camera').show();
+$( '#person_image' ).hide();
+$('#person_image').html('')
+<% end %>

@@ -1,0 +1,2 @@
+server_url: http://localhost:8200
+secret_token: '7a10916b0bffd28fa8b7f8849708db55f407cfe5fd4245e738b3ffc938c18d8b54c93143e0da2b18f7182a72c01a4fe115fba2f4a9e80c39df45547d1bfcfaa7'

@@ -18,8 +18,8 @@
 
   <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
   *= require smartadmin-production-plugins.min.css
-  *= require smartadmin-production.min.css
-  *= require smartadmin-skins.min.css
+  *= require smartadmin-production.css
+  *= require smartadmin-skins.css
 
   <!-- SmartAdmin RTL Support  -->
   *= require smartadmin-rtl.min.css

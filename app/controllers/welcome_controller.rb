@@ -135,6 +135,16 @@ class WelcomeController < ApplicationController
       format.pdf{
       }
     end
+  end
 
+  def check_email
+    respond_to do |format|
+      format.json{
+
+      }
+      format.js{
+        @visitor = Visitor.find_by_email params[:email]
+      }
+    end
   end
 end

@@ -3,6 +3,14 @@ var visitors_transactions = [];
 
 var validform;
 
+$(document).ready(function(){
+    $('#capture_person_email').on('keyup', function(){
+        if($(this).val().length > 4)
+            $.getScript('/check_email.js?email='+ $(this).val())
+    });
+})
+
+
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
