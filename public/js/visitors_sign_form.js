@@ -5,7 +5,7 @@ var validform;
 
 $(document).ready(function(){
     $('#capture_person_email').on('keyup', function(){
-        if($(this).val().length > 4)
+        if($(this).val().length > 4 && !picked_photo)
             $.getScript('/check_email.js?email='+ $(this).val())
     });
 })
@@ -106,7 +106,7 @@ $(document).ready(function () {
     var signinbtn = document.getElementById("signin_btn");
     var signoutbtn = document.getElementById("signout_btn");
     var missedbtn = document.getElementById("missed_btn");
-
+    picked_photo = false;
     if (window.location.href.indexOf("signin") > 0) {
         $("#signin_capture_msg").show();
         $("#signin_check_visit").show();
@@ -140,7 +140,8 @@ $(document).ready(function () {
                     document.getElementById('person_image').innerHTML =      '<img src="'+data_uri+'"/>';
                     document.getElementById('display_photo_div').innerHTML = '<img src="'+data_uri+'"/>';
                     $('#person_image_camera').hide();
-                    $( '#person_image' ).show()
+                    $( '#person_image' ).show();
+                    picked_photo = true;
                 }
             });
 
@@ -167,6 +168,7 @@ $(document).ready(function () {
                     // display results in page
                     document.getElementById('person_image').innerHTML = '<img src="'+data_uri+'"/>';
                     document.getElementById('display_photo_div').innerHTML = '<img src="'+data_uri+'"/>';
+                    picked_photo = true;
                 } );
                 $( '#person_image' ).show()
             })
