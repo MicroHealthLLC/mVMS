@@ -44,6 +44,7 @@ class Visitor < ApplicationRecord
   end
 
   def to_json
+    last_visit = visitor_visit_informations.last
     {
         display_name: self.name,
         display_company: self.company,
@@ -51,18 +52,22 @@ class Visitor < ApplicationRecord
         avatar: self.avatar,
         display_email: self.email,
 
-        display_reason: self.last_missed_visit&.visit_reason,
-        display_personvisit: self.last_missed_visit&.person.try(:name),
+        display_reason: last_visit&.visit_reason,
+        display_personvisit: last_visit&.person.try(:name),
         display_citizen: self.us_citizen?,
 
-        display_classified: self.last_missed_visit&.classified?,
-        display_date_in: self.last_missed_visit&.sign_in_date.try(:to_date),
-        display_time_in: self.last_missed_visit&.sign_in_date&.strftime('%I:%M %p'),
+        display_classified: last_visit&.classified?,
+        display_date_in: last_visit&.sign_in_date.try(:to_date),
+        display_time_in: last_visit&.sign_in_date&.strftime('%I:%M %p'),
     }
   end
 
   def self.csv_header
     Visitor.new.to_json.except(:avatar).keys.map{|v| v.to_s.sub('display_', '').sub('_', ' ')}
+  end
+
+  def self.signed_in
+    includes(:visitor_visit_informations).references(:visitor_visit_informations).where.not(visitor_visit_informations: { sign_in_date: nil })
   end
 
   def to_csv
