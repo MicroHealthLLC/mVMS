@@ -66,11 +66,11 @@ function validateVisitInfo() {
 }
 
 function styleRadios() {
-    if (document.getElementById("update_contact").checked === true) {
-        document.getElementById("update_contact_label").style.backgroundColor = "#5bc0de";
-    } else {
-        document.getElementById("update_contact_label").style.backgroundColor = "#dddddd";
-    }
+    // if (document.getElementById("update_contact").checked === true) {
+    //     document.getElementById("update_contact_label").style.backgroundColor = "#5bc0de";
+    // } else {
+    //     document.getElementById("update_contact_label").style.backgroundColor = "#dddddd";
+    // }
     if (document.getElementById("citizen_yes").checked === true) {
         document.getElementById("citizen_yes_label").style.backgroundColor = "#5bc0de";
     } else {
