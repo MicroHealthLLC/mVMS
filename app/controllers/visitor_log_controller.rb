@@ -25,13 +25,13 @@ class VisitorLogController < BaseController
 
   def visitor_log
     require 'csv'
-    @visitors = Visitor.all
+    @visitors = Visitor.where(nil)
     respond_to do |format|
       format.html{}
       format.csv{
        @csv =  CSV.generate do |csv|
          csv << Visitor.csv_header
-          @visitors.each do |visitor|
+          @visitors.signed_in.each do |visitor|
             csv<< visitor.to_csv
           end
        end
