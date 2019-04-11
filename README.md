@@ -81,7 +81,7 @@ rake assets:precompile
 
 rake secret
 
-put that output in config/secretys.yml
+put that output in config/secrets.yml
 
 # Configure Nginx repo for CentOS 7
 
