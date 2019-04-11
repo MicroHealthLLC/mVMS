@@ -451,10 +451,12 @@ $(document).ready(function () {
             $("#visitor_signature").show();
         }
     });
+    var key_event_triggered = false
 
     $(document).keypress(function(e) {
         var keycode = (e.keyCode ? e.keyCode : e.which);
         if (keycode == '13') {
+            key_event_triggered = true
             console.log('You pressed enter! - keypress');
             if($('#capture_photo').is(":visible")){
                 $('#capture_next_btn').trigger('click')
@@ -471,11 +473,19 @@ $(document).ready(function () {
             else if($('#visitor_signature').is(":visible")){
                 $('#signature_next_btn').trigger('click')
             }
+            setTimeout(function(){
+                key_event_triggered = false;
+            }, 600)
+
         }
     });
 
     $("#capture_cancel_btn, #signature_cancel_btn, #summary_cancel_btn").click(function (e) {
         e.preventDefault();
+        if(key_event_triggered)
+        {
+            return ;
+        }
         var thisscreen, thiscancel = this.id.slice(0,-11);
         if (window.location.href.indexOf("signin") > 0) {
             thisprocess = "Sign In";
@@ -494,7 +504,7 @@ $(document).ready(function () {
             thisscreen = "unsure";
         }
         // alert('Log cancel event on ' + thisprocess + ' - ' + thisscreen + ' screen!');
-        // window.location.href = "/";
+        window.location.href = "/";
     });
 
 
