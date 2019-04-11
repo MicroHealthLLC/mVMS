@@ -89,15 +89,19 @@ nano /etc/yum.repos.d/nginx.repo
 
 # then enter this below and save
 
-[nginx]
+[nginx-stable]
 
-name=nginx repo
+name=nginx stable repo
 
-baseurl=http://nginx.org/packages/mainline/centos/7/$basearch/
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
 
-gpgcheck=0
+gpgcheck=1
 
 enabled=1
+
+gpgkey=https://nginx.org/keys/nginx_signing.key
+
+
 
 # Update yum and install nginx
 yum update
