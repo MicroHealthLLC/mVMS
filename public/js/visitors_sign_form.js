@@ -95,6 +95,13 @@ function validateSignature() {
     return validform;
 }
 
+function open_picture(){
+    console.log('open picture')
+    $('#person_image_camera-ios_input').show()
+    $('#person_image_camera-ios_input').trigger('click');
+    $('#person_image_camera-ios_input').hide()
+}
+
 
 $(document).ready(function () {
     $("#capture_photo").hide();
@@ -114,18 +121,6 @@ $(document).ready(function () {
         signoutbtn.style.display = "none";
         iOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
         if(iOS){
-            // var cameras = new Array(); //create empty array to later insert available devices
-            // navigator.mediaDevices.enumerateDevices() // get the available devices found in the machine
-            //     .then(function(devices) {
-            //         devices.forEach(function(device) {
-            //             var i = 0;
-            //             if(device.kind=== "videoinput"){ //filter video devices only
-            //                 cameras[i]= device.deviceId; // save the camera id's in the camera array
-            //                 i++;
-            //             }
-            //         });
-            //     })
-
             Webcam.set({
                 width: 280,
                 constraints: { facingMode: { exact: "user" }  },
@@ -178,6 +173,10 @@ $(document).ready(function () {
         Webcam.attach( '#person_image_camera' );
 
         $("#capture_photo").show();
+
+
+        if(iOS)
+            $('#open_picture').trigger('click')
     }
     else {
         $("#signin_capture_msg").hide();
@@ -494,8 +493,8 @@ $(document).ready(function () {
         } else {
             thisscreen = "unsure";
         }
-        alert('Log cancel event on ' + thisprocess + ' - ' + thisscreen + ' screen!');
-        window.location.href = "/";
+        // alert('Log cancel event on ' + thisprocess + ' - ' + thisscreen + ' screen!');
+        // window.location.href = "/";
     });
 
 
