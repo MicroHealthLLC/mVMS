@@ -75,6 +75,8 @@ bundle install
 
 rails db:setup 
 
+rake db:seed
+
 rake assets:precompile
 
 # generate your secrets for config/secrets.yml
