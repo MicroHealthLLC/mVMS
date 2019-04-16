@@ -15,17 +15,18 @@ class WelcomeController < ApplicationController
   def visitor_signout
     @visitors = Visitor.joins(:visitor_visit_informations).merge(VisitorVisitInformation.where(sign_out_date: nil))
     if request.post?
-      if params[:visitor_id]
-        @visitor = Visitor.find(params[:visitor_id])
-        @visitor.last_visit.update_attributes({sign_out_date: Time.now })
-        redirect_to root_path
-        return
-      end
       name = params[:name]
       @visitor = @visitors.where(email: name).first
       if @visitor.nil?
         flash[:error] = 'You are not signed in. Click Cancel'
         redirect_to "/visitor_signout"
+      end
+    else
+      if params[:visitor_id]
+        @visitor = Visitor.find(params[:visitor_id])
+        @visitor.last_visit.update_attributes({sign_out_date: Time.now })
+        redirect_to root_path
+        return
       end
     end
 
@@ -56,9 +57,11 @@ class WelcomeController < ApplicationController
     json = if params[:first_visit].to_s == 'false' and visitor.persisted?
              {success: true}
            elsif params[:first_visit].to_s == 'true' and visitor.persisted?
-             {success: false, message: "It seems that this is not your first visit. You can update your data."}
+             {success: false, message: "It seems that this is not your first visit. You can update your data.", should_signout: false}
            elsif params[:first_visit].to_s == 'false' and visitor.new_record?
-             {success: false, message: "We didn't find your email in our DB, we will create a new record. "}
+             {success: false, message: "We didn't find your email in our DB, we will create a new record. ", should_signout: false}
+           elsif visitor.persisted? && visitor.visitor_visit_informations.where(sign_out_date: nil).present?
+             {success: false, message: "You have to signout before sign in again", should_signout: true}
            else
              {success: true}
            end

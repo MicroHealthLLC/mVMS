@@ -300,7 +300,15 @@ $(document).ready(function () {
                     },
                     success: function(json, d){
                         if(!json['success'])
-                            alert(json['message'])
+                        {
+                            alert(json['message']);
+                            console.log(json['should_signout'])
+                            if(json['should_signout'])
+                            {
+                                location.href='/visitor_signout'
+                            }
+                        }
+
                         document.getElementById("company").value = json['company']
                         document.getElementById("phone").value = json['phone']
                         document.getElementById("person_name").value = json['name']

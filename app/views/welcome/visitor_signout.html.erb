@@ -5,14 +5,7 @@
 <script src="/js/bootstrap-datetimepicker.min.js"></script>
 
 <!--  <script src="js/seeds.js"></script> -->
-<script type="text/javascript">
-    var visitors = <%= raw @visitors.pluck(:email) %>
-        $(function () {
-            $("#capture_person_name").autocomplete({
-                source: visitors
-            });
-        });
-</script>
+
 <link rel="stylesheet" href="/css/jquery-ui.min.css">
 <link rel="stylesheet" href="/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/bootstrap-theme2.css">
