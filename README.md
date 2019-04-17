@@ -46,7 +46,7 @@ mysql_secure_installation
 
 mysql -u root -p
 
-create database mvms_prod CHARACTER SET utf8 COLLATE utf8_general_ci;
+create database mvms_dev CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 exit
 
