@@ -6,7 +6,11 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-User.create(login: 'admin', full_name: 'admin', email: 'admin@example.com', password: 'admin@2018', admin: true, state: true)
+User.create(full_name: 'admin',
+            email: 'admin@example.com',
+            password: 'admin@2018',
+            admin: true,
+            state: true)
 
 if AdminLoginPage.count == 0
   AdminLoginPage.create(
