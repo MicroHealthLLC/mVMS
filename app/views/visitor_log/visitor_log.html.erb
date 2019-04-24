@@ -125,7 +125,7 @@
         <!--<button id="signedout_filter" class="btn btn-default filter_btn">(<span id="count_signedout">0</span>) Signed Out / Unsaved</button>-->
         <!--<button id="all_saved_filter" class="btn btn-default btn-default filter_btn">(<span id="count_saved">0</span>) All Saved</button>-->
         <!--<button id="missed_signout_filter" class="btn btn-default filter_btn">(<span id="count_missed">0</span>) Missed Sign Out</button>-->
-        <%= link_to 'export CSV', { controller: "visitor_log", action: 'visitor_log', format: 'csv', params: {filter: params[:filter].permit! } } , class: 'btn btn-default' %>
+        <%= link_to 'export CSV', { controller: "visitor_log", action: 'visitor_log', format: 'csv', params: {filter: params[:filter] ? params[:filter].permit! : {}} } , class: 'btn btn-default' %>
         <!--  <button id="new_company_filter" class="btn btn-default filter_btn">(<span id="count_newco">0</span>) New Companies</button> -->
       </div>
     </div>
