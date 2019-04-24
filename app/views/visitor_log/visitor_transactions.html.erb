@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="/css/mvms_style.css">
 <script type="text/javascript" charset="utf-8">
     var visitors_signs = [ ]
-    <% Visitor.all.each do |v| %>
+    <% Visitor.where(id: @visitor.id).each do |v| %>
     visitors_signs.push( {
         visitor_sign_id: '<%= v.id %>',
         person_id: '<%= v.id %>',
@@ -44,7 +44,7 @@
 </script>
 <script type="text/javascript" charset="utf-8">
     var visitors_transactions = [ ]
-    <% VisitorVisitInformation.all.each do |visit| %>
+    <% VisitorVisitInformation.where(visitor_id: @visitor.id).each do |visit| %>
     visitors_transactions.push({
         trans_id: "<%= visit.id %>",
         visitor_sign_id: "<%= visit.visitor_id %>",

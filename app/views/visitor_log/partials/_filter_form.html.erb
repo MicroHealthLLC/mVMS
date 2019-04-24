@@ -1,0 +1,56 @@
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<div style="overflow: hidden; margin-bottom: 10px">
+  <%= form_for @filters, as: :filter, url: '/visitor_log/visitor_log', html: {class: 'form-horizontal'},method: :get do |f|  %>
+      <div class="row">
+
+        <div class="col-md-2 col-sm-4 col-xs-6">
+          <label>Name:</label>
+          <%= f.text_field :f_name, class: 'form-control' %>
+        </div>
+        <div class="col-md-2 col-sm-4 col-xs-6">
+          <label>Company:</label>
+          <%= f.text_field :f_company , class: 'form-control' %>
+        </div>
+        <div class="col-md-2 col-sm-4 col-xs-6">
+          <label>Email:</label>
+          <%= f.text_field :f_email , class: 'form-control' %>
+        </div>
+        <div class="col-md-2 col-sm-4 col-xs-6">
+          <label>Phone:</label>
+          <%= f.text_field :f_phone, class: 'form-control' %>
+        </div>
+
+      <div class="col-md-2 col-sm-4 col-xs-6">
+          <label>Time In:</label>
+          <%= f.text_field :f_date_range, class: 'form-control' %>
+        </div>
+
+      </div>
+      <div class="row" style="margin-top: 10px">
+        <div class="pull-right col-md-2 col-sm-4 col-xs-6">
+          <%= f.submit 'FILTER', class: 'btn btn-success btn-block' %>
+        </div>
+        <div class="pull-right col-md-2 col-sm-4 col-xs-6">
+          <%= link_to 'Clear', '/visitor_log/visitor_log', class: 'btn btn-default btn-block' %>
+        </div>
+      </div>
+  <% end %>
+  <style>
+    .ui-datepicker-calendar {
+      display: none;
+    }
+  </style>
+  <script>
+      $(function() {
+          $('#filter_f_date_range').daterangepicker({
+              opens: 'left'
+          }, function(start, end, label) {
+              console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+          });
+      });
+  </script>
+</div>
+

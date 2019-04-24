@@ -22,7 +22,6 @@ class VisitorVisitInformation < ApplicationRecord
   belongs_to :person, foreign_key: :person_visiting_id
 
   def status
-
     if  classified.nil? or person.nil?
       return '02222'
     end
