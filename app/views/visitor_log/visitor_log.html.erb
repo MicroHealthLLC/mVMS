@@ -3,7 +3,7 @@
 <script type="text/javascript" src="/js/jquery.basictable.min.js"></script>
 <script type="text/javascript" charset="utf-8">
     var visitors_signs = [ ]
-    <% @visitors.each do |v| %>
+    <% @visitors.reverse.each do |v| %>
     visitors_signs.push( {
         visitor_sign_id: '<%= v.id %>',
         person_id: '<%= v.id %>',
@@ -280,46 +280,46 @@
         }
 
         var r, thisbtnclass, thistd, newco = 0, not_signedout = 0, signedout = 0, allsaved = 0, firstvisitor = 0, returnvisitor = 0, updatevisitor = 0, missed_signout = 0, newcompany = 0, theserows = $("#visitors_log_table tr");
-        for (r = 1; r < theserows.length; r += 1) {
-            theserows[r].addEventListener("click", function () {
-                thisIndex(this);
-            });
-            thisbtnclass = $(theserows[r]).find("button");
-            if ($(thisbtnclass).hasClass("return_visitin_btn") || $(thisbtnclass).hasClass("first_visitin_btn") || $(thisbtnclass).hasClass("update_visitin_btn")
-                || $(thisbtnclass).hasClass("visitin_recorded_btn") || $(thisbtnclass).hasClass("missed_signout_btn") || $(thisbtnclass).hasClass("missed2_signout_btn")) {
-                not_signedout += 1;
-            }
-            if ($(thisbtnclass).hasClass("return_visitout_btn") || $(thisbtnclass).hasClass("return2_visitout_btn") || $(thisbtnclass).hasClass("first_visitout_btn") || $(thisbtnclass).hasClass("update_visitout_btn")) {
-                signedout += 1;
-            }
-            if ($(thisbtnclass).hasClass("saved_visit_btn") || $(thisbtnclass).hasClass("saved_missed_btn")) {
-                allsaved += 1;
-            }
-            if ($(thisbtnclass).hasClass("new_user_btn")) {
-                firstvisitor += 1;
-            }
-            if ($(thisbtnclass).hasClass("return_user_btn")) {
-                returnvisitor += 1;
-            }
-            if ($(thisbtnclass).hasClass("update_user_btn")) {
-                updatevisitor += 1;
-            }
-            if ($(thisbtnclass).hasClass("missed_signout_btn") || $(thisbtnclass).hasClass("missed2_signout_btn")) {
-                missed_signout += 1;
-            }
-            thistd = $(theserows[r]).find("td:eq(3)");
-            if ($(thistd).hasClass("newcompany")) {
-                newco += 1;
-            }
-            /* NOTE: Fix new company code
-                var thisco = thistd.innerHTML;
-                alert(thisco);
-                if (!thisco.in(companies)) {
-                  $(thistd).addClass("newcompany");
-                  newco += 1;
-                }
-            */
-        }
+//        for (r = 1; r < theserows.length; r += 1) {
+//            theserows[r].addEventListener("click", function () {
+//                thisIndex(this);
+//            });
+//            thisbtnclass = $(theserows[r]).find("button");
+//            if ($(thisbtnclass).hasClass("return_visitin_btn") || $(thisbtnclass).hasClass("first_visitin_btn") || $(thisbtnclass).hasClass("update_visitin_btn")
+//                || $(thisbtnclass).hasClass("visitin_recorded_btn") || $(thisbtnclass).hasClass("missed_signout_btn") || $(thisbtnclass).hasClass("missed2_signout_btn")) {
+//                not_signedout += 1;
+//            }
+//            if ($(thisbtnclass).hasClass("return_visitout_btn") || $(thisbtnclass).hasClass("return2_visitout_btn") || $(thisbtnclass).hasClass("first_visitout_btn") || $(thisbtnclass).hasClass("update_visitout_btn")) {
+//                signedout += 1;
+//            }
+//            if ($(thisbtnclass).hasClass("saved_visit_btn") || $(thisbtnclass).hasClass("saved_missed_btn")) {
+//                allsaved += 1;
+//            }
+//            if ($(thisbtnclass).hasClass("new_user_btn")) {
+//                firstvisitor += 1;
+//            }
+//            if ($(thisbtnclass).hasClass("return_user_btn")) {
+//                returnvisitor += 1;
+//            }
+//            if ($(thisbtnclass).hasClass("update_user_btn")) {
+//                updatevisitor += 1;
+//            }
+//            if ($(thisbtnclass).hasClass("missed_signout_btn") || $(thisbtnclass).hasClass("missed2_signout_btn")) {
+//                missed_signout += 1;
+//            }
+//            thistd = $(theserows[r]).find("td:eq(3)");
+//            if ($(thistd).hasClass("newcompany")) {
+//                newco += 1;
+//            }
+//            /* NOTE: Fix new company code
+//                var thisco = thistd.innerHTML;
+//                alert(thisco);
+//                if (!thisco.in(companies)) {
+//                  $(thistd).addClass("newcompany");
+//                  newco += 1;
+//                }
+//            */
+//        }
 
 
 //        document.getElementById("count_all").innerHTML = theserows.length - 1;

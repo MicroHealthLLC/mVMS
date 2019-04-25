@@ -19,7 +19,7 @@ class Visitor < ApplicationRecord
 
   include Filterable
   # Filter scopes
-  scope :f_name, ->(name) { where('LOWER(name) LIKE :name_search', name_search: "#{name.downcase}%") }
+  scope :f_name, ->(name) { where('LOWER(name) LIKE :name_search', name_search: "%#{name.downcase}%") }
   scope :f_company, ->(company) { where('LOWER(company) LIKE :company', company: "#{company.downcase}%") }
   scope :f_email, ->(email) { where('LOWER(email) LIKE :email', email: "#{email.downcase}%") }
   scope :f_phone, ->(phone) { where('LOWER(phone) LIKE :phone', phone: "#{phone.downcase}%") }
@@ -28,12 +28,19 @@ class Visitor < ApplicationRecord
     date_from = Date.strptime(dates[0], '%m/%d/%Y') rescue nil
     date_to = Date.strptime(dates[1], '%m/%d/%Y') rescue nil
     if date_from && date_to
-      joins(:visitor_visit_informations).where(visitor_visit_informations: {sign_out_date: nil}).where("visitor_visit_informations.sign_in_date BETWEEN ? AND ?", date_from, date_to)
+      where(visitor_visit_informations: {sign_out_date: nil}).where("visitor_visit_informations.sign_in_date BETWEEN ? AND ?", date_from, date_to)
     else
       where(nil)
     end
   }
+ scope :f_visit_reason, ->(reason) { where(visitor_visit_informations: {visit_reason: reason}) }
+ scope :f_person_visiting, ->(person_id) { where(visitor_visit_informations: {person_visiting_id: person_id}) }
+ scope :f_us_citizen, ->(us_citizen) { where(us_citizen: us_citizen) }
+ scope :f_classified, ->(classified) { where(visitor_visit_informations: {classified: classified}) }
+ scope :f_sort_by, ->(sort) { order("#{sort} ASC") }
 
+
+  default_scope { joins(:visitor_visit_informations) }
   validates_presence_of :name, :email
   validates_uniqueness_of :email
 
