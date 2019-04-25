@@ -2,6 +2,7 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <div style="overflow: hidden; margin-bottom: 10px">
   <%= form_for @filters, as: :filter, url: '/visitor_log/visitor_log', html: {class: 'form-horizontal'},method: :get do |f|  %>
       <div class="row">
@@ -23,11 +24,48 @@
           <%= f.text_field :f_phone, class: 'form-control' %>
         </div>
 
-      <div class="col-md-2 col-sm-4 col-xs-6">
+        <div class="col-md-2 col-sm-4 col-xs-6">
           <label>Time In:</label>
           <%= f.text_field :f_date_range, class: 'form-control' %>
         </div>
 
+        <div class="col-md-2 col-sm-4 col-xs-6">
+          <label style="height: 37px;"></label>
+          <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#options_filter">More options</button>
+        </div>
+
+      </div>
+
+
+      <div id="options_filter" class="collapse">
+        <div class="row">
+
+          <div class="col-md-2 col-sm-4 col-xs-6">
+            <label>Visit Reason:</label>
+            <%= f.select :f_visit_reason, options_for_select(Reason.pluck(:name),
+                                                             selected: params.dig(:filter, :f_visit_reason) ), {include_blank: true}, class: 'form-control' %>
+          </div>
+          <div class="col-md-2 col-sm-4 col-xs-6">
+            <label>Person Visiting:</label>
+            <%= f.select :f_person_visiting, options_for_select(Person.pluck(:name, :id),
+                                                             selected: params.dig(:filter, :f_person_visiting) ), {include_blank: true},  class: 'form-control' %>
+          </div>
+          <div class="col-md-2 col-sm-4 col-xs-6">
+            <label>US Citizen:</label>
+            <%= f.select :f_us_citizen, options_for_select([['Yes', true], ['NO', false]],
+                                                                selected: params.dig(:filter, :f_us_citizen) ), {include_blank: true}, class: 'form-control' %>
+          </div>
+
+          <div class="col-md-2 col-sm-4 col-xs-6">
+            <label>Classified:</label>
+            <%= f.select :f_classified, options_for_select([['Yes', true], ['NO', false]],
+                                                           selected: params.dig(:filter, :f_classified) ), {include_blank: true}, class: 'form-control' %>
+          </div>
+
+
+
+
+        </div>
       </div>
       <div class="row" style="margin-top: 10px">
         <div class="pull-right col-md-2 col-sm-4 col-xs-6">

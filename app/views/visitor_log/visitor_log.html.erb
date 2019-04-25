@@ -1,5 +1,5 @@
 <body>
-<%= render partial: 'visitor_log/partials/filter_form' %>
+
 <script type="text/javascript" src="/js/jquery.basictable.min.js"></script>
 <script type="text/javascript" charset="utf-8">
     var visitors_signs = [ ]
@@ -95,6 +95,10 @@
 
 
   <h2>Visitors Log</h2>
+  <%= link_to 'export CSV',
+              { controller: "visitor_log", action: 'visitor_log', format: 'csv', params: {filter: params[:filter] ? params[:filter].permit! : {}} } ,
+              class: 'btn btn-default pull-right'%>
+
   <p>*If applicable, visitor was created/updated</p>
 
   <div id="log_key" class="row">
@@ -125,12 +129,11 @@
         <!--<button id="signedout_filter" class="btn btn-default filter_btn">(<span id="count_signedout">0</span>) Signed Out / Unsaved</button>-->
         <!--<button id="all_saved_filter" class="btn btn-default btn-default filter_btn">(<span id="count_saved">0</span>) All Saved</button>-->
         <!--<button id="missed_signout_filter" class="btn btn-default filter_btn">(<span id="count_missed">0</span>) Missed Sign Out</button>-->
-        <%= link_to 'export CSV', { controller: "visitor_log", action: 'visitor_log', format: 'csv', params: {filter: params[:filter] ? params[:filter].permit! : {}} } , class: 'btn btn-default' %>
         <!--  <button id="new_company_filter" class="btn btn-default filter_btn">(<span id="count_newco">0</span>) New Companies</button> -->
       </div>
     </div>
   </div><!-- filter_btns_div  -->
-
+  <%= render partial: 'visitor_log/partials/filter_form' %>
   <div id="visitors_log_table_div">
     <p id="transaction_instruction"><strong>INSTRUCTIONS:</strong> Click on a transaction status icon to record the next appropriate transaction, until status symbol is <span class="nobr">All Visitor</span> Transactions <span class="nobr">Saved (<button id="saved_visit_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span> or <span class="nobr">All Missed</span> Sign Out Visitor Transactions <span class="nobr">Saved (<button id="saved_missed_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span></p>
     <table id="visitors_log_table" class="table two-axis">
