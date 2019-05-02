@@ -33,14 +33,64 @@ class Visitor < ApplicationRecord
       where(nil)
     end
   }
- scope :f_visit_reason, ->(reason) { where(visitor_visit_informations: {visit_reason: reason}) }
- scope :f_person_visiting, ->(person_id) { where(visitor_visit_informations: {person_visiting_id: person_id}) }
- scope :f_us_citizen, ->(us_citizen) { where(us_citizen: us_citizen) }
- scope :f_classified, ->(classified) { where(visitor_visit_informations: {classified: classified}) }
- scope :f_sort_by, ->(sort) { order("#{sort} ASC") }
+  scope :f_visit_reason, ->(reason) { where(visitor_visit_informations: {visit_reason: reason}) }
+  scope :f_person_visiting, ->(person_id) { where(visitor_visit_informations: {person_visiting_id: person_id}) }
+  scope :f_us_citizen, ->(us_citizen) { where(us_citizen: us_citizen) }
+  scope :f_classified, ->(classified) { where(visitor_visit_informations: {classified: classified}) }
+  scope :f_sort_by, ->(sort) { order("#{sort} ASC") }
+
+  # def status
+  #   if  classified.nil? or person.nil?
+  #     return '02222'
+  #   end
+  #   return '01111' if sign_out_date.present?
+  #   return '10002' if sign_in_date.nil?
+  #   return '10002' if sign_in_date.to_date < Date.today.to_date
+  #   return '01100' if 2.hours.ago < sign_in_date
+  #   "01110"
+  # end
+
+  scope :f_status, ->(status){
+    case status
+      when '02222' then
+        where(visitor_visit_informations: {person_visiting_id: nil})
+      when '01111' then sign_in_present
+      when '10002' then sign_in_outdate
+      when '20000' then must_sign_out
+      when '01110' then where(nil)
+      else
+        where(nil)
+    end
+  }
+  def self.sign_in_present
+    where("visitor_visit_informations.sign_in_date IS NOT NULL ")
+  end
+
+  def self.must_sign_out
+    where("visitor_visit_informations.sign_in_date < ? ", 2.hours.ago )
+  end
+
+  def self.sign_in_outdate
+    where("visitor_visit_informations.sign_in_date IS NULL OR visitor_visit_informations.sign_in_date < ? ", Date.today.to_date )
+  end
+
+  scope :f_visits, ->(status){
+    case status
+      when 'first_visit' then
+        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) = 1')
+        where(id: v.pluck(:visitor_id))
+      when 'return_visitor' then
+        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
+        where(id: v.pluck(:visitor_id))
+      when 'need_info' then
+        where(nil)
+      else
+        where(nil)
+    end
+  }
 
 
-  default_scope { joins(:visitor_visit_informations) }
+  default_scope { includes(:visitor_visit_informations).references(:visitor_visit_informations) }
   validates_presence_of :name, :email
   validates_uniqueness_of :email
 

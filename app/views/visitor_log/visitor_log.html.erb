@@ -235,6 +235,23 @@
                 }
                 newinput = newinput + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></td>';
 
+                // 00000
+                // 00002
+                // 20000
+                // 20002
+                // 00010
+                // 20010
+                // 10000 | 01000 | 21000 |  |
+                // 10002 | 01002 | 21002 |  |
+                // 01100 | 10100 | 21100 |  |
+                // 01102 | 10102 | 21102 |  |
+                // 01111 | 10111 | 21111 |  |
+                // 01010 | 10010 | 21010 |  |
+                // 01110 | 10110 | 21110 |  |
+                // 02222 | 12222 | 22222 |  |
+                //
+                //
+
                 if (transstatus === "00000") {
                     newinput = newinput + '<td><button class="first_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></td>';
                 } else if (transstatus === "00002") {

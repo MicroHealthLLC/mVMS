@@ -48,12 +48,12 @@
           <div class="col-md-2 col-sm-4 col-xs-6">
             <label>Person Visiting:</label>
             <%= f.select :f_person_visiting, options_for_select(Person.pluck(:name, :id),
-                                                             selected: params.dig(:filter, :f_person_visiting) ), {include_blank: true},  class: 'form-control' %>
+                                                                selected: params.dig(:filter, :f_person_visiting) ), {include_blank: true},  class: 'form-control' %>
           </div>
           <div class="col-md-2 col-sm-4 col-xs-6">
             <label>US Citizen:</label>
             <%= f.select :f_us_citizen, options_for_select([['Yes', true], ['NO', false]],
-                                                                selected: params.dig(:filter, :f_us_citizen) ), {include_blank: true}, class: 'form-control' %>
+                                                           selected: params.dig(:filter, :f_us_citizen) ), {include_blank: true}, class: 'form-control' %>
           </div>
 
           <div class="col-md-2 col-sm-4 col-xs-6">
@@ -62,9 +62,27 @@
                                                            selected: params.dig(:filter, :f_classified) ), {include_blank: true}, class: 'form-control' %>
           </div>
 
+          <div class="col-md-2 col-sm-4 col-xs-6">
+            <label>Sign in status:</label>
+            <%= f.select :f_visits, options_for_select([['First Visit', 'first_visit'],['Return Visit', 'return_visitor'],
+                                                        ['Return Visitor Needs Info Updated','need_info']],
+                                                       selected: params.dig(:filter, :f_visits) ), {include_blank: true}, class: 'form-control' %>
+          </div>
+
+
+          <div class="col-md-2 col-sm-4 col-xs-6">
+            <label>Visit status:</label>
+            <%= f.select :f_status, options_for_select([
+                                                           ['All Visitor Transactions Saved', '01111'],
+                                                           ['All Visitor Transactions Saved', '02222'],
+                                                           ['Sign In Recorded*', '01100'],
+                                                           ['Must Record Sign Out*', '01110'],
+                                                           ['Should Update Return Visitor', '20000'],
+                                                           ['Missed Sign Out: Must Record Sign In/Out', '10002']
+],
+                                                       selected: params.dig(:filter, :f_status) ), {include_blank: true}, class: 'form-control' %>
+          </div>
         </div>
-
-
 
         <div class="row">
           <div class="col-md-2 col-sm-4 col-xs-6">
