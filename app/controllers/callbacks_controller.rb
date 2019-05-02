@@ -12,6 +12,10 @@ class CallbacksController < Devise::OmniauthCallbacksController
     check_omniauth_auth
   end
 
+  def github
+    check_omniauth_auth
+  end
+
   def google_oauth2
     check_omniauth_auth
   end
@@ -23,14 +27,14 @@ class CallbacksController < Devise::OmniauthCallbacksController
   private
 
   def check_omniauth_auth
-    if User.get_user(request.env["omniauth.auth"]).nil?
-      flash[:error] = 'Social Sign up is not enabled'
-      redirect_to root_path
-    else
+    # if User.get_user(request.env["omniauth.auth"]).nil?
+    #   flash[:error] = 'Social Sign up is not enabled'
+    #   redirect_to root_path
+    # else
       @user = User.from_omniauth(request.env["omniauth.auth"])
       sign_in @user
       flash[:notice] = 'Logged in successfully.'
       redirect_to "/admin"
     end
-  end
+  # end
 end

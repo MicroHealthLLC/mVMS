@@ -28,7 +28,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable, omniauth_providers: [:facebook, :linkedin, :twitter, :google_oauth2,:office365]
+         :omniauthable, omniauth_providers: [:facebook, :linkedin, :twitter, :google_oauth2,:office365, :github]
 
 
   STATUS = [['Active', true],['Inactive', false]]

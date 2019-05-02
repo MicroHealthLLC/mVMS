@@ -285,6 +285,7 @@ Devise.setup do |config|
   config.omniauth :twitter, (Setting['TWITTER_KEY'] rescue ENV['TWITTER_KEY']),(Setting['TWITTER_SECRET'] rescue ENV['TWITTER_SECRET']) , scope: 'user:email'
   config.omniauth :office365, (Setting['OFFICE365_KEY'] rescue ENV['OFFICE365_KEY']),(Setting['OFFICE365_SECRET'] rescue ENV['OFFICE365_SECRET']), scope: 'openid profile email https://outlook.office.com/mail.read'
   config.omniauth :google_oauth2, (Setting['GOOGLE_KEY'] rescue ENV['GOOGLE_KEY']),(Setting['GOOGLE_SECRET'] rescue ENV['GOOGLE_SECRET'])
+  config.omniauth :github, (Setting['GITHUB_KEY'] rescue ENV['GITHUB_KEY']),(Setting['GITHUB_SECRET'] rescue ENV['GITHUB_SECRET'])
 
 
 

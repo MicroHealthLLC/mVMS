@@ -14,6 +14,11 @@
       <%= image_tag '/images/icon-twitter.jpg' %>
     <% end %>
   <% end %>
+   <% if Setting['GITHUB_KEY'].present? and Setting['GITHUB_SECRET'].present? %>
+    <%= link_to '/users/auth/github' do %>
+      <%= image_tag '/images/icon-github.png' %>
+    <% end %>
+  <% end %>
   <% if Setting['LINKEDIN_KEY'].present? and Setting['LINKEDIN_SECRET'].present? %>
     <%= link_to '/users/auth/linkedin' do %>
       <%= image_tag '/images/icon-linkedin.jpg' %>

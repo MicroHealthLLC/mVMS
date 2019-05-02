@@ -6,7 +6,7 @@ class SocialKeysController < BaseController
   end
   
   def create
-    ['OFFICE365', 'GOOGLE', 'FACEBOOK', 'LINKEDIN', 'TWITTER'].each do |provider|
+    ['OFFICE365', 'GOOGLE', 'FACEBOOK', 'LINKEDIN', 'TWITTER', 'GITHUB'].each do |provider|
       Setting["#{provider}_SECRET"] = params["#{provider.downcase}"]['secret']
       Setting["#{provider}_KEY"] = params["#{provider.downcase}"]['key']
     end

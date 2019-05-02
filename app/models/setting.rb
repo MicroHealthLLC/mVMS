@@ -107,9 +107,9 @@ class Setting < ApplicationRecord
     YAML::load(File.open("#{Rails.root}/config/settings.yml")).each do |name, options|
       available_settings[name.to_s] = options
     end
-    ['OFFICE365', 'GOOGLE', 'FACEBOOK', 'LINKEDIN', 'TWITTER'].each do |provider|
-      available_settings["#{provider}_KEY"] = { 'default'=> ENV["#{provider}_KEY"] }
-      available_settings["#{provider}_SECRET"] = { 'default'=> ENV["#{provider}_SECRET"] }
+    ['OFFICE365', 'GOOGLE', 'FACEBOOK', 'LINKEDIN', 'TWITTER', 'GITHUB'].each do |provider|
+      available_settings["#{provider}_KEY"] = { 'default'=> Setting["#{provider}_KEY"] }
+      available_settings["#{provider}_SECRET"] = { 'default'=> Setting["#{provider}_SECRET"] }
     end
   end
   load_available_settings

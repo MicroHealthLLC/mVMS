@@ -1,5 +1,5 @@
 <%= form_tag(social_keys_path, method: 'post',  class: 'form-horizontal' ) do |f| %>
-    <% ['OFFICE365', 'GOOGLE', 'FACEBOOK', 'LINKEDIN', 'TWITTER'].each do |provider| %>
+    <% ['OFFICE365', 'GOOGLE', 'FACEBOOK', 'LINKEDIN', 'TWITTER', 'GITHUB'].each do |provider| %>
         <fieldset>
           <legend><%= provider %> </legend>
           <div class="row">

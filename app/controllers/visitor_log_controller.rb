@@ -16,8 +16,11 @@ class VisitorLogController < BaseController
 
       image = path + "/visitor_#{@visitor.id}.jpeg"
       unless FileTest.exist?(image)
-        data = StringIO.new( Base64.decode64(@visitor.avatar.sub('data:image/jpeg;base64', '') ))
-        File.open(File.join(Rails.root, 'public', 'visitors', "visitor_#{@visitor.id}.jpeg"), 'wb') { |f| f.write data.read }
+        if @visitor.avatar
+          data = StringIO.new( Base64.decode64(@visitor.avatar.to_s.sub('data:image/jpeg;base64', '') ))
+          File.open(File.join(Rails.root, 'public', 'visitors', "visitor_#{@visitor.id}.jpeg"), 'wb') { |f| f.write data.read }
+        end
+
       end
     end
 
