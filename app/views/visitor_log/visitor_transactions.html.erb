@@ -44,7 +44,7 @@
 </script>
 <script type="text/javascript" charset="utf-8">
     var visitors_transactions = [ ]
-    <% VisitorVisitInformation.where(visitor_id: @visitor.id).each do |visit| %>
+    <% VisitorVisitInformation.where(visitor_id: @visitor.id).order('updated_at DESC').each do |visit| %>
     visitors_transactions.push({
         trans_id: "<%= visit.id %>",
         visitor_sign_id: "<%= visit.visitor_id %>",
