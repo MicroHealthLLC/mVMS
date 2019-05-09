@@ -39,6 +39,10 @@ class Visitor < ApplicationRecord
   scope :f_classified, ->(classified) { where(visitor_visit_informations: {classified: classified}) }
   scope :f_sort_by, ->(sort) { order("#{sort} ASC") }
 
+
+  after_create do
+    save_image_avatar
+  end
   # def status
   #   if  classified.nil? or person.nil?
   #     return '02222'
@@ -146,6 +150,19 @@ class Visitor < ApplicationRecord
 
   def to_csv
     to_json.except(:avatar).values
+  end
+
+  def save_image_avatar
+    storage_path = File.join(Rails.root, "public")
+    path = storage_path + "/visitors"
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+    image = path + "/visitor_#{self.id}.jpg"
+    unless FileTest.exist?(image)
+      if self.avatar
+        data = StringIO.new( Base64.decode64(self.avatar.to_s.sub('data:image/jpeg;base64', '') ))
+        File.open(File.join(Rails.root, 'public', 'visitors', "visitor_#{self.id}.jpg"), 'wb') { |f| f.write data.read }
+      end
+    end
   end
 
 end

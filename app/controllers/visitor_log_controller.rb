@@ -8,19 +8,11 @@ class VisitorLogController < BaseController
   def visitor_transactions
     @visitor = Visitor.find_by_id params[:personid]
     if @visitor
-      storage_path = File.join(Rails.root, "public")
-      path = storage_path + "/visitors"
-      unless File.directory?(path)
-        FileUtils.mkdir_p(path)
-      end
-
       image = path + "/visitor_#{@visitor.id}.jpeg"
       unless FileTest.exist?(image)
         if @visitor.avatar
-          data = StringIO.new( Base64.decode64(@visitor.avatar.to_s.sub('data:image/jpeg;base64', '') ))
-          File.open(File.join(Rails.root, 'public', 'visitors', "visitor_#{@visitor.id}.jpeg"), 'wb') { |f| f.write data.read }
+          @visitor.save_image_avatar
         end
-
       end
     end
 

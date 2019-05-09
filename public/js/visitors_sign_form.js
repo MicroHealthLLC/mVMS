@@ -102,7 +102,6 @@ function open_picture(){
     $('#person_image_camera-ios_input').hide()
 }
 
-
 $(document).ready(function () {
     $("#capture_photo").hide();
     $("#contact_info").hide();
@@ -115,6 +114,7 @@ $(document).ready(function () {
     var missedbtn = document.getElementById("missed_btn");
     picked_photo = false;
     if (window.location.href.indexOf("signin") > 0) {
+        // init_face_api()
         $("#signin_capture_msg").show();
         $("#signin_check_visit").show();
         $("#signout_capture_msg").hide();
@@ -132,8 +132,8 @@ $(document).ready(function () {
                 user_callback: function(data_uri) {
                     // display results in page
 
-                    document.getElementById('person_image').innerHTML =      '<img src="'+data_uri+'"/>';
-                    document.getElementById('display_photo_div').innerHTML = '<img src="'+data_uri+'"/>';
+                    document.getElementById('person_image').innerHTML =      '<img id="inputImg" src="'+data_uri+'"/>';
+                    document.getElementById('display_photo_div').innerHTML = '<img id="inputImg" src="'+data_uri+'"/>';
                     $('#person_image_camera').hide();
                     $( '#person_image' ).show();
                     picked_photo = true;
@@ -161,11 +161,12 @@ $(document).ready(function () {
                 $('#person_image_camera').hide()
                 Webcam.snap( function(data_uri) {
                     // display results in page
-                    document.getElementById('person_image').innerHTML = '<img src="'+data_uri+'"/>';
-                    document.getElementById('display_photo_div').innerHTML = '<img src="'+data_uri+'"/>';
+                    document.getElementById('person_image').innerHTML = '<img  id="inputImg" src="'+data_uri+'"/>';
+                    document.getElementById('display_photo_div').innerHTML = '<img id="inputImg" src="'+data_uri+'"/>';
                     picked_photo = true;
                 } );
-                $( '#person_image' ).show()
+                $( '#person_image' ).show();
+                updateResults()
             })
         }
 
