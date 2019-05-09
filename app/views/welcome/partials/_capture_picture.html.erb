@@ -48,3 +48,82 @@
     <button id="capture_next_btn" class="btn btn-success">Next</button>
   </div>
 </div><!-- capture_photo  -->
+<script>
+
+    var classes = [];
+    var visitors_emails = {};
+    <% Visitor.where(nil).each do |v| %>
+      classes.push("<%= "visitor_#{v.id}"%>");
+      visitors_emails['<%= "visitor_#{v.id}" %>'] = '<%=  v.email %>'
+    <% end %>
+    var faceMatcher = {}
+
+    async function updateResults() {
+
+        if(faceMatcher['_labeledDescriptors'])
+        {
+            if (!isFaceDetectionModelLoaded()) {
+                return
+            }
+            const threshold = 0.6;
+            const inputImgEl = $('#inputImg').get(0)
+
+            desc2 = await faceapi.computeFaceDescriptor(inputImgEl);
+
+            for (i = 0; i < faceMatcher['_labeledDescriptors'].length; i++) {
+                desc1 = faceMatcher['_labeledDescriptors'][i]['_descriptors'][0]
+                distance = faceapi.round(faceapi.euclideanDistance(desc1, desc2)
+                )
+                if (distance <= threshold) {
+                    console.log(faceMatcher['_labeledDescriptors'][i]['_label'])
+                    $('#capture_person_email').val(visitors_emails[faceMatcher['_labeledDescriptors'][i]['_label']])
+                    break;
+                }
+
+            }
+        }
+
+    }
+
+    function drawFaceRecognitionResults(results) {
+        const canvas = $('#overlay').get(0)
+        // resize detection and landmarks in case displayed image is smaller than
+        // original size
+        resizedResults = resizeCanvasAndResults($('#inputImg').get(0), canvas, results)
+
+        const boxesWithText = resizedResults.map(({ detection, descriptor }) =>
+            new faceapi.BoxWithText(
+                detection.box,
+                faceMatcher.findBestMatch(descriptor).toString()
+            )
+    )
+        faceapi.drawDetection(canvas, boxesWithText)
+    }
+
+    async function run() {
+        // load face detection, face landmark model and face recognition models
+        await changeFaceDetector(selectedFaceDetector)
+        await faceapi.loadFaceLandmarkModel('/')
+        await faceapi.loadFaceRecognitionModel('/')
+
+//        // initialize face matcher with 1 reference descriptor per bbt character
+        faceMatcher = await createBbtFaceMatcher(1)
+
+        console.log(faceMatcher)
+
+    }
+
+    $(document).ready(function() {
+        initFaceDetectionControls()
+        run();
+        initWebCam()
+    })
+
+</script>
+<script src="/js/face-api.js"></script>
+<script src="/js/commons.js"></script>
+<script src="/js/drawing.js"></script>
+<script src="/js/faceDetectionControls.js"></script>
+<script src="/js/imageSelectionControls.js"></script>
+<script src="/js/bbt.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>

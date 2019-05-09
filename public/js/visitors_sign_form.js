@@ -101,7 +101,67 @@ function open_picture(){
     $('#person_image_camera-ios_input').trigger('click');
     $('#person_image_camera-ios_input').hide()
 }
+function initWebCam(){
 
+    iOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    if(iOS){
+        Webcam.set({
+            width: 280,
+            constraints: { facingMode: { exact: "user" }  },
+            height: 300,
+            dest_width: 280,
+            dest_height: 300,
+            image_format: 'jpeg',
+            jpeg_quality: 90,
+            user_callback: function(data_uri) {
+                // display results in page
+
+                document.getElementById('person_image').innerHTML =      '<img id="inputImg" src="'+data_uri+'"/>';
+                document.getElementById('display_photo_div').innerHTML = '<img id="inputImg" src="'+data_uri+'"/>';
+                $('#person_image_camera').hide();
+                $( '#person_image' ).show();
+                picked_photo = true;
+            }
+        });
+
+        // Webcam.set( 'constraints', { //set the constraints and initialize camera device (0 or 1 for back and front - varies which is which depending on device)
+        //     width: 1920,
+        //     height: 1080,
+        //
+        // } );
+    }
+
+    else
+    {
+        Webcam.set({
+            width: 280,
+            height: 300,
+            dest_width: 280,
+            dest_height: 270,
+            image_format: 'jpeg',
+            jpeg_quality: 90
+        });
+        $('#person_image_camera').on('click', function(){
+            $('#person_image_camera').hide()
+            Webcam.snap( function(data_uri) {
+                // display results in page
+                document.getElementById('person_image').innerHTML = '<img  id="inputImg" src="'+data_uri+'"/>';
+                document.getElementById('display_photo_div').innerHTML = '<img id="inputImg" src="'+data_uri+'"/>';
+                picked_photo = true;
+            } );
+            $( '#person_image' ).show();
+            updateResults()
+        })
+    }
+
+
+    Webcam.attach( '#person_image_camera' );
+
+
+
+    if(iOS)
+        $('#open_picture').trigger('click')
+}
 $(document).ready(function () {
     $("#capture_photo").hide();
     $("#contact_info").hide();
@@ -119,65 +179,8 @@ $(document).ready(function () {
         $("#signin_check_visit").show();
         $("#signout_capture_msg").hide();
         signoutbtn.style.display = "none";
-        iOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
-        if(iOS){
-            Webcam.set({
-                width: 280,
-                constraints: { facingMode: { exact: "user" }  },
-                height: 300,
-                dest_width: 280,
-                dest_height: 300,
-                image_format: 'jpeg',
-                jpeg_quality: 90,
-                user_callback: function(data_uri) {
-                    // display results in page
-
-                    document.getElementById('person_image').innerHTML =      '<img id="inputImg" src="'+data_uri+'"/>';
-                    document.getElementById('display_photo_div').innerHTML = '<img id="inputImg" src="'+data_uri+'"/>';
-                    $('#person_image_camera').hide();
-                    $( '#person_image' ).show();
-                    picked_photo = true;
-                }
-            });
-
-            // Webcam.set( 'constraints', { //set the constraints and initialize camera device (0 or 1 for back and front - varies which is which depending on device)
-            //     width: 1920,
-            //     height: 1080,
-            //
-            // } );
-        }
-
-        else
-        {
-            Webcam.set({
-                width: 280,
-                height: 300,
-                dest_width: 280,
-                dest_height: 270,
-                image_format: 'jpeg',
-                jpeg_quality: 90
-            });
-            $('#person_image_camera').on('click', function(){
-                $('#person_image_camera').hide()
-                Webcam.snap( function(data_uri) {
-                    // display results in page
-                    document.getElementById('person_image').innerHTML = '<img  id="inputImg" src="'+data_uri+'"/>';
-                    document.getElementById('display_photo_div').innerHTML = '<img id="inputImg" src="'+data_uri+'"/>';
-                    picked_photo = true;
-                } );
-                $( '#person_image' ).show();
-                updateResults()
-            })
-        }
-
-
-        Webcam.attach( '#person_image_camera' );
-
         $("#capture_photo").show();
 
-
-        if(iOS)
-            $('#open_picture').trigger('click')
     }
     else {
         $("#signin_capture_msg").hide();
@@ -211,6 +214,7 @@ $(document).ready(function () {
             $("#missed_signout_msg").show();
             $("#time_out_div").show();
             $("#datetime_out").prop("readOnly", false);
+
         } else {
             var thistime = Date.now();
             $("#datetime_out").val(thistime);

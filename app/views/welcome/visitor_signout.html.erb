@@ -60,7 +60,7 @@
             <div class="row">
               <div class="col-xs-12 col-sm-12" >
                 <div id="person_image_camera" style="width: 250px;height: 320px; overflow: hidden; margin: auto"> </div>
-                <div id="person_image" style="width: 250px;height: 320px; overflow: hidden" hidden> </div>
+                <div id="person_image" style="width: 250px;height: 320px; margin: auto; overflow: hidden" hidden> </div>
               </div>
             </div>
             <div class="row" id="email_row" hidden>
@@ -83,46 +83,49 @@
           </div><!-- capture_photo  -->
         </div>
       </form>
-      <canvas id="overlay" />
       <script>
 
           var classes = [];
           var visitors_emails = {};
           <% Visitor.where(visitor_visit_informations: {sign_out_date: nil}).each do |v| %>
-            classes.push("<%= "visitor_#{v.id}"%>");
-            visitors_emails['<%= "visitor_#{v.id}" %>'] = '<%=  v.email %>'
+          classes.push("<%= "visitor_#{v.id}"%>");
+          visitors_emails['<%= "visitor_#{v.id}" %>'] = '<%=  v.email %>'
           <% end %>
-          var faceMatcher = null
+          var faceMatcher = {}
           //          const threshold = 0.6
 
           async function updateResults() {
-              if (!isFaceDetectionModelLoaded()) {
-                  return
-              }
-              const threshold = 0.6;
-              const inputImgEl = $('#inputImg').get(0)
 
-              desc2 = await
-              faceapi.computeFaceDescriptor(inputImgEl);
-
-              found = false;
-              for (i = 0; i < faceMatcher['_labeledDescriptors'].length; i++) {
-                  desc1 = faceMatcher['_labeledDescriptors'][i]['_descriptors'][0]
-                  distance = faceapi.round(faceapi.euclideanDistance(desc1, desc2)
-                  )
-                  if (distance <= threshold) {
-                      console.log(faceMatcher['_labeledDescriptors'][i]['_label'])
-                      found = true;
-                      $('#capture_person_name').val(visitors_emails[faceMatcher['_labeledDescriptors'][i]['_label']])
-                      break;
+              if(faceMatcher['_labeledDescriptors']) {
+                  if (!isFaceDetectionModelLoaded()) {
+                      return
                   }
+                  const threshold = 0.6;
+                  const inputImgEl = $('#inputImg').get(0)
 
+                  desc2 = await
+                  faceapi.computeFaceDescriptor(inputImgEl);
+
+                  found = false;
+                  for (i = 0; i < faceMatcher['_labeledDescriptors'].length; i++) {
+                      desc1 = faceMatcher['_labeledDescriptors'][i]['_descriptors'][0]
+                      distance = faceapi.round(faceapi.euclideanDistance(desc1, desc2)
+                      )
+                      if (distance <= threshold) {
+                          console.log(faceMatcher['_labeledDescriptors'][i]['_label'])
+                          found = true;
+                          $('#capture_person_name').val(visitors_emails[faceMatcher['_labeledDescriptors'][i]['_label']])
+                          break;
+                      }
+
+                  }
+                  if(!found)
+                  {
+                      $('#email_row_not_found').show()
+                  }
               }
               $('#email_row').show()
-              if(!found)
-              {
-                  $('#email_row_not_found').show()
-              }
+
           }
 
           function drawFaceRecognitionResults(results) {
@@ -210,6 +213,10 @@
               $("#capture_photo").show();
 
           }
+          $('#person_image').on('click', function(){
+              $( '#person_image' ).hide()
+              $('#person_image_camera').show()
+          })
           $(document).ready(function() {
               initFaceDetectionControls()
               run();
