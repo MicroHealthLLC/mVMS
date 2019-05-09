@@ -24,7 +24,7 @@ class WelcomeController < ApplicationController
     else
       if params[:visitor_id]
         @visitor = Visitor.find(params[:visitor_id])
-        @visitor.last_visit.update_attributes({sign_out_date: Time.now })
+        @visitor.where(visitor_visit_informations: { sign_out_date: nil  }).update_all({sign_out_date: Time.now })
         redirect_to root_path
         return
       end
