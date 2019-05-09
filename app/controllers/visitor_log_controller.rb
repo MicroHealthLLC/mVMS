@@ -8,12 +8,11 @@ class VisitorLogController < BaseController
   def visitor_transactions
     @visitor = Visitor.find_by_id params[:personid]
     if @visitor
-      image = path + "/visitor_#{@visitor.id}.jpeg"
-      unless FileTest.exist?(image)
+      
         if @visitor.avatar
           @visitor.save_image_avatar
         end
-      end
+     
     end
 
   end
