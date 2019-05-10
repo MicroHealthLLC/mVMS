@@ -16,11 +16,18 @@ class WelcomeController < ApplicationController
     @visitors = Visitor.joins(:visitor_visit_informations).merge(VisitorVisitInformation.where(sign_out_date: nil))
     if request.post?
       name = params[:name]
-      @visitor = @visitors.where(email: name).first
-      if @visitor.nil?
-        flash[:error] = 'You are not signed in. Click Cancel'
+      if name.strip.present?
+        @visitor = @visitors.where(email: name).first
+        if @visitor.nil?
+          flash[:error] = 'You are not signed in. Click Cancel'
+          redirect_to "/visitor_signout"
+        end
+      else
+        flash[:error] = 'Email should not be blank'
         redirect_to "/visitor_signout"
+
       end
+
     else
       if params[:visitor_id]
         @visitor = Visitor.find(params[:visitor_id])
@@ -35,7 +42,7 @@ class WelcomeController < ApplicationController
   def update_visitor
     visitor = Visitor.find_by_id params[:record_visit_id]
     if visitor
-      last_visit = visitor.last_visit
+      last_visit = visitor.visitor_visit_informations.where( sign_out_date: nil ).last
       last_visit.sign_out_date = Time.at(params[:record_datetime_out][0..-4].to_i)
       last_visit.visit_reason =  params[:record_reason]
       last_visit.classified =  params[:classified] == 'yes'
@@ -44,7 +51,7 @@ class WelcomeController < ApplicationController
       last_visit.recorded_by = current_user.full_name
       last_visit.save
     end
-    redirect_to '/admin'
+    redirect_back(fallback_location: '/visitor_log/visitor_log')
   end
   def visitor_bye
 
@@ -71,7 +78,7 @@ class WelcomeController < ApplicationController
                     name: visitor.name,
                     us_citizen: visitor.us_citizen?
                 })
-      render json:  json
+    render json:  json
   end
 
   def get_visitor_info
@@ -94,14 +101,14 @@ class WelcomeController < ApplicationController
                                 email: params[:email].to_s.strip
                             }).first_or_initialize
     if params[:update_contact].to_s == 'true' or visitor.new_record?
-        visitor.attributes = {
-            phone: params[:phone],
-            company: params[:company],
-            name: params[:person_name],
-            us_citizen: params[:citizen],
-            person_signature: params[:person_signature],
-            avatar: params[:person_image_url]
-        }
+      visitor.attributes = {
+          phone: params[:phone],
+          company: params[:company],
+          name: params[:person_name],
+          us_citizen: params[:citizen],
+          person_signature: params[:person_signature],
+          avatar: params[:person_image_url]
+      }
     end
     visitor.save
     if visitor.persisted?

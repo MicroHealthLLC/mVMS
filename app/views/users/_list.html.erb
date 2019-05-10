@@ -3,7 +3,8 @@
   <tr>
     <th>#</th>
     <th><%= t :email %></th>
-    <th><%= t :actions %></th>
+    <th></th>
+    <th></th>
 
 
   </tr>
@@ -14,6 +15,7 @@
     <tr>
       <td><%= link_to user.id, user %></td>
       <td><%= user.email %></td>
+      <td><%= link_to "Edit", user_path(user), class: "btn btn-info" %></td>
       <td><%= link_to "Delete",user_path(user),method: "delete",confirm: "Are you sure?",class: "btn btn-warning" %></td>
     </tr>
   <% end %>
