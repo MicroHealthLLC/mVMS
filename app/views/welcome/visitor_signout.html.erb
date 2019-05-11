@@ -121,7 +121,7 @@
               <div class="col-xs-12 col-sm-12"  hidden>
 
                 <% Visitor.where(visitor_visit_informations: {sign_out_date: nil}).each do |v| %>
-                    <img class="inputImg" id="inputImg" src='<%= Visitor.last.avatar %>' data-label="<%= v.email%>"/>
+                    <img class="inputImg" id="inputImg" src='<%= v.avatar %>' data-label="<%= v.email%>"/>
                 <% end %>
                 <canvas id="overlay" />
               </div>
