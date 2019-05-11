@@ -154,83 +154,47 @@
       </form>
       <script>
 
-          var classes = [];
-          var visitors_emails = {};
           var faceMatcher = null
           var labels = null
+          var label = null
           var faceMatchers = null
+          var descriptor = null
 
-          async function updateReferenceImageResults() {
-              faceMatchers = []
-              labels = []
 
-              for(i=0; i< $('.inputImg').length; i++)
-              {
-                  const imgEl = $('.inputImg').get(i)
-                  const fullFaceDescriptions = await faceapi
-                  .detectAllFaces(imgEl, getFaceDetectorOptions())
-                  .withFaceLandmarks()
-                  .withFaceDescriptors()
-
-                  if (!fullFaceDescriptions.length) {
-                      return
-                  }
-                  else {
-                      label = $(imgEl).data('label')
-                      labels.push(label)
-                      f = new faceapi.FaceMatcher(fullFaceDescriptions)
-                      for(j=0; j< f.labeledDescriptors.length; j++)
-                          f.labeledDescriptors[j]['_label'] = label
-                      faceMatchers.push( f )
-                  }
-              }
-
-          }
+          /* TODO add processing */
 
           async function updateQueryImageResults() {
-              if (!faceMatchers) {
-                  return
-              }
-              const inputImgEl = $('#inputImgq').get(0)
-
-              const results = await faceapi
-                  .detectAllFaces(inputImgEl, getFaceDetectorOptions())
-                  .withFaceLandmarks()
-                  .withFaceDescriptors();
-
+              console.log('time = '+ (new Date().getTime() / 1000))
+              canvas = $('#overlay').get(0);
+              console.log('time = '+ (new Date().getTime() / 1000))
+              results = await faceapi.detectAllFaces($('#inputImgq').get(0), getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
               if(results.length > 0)
-                  for(i=0; i<faceMatchers.length;i++)
-                  {
-                      faceMatcher=faceMatchers[i];
-                      if(drawFaceRecognitionResults(results))
-                          break;
-                  }
+              {
+                  console.log('time = '+ (new Date().getTime() / 1000))
+                  resizedResults = resizeCanvasAndResults($('#inputImgq').get(0), canvas, results)
+                  descriptor = resizedResults[0].descriptor;
+                  console.log('time = '+ (new Date().getTime() / 1000))
+
+                  if (faceMatchers) { await fetch_matcher(results); }
+                  else{ await populate_and_fetch_matcher(results); }
+              }
               else
               {
                   alert('We did not detect your face. please try again')
                   $( '#person_image' ).hide()
                   $('#person_image_camera').show()
               }
+              console.log('time = '+ (new Date().getTime() / 1000))
           }
 
-          function drawFaceRecognitionResults(results) {
-              found = false
-              const canvas = $('#overlay').get(0)
-              resizedResults = resizeCanvasAndResults($('#inputImgq').get(0), canvas, results)
-              descriptor = resizedResults[0].descriptor;
-              best_match = faceMatcher.findBestMatch(descriptor).toString();
-              console.log(best_match)
-              for(i=0; i< labels.length; i++)
+          async function fetch_matcher(){
+              found = false;
+              for(i=0; i<faceMatchers.length;i++)
               {
-                  if(best_match.indexOf(labels[i]) >= 0)
-                  {
-                      found = true;
-                      $('#capture_person_name').val(labels[i])
-                      $('#email_row').show();
-                      $('#capture_next_btn').show()
+                  faceMatcher = faceMatchers[i];
+                  found = drawFaceRecognitionResults()
+                  if(found)
                       break;
-                  }
-
               }
               if(!found)
               {
@@ -238,17 +202,62 @@
                   $('#email_row').show()
                   $('#capture_next_btn').show()
               }
+          }
+
+          async function populate_and_fetch_matcher(){
+              found = false;
+              faceMatchers = []
+              labels = []
+              for(i=0; i< $('.inputImg').length; i++)
+              {
+                  imgEl = $('.inputImg').get(i);
+                  label = $(imgEl).data('label')
+                  const fullFaceDescriptions = await faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
+
+                  if (!fullFaceDescriptions.length) {
+
+                  }
+                  else {
+                      labels.push(label)
+                      faceMatcher= new faceapi.FaceMatcher(fullFaceDescriptions)
+                      for(j=0; j< faceMatcher.labeledDescriptors.length; j++)
+                      {
+                          faceMatcher.labeledDescriptors[j]['_label'] = label
+                      }
+                      faceMatchers.push(faceMatcher )
+                      found = drawFaceRecognitionResults()
+                      if(found)
+                          break;
+                  }
+              }
+              if(!found)
+              {
+                  alert('Your face was not recognized. Please enter your email in the box below.')
+                  $('#email_row').show()
+                  $('#capture_next_btn').show()
+              }
+          }
+
+          function drawFaceRecognitionResults() {
+              found = false
+              best_match = faceMatcher.findBestMatch(descriptor).toString();
+              label = faceMatcher.labeledDescriptors[0]['_label']
+              if(best_match.indexOf(label) >= 0)
+              {
+                  found = true;
+                  $('#capture_person_name').val(label)
+                  $('#email_row').show();
+                  $('#capture_next_btn').show();
+              }
+
               return(found)
           }
 
           async function run() {
-              // load face detection, face landmark model and face recognition models
               await changeFaceDetector(selectedFaceDetector)
               await faceapi.loadFaceLandmarkModel('/')
               await faceapi.loadFaceRecognitionModel('/')
 
-//        // initialize face matcher with 1 reference descriptor per bbt character
-              await updateReferenceImageResults()
           }
 
           function initWebCam() {
@@ -269,14 +278,11 @@
                       image_format: 'png',
                       jpeg_quality: 90,
                       user_callback: function (data_uri) {
-                          // display results in page
-
                           document.getElementById('person_image').innerHTML = '<img id="inputImgq" src="' + data_uri + '"/>';
                           $('#person_image_camera').hide();
                           $('#person_image').show();
                           picked_photo = true;
-                          updateQueryImageResults()
-//                          updateResults()
+                          updateQueryImageResults();
                       }
                   });
 
@@ -300,7 +306,6 @@
                       });
                       $('#person_image').show();
                       updateQueryImageResults()
-//                      updateResults()
                   })
               }
 
@@ -310,10 +315,6 @@
               $("#capture_photo").show();
 
           }
-          $('#person_image').on('click', function(){
-              $( '#person_image' ).hide()
-              $('#person_image_camera').show()
-          })
           $(document).ready(function() {
               initFaceDetectionControls()
               run();
@@ -326,8 +327,6 @@
       <script src="/js/commons.js"></script>
       <script src="/js/drawing.js"></script>
       <script src="/js/faceDetectionControls.js"></script>
-      <script src="/js/imageSelectionControls.js"></script>
-      <script src="/js/bbt.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
 
       <script>
