@@ -145,9 +145,9 @@
               </div>
             </div>
 
-            <div class="buttonrow" id="button_form" hidden>
+            <div class="buttonrow" >
               <a href="/" > <button class="btn btn-warning" > Cancel</button></a>
-              <button id="capture_next_btn" class="btn btn-success">Next</button>
+              <button id="capture_next_btn" class="btn btn-success" hidden>Next</button>
             </div>
           </div><!-- capture_photo  -->
         </div>
@@ -227,7 +227,7 @@
                       found = true;
                       $('#capture_person_name').val(labels[i])
                       $('#email_row').show();
-                      $('#button_form').show()
+                      $('#capture_next_btn').show()
                       break;
                   }
 
@@ -236,7 +236,7 @@
               {
                   alert('Your face was not recognized. Please enter your email in the box below.')
                   $('#email_row').show()
-                  $('#button_form').show()
+                  $('#capture_next_btn').show()
               }
               return(found)
           }
