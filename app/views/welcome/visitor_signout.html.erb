@@ -118,11 +118,12 @@
             <h1><a href='/'> <img class="smlogo" src="/images/microhealth-logo.svg" /></a></h1>
             <div class="complete_msg" id="capture_complete_msg">Must complete form!</div>
             <div class="row">
-              <div class="col-xs-12 col-sm-12" hidden >
-                <canvas id="overlay" />
+              <div class="col-xs-12 col-sm-12"  hidden>
+
                 <% Visitor.where(visitor_visit_informations: {sign_out_date: nil}).each do |v| %>
                     <img class="inputImg" id="inputImg" src='<%= Visitor.last.avatar %>' data-label="<%= v.email%>"/>
                 <% end %>
+                <canvas id="overlay" />
               </div>
               <div class="col-xs-12 col-sm-12" >
 
@@ -131,6 +132,7 @@
                 </h3>
                 <div id="person_image_camera" style="width: 300px;height: 300px; overflow: hidden; margin: auto"> </div>
                 <div id="person_image" style="width: 300px;height: 300px; margin: auto; overflow: hidden" hidden> </div>
+                <%= image_tag 'loading.gif', id: 'loading', style: 'width: 50px;   position: absolute; top: 46px;    right: 29%; display: none' %>
               </div>
             </div>
             <div class="row" id="email_row" hidden>
@@ -164,19 +166,22 @@
           /* TODO add processing */
 
           async function updateQueryImageResults() {
-              console.log('time = '+ (new Date().getTime() / 1000))
+              $('#loading').show()
+              
               canvas = $('#overlay').get(0);
-              console.log('time = '+ (new Date().getTime() / 1000))
+              
               results = await faceapi.detectAllFaces($('#inputImgq').get(0), getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
               if(results.length > 0)
               {
-                  console.log('time = '+ (new Date().getTime() / 1000))
+                  
                   resizedResults = resizeCanvasAndResults($('#inputImgq').get(0), canvas, results)
                   descriptor = resizedResults[0].descriptor;
-                  console.log('time = '+ (new Date().getTime() / 1000))
+                  
 
                   if (faceMatchers) { await fetch_matcher(results); }
                   else{ await populate_and_fetch_matcher(results); }
+
+                 
               }
               else
               {
@@ -184,7 +189,8 @@
                   $( '#person_image' ).hide()
                   $('#person_image_camera').show()
               }
-              console.log('time = '+ (new Date().getTime() / 1000))
+              $('#loading').hide()
+              
           }
 
           async function fetch_matcher(){
