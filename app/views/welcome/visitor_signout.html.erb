@@ -13,43 +13,103 @@
 <link rel="stylesheet" href="/css/mvms_visitors_style.css">
 <body class="ltblueback">
 
-<div id="main2" class="container">
+<div id="main2" class="container">  <div class="center-content" hidden>
+  <!-- face_detector_selection_control -->
+  <div id="face_detector_selection_control" class="row input-field">
+    <select id="selectFaceDetector">
+      <option value="ssd_mobilenetv1">SSD Mobilenet V1</option>
+      <option value="tiny_face_detector">Tiny Face Detector</option>
+      <option value="mtcnn">MTCNN</option>
+    </select>
+    <label>Select Face Detector</label>
+  </div>
+  <!-- face_detector_selection_control -->
+
+  <!-- ssd_mobilenetv1_controls -->
+  <span id="ssd_mobilenetv1_controls">
+        <div class="row side-by-side">
+          <div class="row">
+            <label for="minConfidence">Min Confidence:</label>
+            <input disabled value="0.5" id="minConfidence" type="text" class="bold">
+          </div>
+          <button
+          class="waves-effect waves-light btn"
+          onclick="onDecreaseMinConfidence()"
+          >
+            <i class="material-icons left">-</i>
+          </button>
+          <button
+          class="waves-effect waves-light btn"
+          onclick="onIncreaseMinConfidence()"
+          >
+            <i class="material-icons left">+</i>
+          </button>
+        </div>
+      </span>
+  <!-- ssd_mobilenetv1_controls -->
+
+  <!-- tiny_face_detector_controls -->
+  <span id="tiny_face_detector_controls">
+        <div class="row side-by-side">
+          <div class="row input-field" style="margin-right: 20px;">
+            <select id="inputSize">
+              <option value="" disabled selected>Input Size:</option>
+              <option value="160">160 x 160</option>
+              <option value="224">224 x 224</option>
+              <option value="320">320 x 320</option>
+              <option value="416">416 x 416</option>
+              <option value="512">512 x 512</option>
+              <option value="608">608 x 608</option>
+            </select>
+            <label>Input Size</label>
+          </div>
+          <div class="row">
+            <label for="scoreThreshold">Score Threshold:</label>
+            <input disabled value="0.5" id="scoreThreshold" type="text" class="bold">
+          </div>
+          <button
+          class="waves-effect waves-light btn"
+          onclick="onDecreaseScoreThreshold()"
+          >
+            <i class="material-icons left">-</i>
+          </button>
+          <button
+          class="waves-effect waves-light btn"
+          onclick="onIncreaseScoreThreshold()"
+          >
+            <i class="material-icons left">+</i>
+          </button>
+        </div>
+      </span>
+  <!-- tiny_face_detector_controls -->
+
+  <!-- mtcnn_controls -->
+  <span id="mtcnn_controls">
+        <div class="row side-by-side">
+          <div class="row">
+            <label for="minFaceSize">Minimum Face Size:</label>
+            <input disabled value="20" id="minFaceSize" type="text" class="bold">
+          </div>
+          <button
+          class="waves-effect waves-light btn"
+          onclick="onDecreaseMinFaceSize()"
+          >
+            <i class="material-icons left">-</i>
+          </button>
+          <button
+          class="waves-effect waves-light btn"
+          onclick="onIncreaseMinFaceSize()"
+          >
+            <i class="material-icons left">+</i>
+          </button>
+        </div>
+      </span>
+  <!-- mtcnn_controls -->
+
+</div>
   <% if request.get? %>
 
 
-      <div hidden>
-        <div id="face_detector_selection_control" class="row input-field" style="margin-right: 20px;">
-          <select id="selectFaceDetector">
-            <option value="ssd_mobilenetv1" selected>SSD Mobilenet V1</option>
-            <option value="tiny_face_detector">Tiny Face Detector</option>
-            <option value="mtcnn">MTCNN</option>
-          </select>
-          <label>Select Face Detector</label>
-        </div>
-        <!-- ssd_mobilenetv1_controls -->
-        <span id="ssd_mobilenetv1_controls">
-          <div class="row side-by-side">
-            <div class="row">
-              <label for="minConfidence">Min Confidence:</label>
-              <input disabled value="0.5" id="minConfidence" type="text" class="bold">
-            </div>
-            <button
-            class="waves-effect waves-light btn"
-            onclick="onDecreaseMinConfidence()"
-            >
-              <i class="material-icons left">-</i>
-            </button>
-            <button
-            class="waves-effect waves-light btn"
-            onclick="onIncreaseMinConfidence()"
-            >
-              <i class="material-icons left">+</i>
-            </button>
-          </div>
-        </span>
-        <!-- ssd_mobilenetv1_controls -->
-
-      </div>
 
       <form id="visitor_sign_form" autocomplete="off" method="post">
         <div class="form-group">
@@ -58,9 +118,18 @@
             <h1><a href='/'> <img class="smlogo" src="/images/microhealth-logo.svg" /></a></h1>
             <div class="complete_msg" id="capture_complete_msg">Must complete form!</div>
             <div class="row">
+              <div class="col-xs-12 col-sm-12" hidden >
+                <% Visitor.where(visitor_visit_informations: {sign_out_date: nil}).each do |v| %>
+                    <img class="inputImg" id="inputImg" src='<%= Visitor.last.avatar %>' data-label="<%= v.email%>"/>
+                <% end %>
+              </div>
               <div class="col-xs-12 col-sm-12" >
-                <div id="person_image_camera" style="width: 250px;height: 320px; overflow: hidden; margin: auto"> </div>
-                <div id="person_image" style="width: 250px;height: 320px; margin: auto; overflow: hidden" hidden> </div>
+
+                <h3 style="margin: auto; align-content: center">
+                  Please look at the camera so your face may be recognized.
+                </h3>
+                <div id="person_image_camera" style="width: 300px;height: 300px; overflow: hidden; margin: auto"> </div>
+                <div id="person_image" style="width: 300px;height: 300px; margin: auto; overflow: hidden" hidden> </div>
               </div>
             </div>
             <div class="row" id="email_row" hidden>
@@ -83,6 +152,8 @@
           </div><!-- capture_photo  -->
         </div>
       </form>
+      <canvas id="overlay" />
+      <canvas id="overlay2" />
       <script>
 
           var classes = [];
@@ -91,56 +162,61 @@
           classes.push("<%= "visitor_#{v.id}"%>");
           visitors_emails['<%= "visitor_#{v.id}" %>'] = '<%=  v.email %>'
           <% end %>
-          var faceMatcher = {}
-          //          const threshold = 0.6
 
-          async function updateResults() {
+          var faceMatcher = null
+          var faceMatchers = null
 
-              if(faceMatcher['_labeledDescriptors']) {
-                  if (!isFaceDetectionModelLoaded()) {
+          async function updateReferenceImageResults() {
+              faceMatchers = []
+
+              for(i=0; i< $('.inputImg').length; i++)
+              {
+                  const imgEl = $('.inputImg').get(i)
+                  const fullFaceDescriptions = await faceapi
+                  .detectAllFaces(imgEl, getFaceDetectorOptions())
+                  .withFaceLandmarks()
+                  .withFaceDescriptors()
+
+                  if (!fullFaceDescriptions.length) {
                       return
                   }
-                  const threshold = 0.6;
-                  const inputImgEl = $('#inputImg').get(0)
-
-                  desc2 = await
-                  faceapi.computeFaceDescriptor(inputImgEl);
-
-                  found = false;
-                  for (i = 0; i < faceMatcher['_labeledDescriptors'].length; i++) {
-                      desc1 = faceMatcher['_labeledDescriptors'][i]['_descriptors'][0]
-                      distance = faceapi.round(faceapi.euclideanDistance(desc1, desc2)
-                      )
-                      if (distance <= threshold) {
-                          console.log(faceMatcher['_labeledDescriptors'][i]['_label'])
-                          found = true;
-                          $('#capture_person_name').val(visitors_emails[faceMatcher['_labeledDescriptors'][i]['_label']])
-                          break;
-                      }
-
-                  }
-                  if(!found)
-                  {
-                      $('#email_row_not_found').show()
+                  else {
+                      label = $(imgEl).data('label')
+                      f = new faceapi.FaceMatcher(fullFaceDescriptions)
+                      for(j=0; j< f.labeledDescriptors.length; j++)
+                          f.labeledDescriptors[j]['_label'] = label
+                      faceMatchers.push( f )
                   }
               }
-              $('#email_row').show()
 
+          }
+
+          async function updateQueryImageResults() {
+              if (!faceMatchers) {
+                  return
+              }
+              const inputImgEl = $('#inputImgq').get(0)
+
+              const results = await faceapi
+                  .detectAllFaces(inputImgEl, getFaceDetectorOptions())
+                  .withFaceLandmarks()
+                  .withFaceDescriptors();
+
+              for(i=0; i<faceMatchers.length;i++)
+              {
+                  faceMatcher=faceMatchers[i];
+                  drawFaceRecognitionResults(results)
+              }
           }
 
           function drawFaceRecognitionResults(results) {
               const canvas = $('#overlay').get(0)
               // resize detection and landmarks in case displayed image is smaller than
               // original size
-              resizedResults = resizeCanvasAndResults($('#inputImg').get(0), canvas, results)
-
-              const boxesWithText = resizedResults.map(({ detection, descriptor }) =>
-                  new faceapi.BoxWithText(
-                      detection.box,
-                      faceMatcher.findBestMatch(descriptor).toString()
-                  )
-          )
-              faceapi.drawDetection(canvas, boxesWithText)
+              resizedResults = resizeCanvasAndResults($('#inputImgq').get(0), canvas, results)
+              descriptor = resizedResults[0].descriptor;
+              best_match = faceMatcher.findBestMatch(descriptor).toString();
+              console.log(best_match)
           }
 
           async function run() {
@@ -150,9 +226,8 @@
               await faceapi.loadFaceRecognitionModel('/')
 
 //        // initialize face matcher with 1 reference descriptor per bbt character
-              faceMatcher = await createBbtFaceMatcher(1)
+              await updateReferenceImageResults()
 
-              console.log(faceMatcher)
 
           }
 
@@ -176,11 +251,12 @@
                       user_callback: function (data_uri) {
                           // display results in page
 
-                          document.getElementById('person_image').innerHTML = '<img id="inputImg" src="' + data_uri + '"/>';
+                          document.getElementById('person_image').innerHTML = '<img id="inputImgq" src="' + data_uri + '"/>';
                           $('#person_image_camera').hide();
                           $('#person_image').show();
                           picked_photo = true;
-                          updateResults()
+                          updateQueryImageResults()
+//                          updateResults()
                       }
                   });
 
@@ -190,7 +266,7 @@
                   Webcam.set({
                       width: 280,
                       height: 300,
-                      dest_width: 280,
+                      dest_width: 300,
                       dest_height: 300,
                       image_format: 'jpeg',
                       jpeg_quality: 180
@@ -199,11 +275,12 @@
                       $('#person_image_camera').hide()
                       Webcam.snap(function (data_uri) {
                           // display results in page
-                          document.getElementById('person_image').innerHTML = '<img  id="inputImg" src="' + data_uri + '"/>';
+                          document.getElementById('person_image').innerHTML = '<img  id="inputImgq" src="' + data_uri + '"/>';
                           picked_photo = true;
                       });
                       $('#person_image').show();
-                      updateResults()
+                      updateQueryImageResults()
+//                      updateResults()
                   })
               }
 
