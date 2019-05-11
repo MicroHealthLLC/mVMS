@@ -106,10 +106,10 @@ function initWebCam(){
     iOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
     if(iOS){
         Webcam.set({
-            width: 280,
+            width: 300,
             constraints: { facingMode: { exact: "user" }  },
             height: 300,
-            dest_width: 280,
+            dest_width: 300,
             dest_height: 300,
             image_format: 'jpeg',
             jpeg_quality: 90,
@@ -134,10 +134,10 @@ function initWebCam(){
     else
     {
         Webcam.set({
-            width: 280,
+            width: 300,
             height: 300,
-            dest_width: 280,
-            dest_height: 270,
+            dest_width: 300,
+            dest_height: 300,
             image_format: 'jpeg',
             jpeg_quality: 90
         });
