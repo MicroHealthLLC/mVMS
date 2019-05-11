@@ -97,8 +97,11 @@ function validateSignature() {
 
 function open_picture(){
     console.log('open picture')
+    console.log( $('#person_image_camera-ios_input').length)
+
     $('#person_image_camera-ios_input').show()
-    $('#person_image_camera-ios_input').trigger('click');
+    $('#person_image_camera-ios_input').focus();
+    $('#person_image_camera-ios_input').click();
     $('#person_image_camera-ios_input').hide()
 }
 function initWebCam(){
@@ -121,6 +124,7 @@ function initWebCam(){
                 $('#person_image_camera').hide();
                 $( '#person_image' ).show();
                 picked_photo = true;
+                updateQueryImageResults()
             }
         });
 
@@ -150,7 +154,7 @@ function initWebCam(){
                 picked_photo = true;
             } );
             $( '#person_image' ).show();
-            updateResults()
+            updateQueryImageResults()
         })
     }
 
