@@ -27,9 +27,9 @@ class VisitorVisitInformation < ApplicationRecord
     end
     return '01111' if sign_out_date.present?
     return '10002' if sign_in_date.nil?
-    return '10002' if sign_in_date.to_date < Date.today.to_date
     return '01100' if 2.hours.ago < sign_in_date
     return '20000' if 2.hours.ago > sign_in_date
+    return '10002' if sign_in_date.to_date < Date.today.to_date
     "01110"
   end
 end
