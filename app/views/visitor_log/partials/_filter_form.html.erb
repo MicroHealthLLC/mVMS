@@ -4,7 +4,7 @@
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 <div style="overflow: hidden; margin-bottom: 10px">
-  <%= form_for @filters, as: :filter, url: '/visitor_log/visitor_log', html: {class: 'form-horizontal'},method: :get do |f|  %>
+  <%= form_for @filters, as: :filter, url: '/visitor_log', html: {class: 'form-horizontal'},method: :get do |f|  %>
       <div class="row">
 
         <div class="col-md-2 col-sm-4 col-xs-6">
@@ -105,7 +105,7 @@
           <%= f.submit 'FILTER', class: 'btn btn-success btn-block' %>
         </div>
         <div class="pull-right col-md-2 col-sm-4 col-xs-6">
-          <%= link_to 'Clear', '/visitor_log/visitor_log', class: 'btn btn-default btn-block' %>
+          <%= link_to 'Clear', '/visitor_log', class: 'btn btn-default btn-block' %>
         </div>
       </div>
   <% end %>

@@ -51,7 +51,7 @@ class WelcomeController < ApplicationController
       last_visit.recorded_by = current_user.full_name
       last_visit.save
     end
-    redirect_back(fallback_location: '/visitor_log/visitor_log')
+    redirect_back(fallback_location: '/visitor_log')
   end
   def visitor_bye
 
