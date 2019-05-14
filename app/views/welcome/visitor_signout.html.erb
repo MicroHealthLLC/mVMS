@@ -161,36 +161,45 @@
           var label = null
           var faceMatchers = null
           var descriptor = null
+          var retries = 0
 
 
           /* TODO add processing */
 
           async function updateQueryImageResults() {
+              retries++;
               $('#loading').show()
-              
+
               canvas = $('#overlay').get(0);
-              
+
               results = await faceapi.detectAllFaces($('#inputImgq').get(0), getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
               if(results.length > 0)
               {
-                  
+
                   resizedResults = resizeCanvasAndResults($('#inputImgq').get(0), canvas, results)
                   descriptor = resizedResults[0].descriptor;
-                  
-
                   if (faceMatchers) { await fetch_matcher(results); }
                   else{ await populate_and_fetch_matcher(results); }
 
-                 
+
               }
               else
               {
-                  alert('We did not detect your face. please try again')
-                  $( '#person_image' ).hide()
-                  $('#person_image_camera').show()
+                  if( retries < 3)
+                  {
+                      alert('We did not detect your face. please try again')
+                      $( '#person_image' ).hide()
+                      $('#person_image_camera').show();
+                  }
+                  else
+                  {
+                      alert('Your face was not recognized. Please enter your email in the box below.')
+                      $('#email_row').show()
+                      $('#capture_next_btn').show()
+                  }
               }
               $('#loading').hide()
-              
+
           }
 
           async function fetch_matcher(){
