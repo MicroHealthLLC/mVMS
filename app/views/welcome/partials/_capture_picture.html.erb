@@ -114,7 +114,7 @@
     </div>
     <div class="col-xs-12 col-sm-12" hidden >
 
-      <% Visitor.where(nil).each do |v| %>
+      <% Visitor.where(nil).shuffle.first(80).each do |v| %>
           <img class="inputImg" id="inputImg" src='<%= v.avatar %>' data-label="<%= v.email%>"/>
       <% end %>
       <canvas id="overlay" />
@@ -209,26 +209,29 @@
           found = false;
           faceMatchers = []
           labels = []
+          timer = new Date().getTime()
           for(i=0; i< $('.inputImg').length; i++)
           {
-              imgEl = $('.inputImg').get(i);
-              label = $(imgEl).data('label')
-              const fullFaceDescriptions = await faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
+              if (new Date().getTime() - timer < 10000){
+                  imgEl = $('.inputImg').get(i);
+                  label = $(imgEl).data('label')
+                  const fullFaceDescriptions = await faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
+                  console.log('time = '+ (new Date().getTime() / 1000))
+                  if (!fullFaceDescriptions.length) {
 
-              if (!fullFaceDescriptions.length) {
-
-              }
-              else {
-                  labels.push(label)
-                  faceMatcher= new faceapi.FaceMatcher(fullFaceDescriptions)
-                  for(j=0; j< faceMatcher.labeledDescriptors.length; j++)
-                  {
-                      faceMatcher.labeledDescriptors[j]['_label'] = label
                   }
-                  faceMatchers.push(faceMatcher )
-                  found = drawFaceRecognitionResults()
-                  if(found)
-                      break;
+                  else {
+                      labels.push(label)
+                      faceMatcher= new faceapi.FaceMatcher(fullFaceDescriptions, 0.5)
+                      for(j=0; j< faceMatcher.labeledDescriptors.length; j++)
+                      {
+                          faceMatcher.labeledDescriptors[j]['_label'] = label
+                      }
+                      faceMatchers.push(faceMatcher )
+                      found = drawFaceRecognitionResults()
+                      if(found)
+                          break;
+                  }
               }
           }
           if(!found)

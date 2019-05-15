@@ -120,7 +120,7 @@
             <div class="row">
               <div class="col-xs-12 col-sm-12"  hidden>
 
-                <% Visitor.where(visitor_visit_informations: {sign_out_date: nil}).each do |v| %>
+                <% Visitor.where(visitor_visit_informations: {sign_out_date: nil}).shuffle.each do |v| %>
                     <img class="inputImg" id="inputImg" src='<%= v.avatar %>' data-label="<%= v.email%>"/>
                 <% end %>
                 <canvas id="overlay" />
@@ -161,8 +161,7 @@
           var label = null
           var faceMatchers = null
           var descriptor = null
-          var retries = 0
-
+          var retries = 0;
 
           /* TODO add processing */
 
@@ -178,10 +177,8 @@
 
                   resizedResults = resizeCanvasAndResults($('#inputImgq').get(0), canvas, results)
                   descriptor = resizedResults[0].descriptor;
-                  if (faceMatchers) { await fetch_matcher(results); }
-                  else{ await populate_and_fetch_matcher(results); }
-
-
+                  if (faceMatchers) { await fetch_matcher(); }
+                  else{ await populate_and_fetch_matcher(); }
               }
               else
               {
@@ -220,52 +217,64 @@
           }
 
           async function populate_and_fetch_matcher(){
-              found = false;
               faceMatchers = []
-              labels = []
-              for(i=0; i< $('.inputImg').length; i++)
-              {
-                  imgEl = $('.inputImg').get(i);
-                  label = $(imgEl).data('label')
-                  const fullFaceDescriptions = await faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
+              labels = [];
+              found = false
+              console.log('time = '+ (new Date().getTime() / 1000))
+              timer = new Date().getTime()
+              for(i=0; i< $('.inputImg').length; i++) {
+                  if (new Date().getTime() - timer < 15000){
+                      if (!found) {
+                          imgEl = $('.inputImg').get(i)
+                          label = $(imgEl).data('label')
+                          const fullFaceDescriptions = await
+                          faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
 
-                  if (!fullFaceDescriptions.length) {
-
+                          if (fullFaceDescriptions.length) {
+                              labels.push(label)
+                              faceMatcher = new faceapi.FaceMatcher(fullFaceDescriptions, 0.5)
+                              for (j = 0; j < faceMatcher.labeledDescriptors.length; j++) {
+                                  faceMatcher.labeledDescriptors[j]['_label'] = label
+                              }
+                              faceMatchers.push(faceMatcher)
+                              found = drawFaceRecognitionResults();
+                          }
+                      }
                   }
                   else {
-                      labels.push(label)
-                      faceMatcher= new faceapi.FaceMatcher(fullFaceDescriptions)
-                      for(j=0; j< faceMatcher.labeledDescriptors.length; j++)
-                      {
-                          faceMatcher.labeledDescriptors[j]['_label'] = label
-                      }
-                      faceMatchers.push(faceMatcher )
-                      found = drawFaceRecognitionResults()
-                      if(found)
-                          break;
+                      break;
                   }
+
+
               }
-              if(!found)
-              {
-                  alert('Your face was not recognized. Please enter your email in the box below.')
-                  $('#email_row').show()
-                  $('#capture_next_btn').show()
-              }
+              console.log(' FINSIH time = '+ (new Date().getTime() / 1000))
+                  if(!found)
+                  {
+                      console.log('time = '+ (new Date().getTime() / 1000))
+                      alert('Your face was not recognized. Please enter your email in the box below.')
+                      $('#email_row').show()
+                      $('#capture_next_btn').show()
+                  }
+
+          }
+
+          async function test(imgEl) {
+
           }
 
           function drawFaceRecognitionResults() {
-              found = false
+              f = false
               best_match = faceMatcher.findBestMatch(descriptor).toString();
               label = faceMatcher.labeledDescriptors[0]['_label']
               if(best_match.indexOf(label) >= 0)
               {
-                  found = true;
+                  f = true;
                   $('#capture_person_name').val(label)
                   $('#email_row').show();
                   $('#capture_next_btn').show();
               }
 
-              return(found)
+              return(f)
           }
 
           async function run() {
