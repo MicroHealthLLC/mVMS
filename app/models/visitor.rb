@@ -95,7 +95,7 @@ class Visitor < ApplicationRecord
 
 
   default_scope { includes(:visitor_visit_informations).references(:visitor_visit_informations).order('visitors.updated_at DESC') }
-  validates_presence_of :name, :email
+  validates_presence_of :name, :email, :avatar
   validates_uniqueness_of :email
 
   def personvisiting

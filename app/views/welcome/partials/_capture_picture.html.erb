@@ -114,7 +114,7 @@
     </div>
     <div class="col-xs-12 col-sm-12" hidden >
 
-      <% Visitor.where(nil).shuffle.first(150).each do |v| %>
+      <% Visitor.not.where(avatar:nil).shuffle.first(150).each do |v| %>
           <img class="inputImg" id="inputImg" src='<%= v.avatar %>' data-label="<%= v.email%>"/>
       <% end %>
       <canvas id="overlay" />
