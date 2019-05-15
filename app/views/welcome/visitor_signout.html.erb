@@ -118,9 +118,9 @@
             <h1><a href='/'> <img class="smlogo" src="/images/microhealth-logo.svg" /></a></h1>
             <div class="complete_msg" id="capture_complete_msg">Must complete form!</div>
             <div class="row">
-              <div class="col-xs-12 col-sm-12"  hidden>
+              <div class="col-xs-12 col-sm-12" id="hidden_imgs" hidden>
 
-                <% Visitor.where.not(avatar:nil).where(visitor_visit_informations: {sign_out_date: nil}).shuffle.each do |v| %>
+                <% Visitor.where.not(avatar:nil).where(visitor_visit_informations: {sign_out_date: nil}).where("visitor_visit_informations.sign_in_date >= ?", 1.day.ago).order('visitor_visit_informations.id DESC').each do |v| %>
                     <img class="inputImg" id="inputImg" src='<%= v.avatar %>' data-label="<%= v.email%>"/>
                 <% end %>
                 <canvas id="overlay" />
@@ -155,8 +155,6 @@
         </div>
       </form>
       <script>
-
-          var faceMatcher = null
           var labels = null
           var label = null
           var faceMatchers = null
@@ -223,7 +221,7 @@
               console.log('time = '+ (new Date().getTime() / 1000))
               timer = new Date().getTime()
               for(i=0; i< $('.inputImg').length; i++) {
-                  if (new Date().getTime() - timer < 15000){
+                  if (new Date().getTime() - timer < 20000){
                       if (!found) {
                           try{
                               imgEl = $('.inputImg').get(i)
@@ -232,11 +230,8 @@
                               faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
 
                               if (fullFaceDescriptions.length) {
-                                  labels.push(label)
                                   faceMatcher = new faceapi.FaceMatcher(fullFaceDescriptions, 0.5)
-                                  for (j = 0; j < faceMatcher.labeledDescriptors.length; j++) {
-                                      faceMatcher.labeledDescriptors[j]['_label'] = label
-                                  }
+                                  faceMatcher.labeledDescriptors[0]['_label'] = label
                                   faceMatchers.push(faceMatcher)
                                   found = drawFaceRecognitionResults();
                               }
@@ -266,7 +261,26 @@
           }
 
           async function test(imgEl) {
+              console.log('time = '+ (new Date().getTime() / 1000))
+              try{
+                  l = $(imgEl).data('label')
+                  const fullFaceDescriptions = await
+                  faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
 
+                  if (fullFaceDescriptions.length) {
+//                      labels.push(l)
+                      fm = new faceapi.FaceMatcher(fullFaceDescriptions, 0.5)
+                      for (j = 0; j < fm.labeledDescriptors.length; j++) {
+                          fm.labeledDescriptors[j]['_label'] = l
+                      }
+                      faceMatchers.push(fm)
+                      found = drawFaceRecognitionResults(fm);
+                  }
+              }
+              catch(err)
+              {
+
+              }
           }
 
           function drawFaceRecognitionResults() {
