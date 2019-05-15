@@ -225,21 +225,28 @@
               for(i=0; i< $('.inputImg').length; i++) {
                   if (new Date().getTime() - timer < 15000){
                       if (!found) {
-                          imgEl = $('.inputImg').get(i)
-                          label = $(imgEl).data('label')
-                          const fullFaceDescriptions = await
-                          faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
+                          try{
+                              imgEl = $('.inputImg').get(i)
+                              label = $(imgEl).data('label')
+                              const fullFaceDescriptions = await
+                              faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
 
-                          if (fullFaceDescriptions.length) {
-                              labels.push(label)
-                              faceMatcher = new faceapi.FaceMatcher(fullFaceDescriptions, 0.5)
-                              for (j = 0; j < faceMatcher.labeledDescriptors.length; j++) {
-                                  faceMatcher.labeledDescriptors[j]['_label'] = label
+                              if (fullFaceDescriptions.length) {
+                                  labels.push(label)
+                                  faceMatcher = new faceapi.FaceMatcher(fullFaceDescriptions, 0.5)
+                                  for (j = 0; j < faceMatcher.labeledDescriptors.length; j++) {
+                                      faceMatcher.labeledDescriptors[j]['_label'] = label
+                                  }
+                                  faceMatchers.push(faceMatcher)
+                                  found = drawFaceRecognitionResults();
                               }
-                              faceMatchers.push(faceMatcher)
-                              found = drawFaceRecognitionResults();
+                          }
+                          catch(err)
+                          {
+
                           }
                       }
+
                   }
                   else {
                       break;
@@ -248,13 +255,13 @@
 
               }
               console.log(' FINSIH time = '+ (new Date().getTime() / 1000))
-                  if(!found)
-                  {
-                      console.log('time = '+ (new Date().getTime() / 1000))
-                      alert('Your face was not recognized. Please enter your email in the box below.')
-                      $('#email_row').show()
-                      $('#capture_next_btn').show()
-                  }
+              if(!found)
+              {
+                  console.log('time = '+ (new Date().getTime() / 1000))
+                  alert('Your face was not recognized. Please enter your email in the box below.')
+                  $('#email_row').show()
+                  $('#capture_next_btn').show()
+              }
 
           }
 
