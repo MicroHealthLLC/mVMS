@@ -42,14 +42,30 @@ class WelcomeController < ApplicationController
   def update_visitor
     visitor = Visitor.find_by_id params[:record_visit_id]
     if visitor
-      last_visit = visitor.visitor_visit_informations.where( sign_out_date: nil ).last
-      last_visit.sign_out_date = Time.at(params[:record_datetime_out][0..-4].to_i)
-      last_visit.visit_reason =  params[:record_reason]
-      last_visit.classified =  params[:classified] == 'yes'
-      last_visit.us_citizen =  params[:citizen]== 'yes'
-      last_visit.person_visiting_id = Person.find_by_name( params[:person_visiting]).id
-      last_visit.recorded_by = current_user.full_name
-      last_visit.save
+      last_visits = visitor.visitor_visit_informations.where( sign_out_date: nil )
+      options = {
+          visit_reason: params[:record_reason],
+          classified: params[:classified],
+          person_visiting_id: Person.find_by_name( params[:person_visiting]).id,
+          recorded_by: current_user.full_name
+      }
+      if params[:record_datetime_in].present? && params[:record_datetime_in] != 'NaN'
+        sign_in_date = Time.at(params[:record_datetime_in][0..-4].to_i) rescue nil
+        options.merge!({sign_in_date: sign_in_date}) if sign_in_date
+      end
+
+      if params[:record_datetime_out].present? && params[:record_datetime_out] != 'NaN'
+        sign_out_date = Time.at(params[:record_datetime_out][0..-4].to_i) rescue nil
+        options.merge!({sign_out_date: sign_out_date}) if sign_out_date
+      end
+      if last_visits.present?
+
+        last_visits.update_all(options)
+      else
+        last_visit = visitor.visitor_visit_informations.last
+        last_visit.update(options)
+      end
+
     end
     redirect_back(fallback_location: '/visitor_log')
   end

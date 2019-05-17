@@ -87,16 +87,16 @@
         <div class="row">
           <div class="col-md-2 col-sm-4 col-xs-6">
             <label>SORT BY :</label>
-            <%= f.select :f_sort_by, options_for_select([
+            <%= select_tag :sort_by, options_for_select([
                                                             ['Name', 'name'], ['Company', 'company'],
                                                             ['Phone', 'phone'], ['Email', 'email'],
                                                             ['Citizen', 'us_citizen'],
                                                             ['Classified', 'visitor_visit_informations.classified'],
                                                             ['Date in', 'visitor_visit_informations.sign_in_date:']
                                                         ],
-                                                        selected: params.dig(:filter, :f_sort_by) ),
-                         {include_blank: true},
-                         class: 'form-control' %>
+                                                        selected: params.dig(:sort_by) ),
+                         {include_blank: true, class: 'form-control'}
+                          %>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ class VisitorLogController < BaseController
 
   def index
     require 'csv'
-    @visitors = Visitor.filter(filter_params).paginate(page: params[:page], per_page: 15)
+    @visitors = Visitor.filter(filter_params).sorted_by(params[:sort_by]).paginate(page: params[:page], per_page: 15)
     respond_to do |format|
       format.html{
 

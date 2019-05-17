@@ -9,7 +9,7 @@
         person_image_url: "<%= v.avatar %>",
         first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
         update_contact: false,
-        person_name: "<%= v.name %>",
+        person_name: "<%= "#{v.name } #{v.id}"%>",
         company: "<%= v.company %>",
         phone: "<%= v.phone %>",
         email: "<%= v.email %>",
@@ -242,8 +242,8 @@
                 // 20010
                 // 10000 | 01000 | 21000 |  |
                 // 10002 | 01002 | 21002 |  |
-                // 01100 | 10100 | 21100 |  |
-                // 01102 | 10102 | 21102 |  |
+                // 01102 | 10100 | 21100 |  |
+                // 01100 | 10102 | 21102 |  |
                 // 01111 | 10111 | 21111 |  |
                 // 01010 | 10010 | 21010 |  |
                 // 01110 | 10110 | 21110 |  |
@@ -586,7 +586,7 @@
                 $("#record_visit_form_div, #filter_form_div, #export_form_div").hide();
                 $("#visitor_form_div").show();
                 window.scrollTo(0,0);
-            }, 1800);
+            }, 800);
         });
 
 
@@ -633,7 +633,7 @@
                 $("#visitor_form_div, #filter_form_div, #export_form_div").hide();
                 $("#record_visit_form_div").show();
                 window.scrollTo(0,0);
-            }, 1800);
+            }, 800);
         });
 
 
