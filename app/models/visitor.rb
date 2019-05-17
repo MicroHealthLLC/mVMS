@@ -20,9 +20,9 @@ class Visitor < ApplicationRecord
   include Filterable
   # Filter scopes
   scope :f_name, ->(name) { where('LOWER(name) LIKE :name_search', name_search: "%#{name.downcase}%") }
-  scope :f_company, ->(company) { where('LOWER(company) LIKE :company', company: "#{company.downcase}%") }
-  scope :f_email, ->(email) { where('LOWER(email) LIKE :email', email: "#{email.downcase}%") }
-  scope :f_phone, ->(phone) { where('LOWER(phone) LIKE :phone', phone: "#{phone.downcase}%") }
+  scope :f_company, ->(company) { where('LOWER(company) LIKE :company', company: "%#{company.downcase}%") }
+  scope :f_email, ->(email) { where('LOWER(email) LIKE :email', email: "%#{email.downcase}%") }
+  scope :f_phone, ->(phone) { where('LOWER(phone) LIKE :phone', phone: "%#{phone.downcase}%") }
   scope :f_date_range, ->(range) {
     dates = range.split('-').map(&:strip)
     date_from = Date.strptime(dates[0], '%m/%d/%Y') rescue nil
