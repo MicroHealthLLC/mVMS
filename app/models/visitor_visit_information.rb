@@ -49,6 +49,38 @@ class VisitorVisitInformation < ApplicationRecord
     end
   end
 
+  def visitor_status
+    if  classified.nil? or person.nil?
+      return '02222'
+    end
+    if  sign_in_date.present? && sign_out_date.present?
+      return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT if  sign_out_date < sign_in_date
+      if visitor.email.blank? || visitor.phone.blank? || visitor.company.blank? || visitor.name.blank?
+        return RETURN_VISITOR_NEED_INFO_UPDATE
+      else
+        return SIGN_IN_RECORDED
+      end
+    end
+
+    if sign_in_date.nil? && sign_out_date.nil?
+      if visitor.email.blank? || visitor.phone.blank? || visitor.company.blank? || visitor.name.blank?
+        return RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT
+      else
+        return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT
+      end
+    elsif sign_in_date.present?
+      if sign_out_date.nil?
+        if sign_in_date.to_date < 1.day.ago
+          return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT
+        else
+          return MUST_SIGN_OUT
+        end
+      end
+    elsif sign_out_date.present?
+      return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT
+    end
+  end
+
   def status
     if  classified.nil? or person.nil?
       return '02222'

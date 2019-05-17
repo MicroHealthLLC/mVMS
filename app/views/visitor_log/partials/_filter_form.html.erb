@@ -122,6 +122,9 @@
           }, function(start, end, label) {
               console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
           });
+          $('#filter_f_date_range').on('apply.daterangepicker', function(ev, picker) {
+              $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+          });
       });
   </script>
 </div>
