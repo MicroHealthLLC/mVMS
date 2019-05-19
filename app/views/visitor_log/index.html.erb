@@ -9,7 +9,7 @@
         person_image_url: "<%= v.avatar %>",
         first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
         update_contact: false,
-        person_name: "<%= "#{v.name } #{v.id}"%>",
+        person_name: "<%= "#{v.name }"%>",
         company: "<%= v.company %>",
         phone: "<%= v.phone %>",
         email: "<%= v.email %>",
@@ -104,8 +104,8 @@
     <div class="col-xs-12 col-sm-4">
       <button id="new_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> First Time Visitor<br>
       <button id="return_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> Return Visitor<br>
-      <button id="update_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> Return Visitor Needs Info Updated<br>
-      <button id="update_visitin_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Should Update Return Visitor<br>
+      <button id="return_visitin_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Should Record Sign In*<br>
+      <button id="update_visitin_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Should Update Visitor Info<br>
       <button id="visitin_recorded_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Sign In Recorded*<br>
     </div>
     <div class="col-xs-12 col-sm-8">
@@ -250,34 +250,20 @@
                 // 02222 | 12222 | 22222 |  |
                 //
                 //
-
-                if (transstatus === "00000") {
-                    newinput = newinput + '<td><button class="first_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></td>';
-                } else if (transstatus === "00002") {
-                    newinput = newinput + '<td><button class="missed2_signout_btn missed_fv_btn"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "10000") || (transstatus === "01000") || (transstatus === "21000")) {
+                transstatus = transstatus.substring(1, 5)
+                 if ( (transstatus === "<%= VisitorVisitInformation::RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT %>")) {
                     newinput = newinput + '<td><button class="return_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "10002") || (transstatus === "01002") || (transstatus === "21002")) {
+                } else if ((transstatus === "<%= VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT %>")) {
                     newinput = newinput + '<td><button class="missed_signout_btn missed_cr_btn"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></td>';
-                } else if (transstatus === "20000") {
+                } else if (transstatus === "<%= VisitorVisitInformation::SHOULD_UPDATE_RETURN_VISITOR %>") {
                     newinput = newinput + '<td><button class="update_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></td>';
-                } else if (transstatus === "20002") {
-                    newinput = newinput + '<td><button class="missed2_signout_btn missed_uv_btn"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "01100") || (transstatus === "10100") || (transstatus === "21100")) {
+                } else if (transstatus === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>")  {
                     newinput = newinput + '<td><button class="visitin_recorded_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "01102") || (transstatus === "10102") || (transstatus === "21102")) {
-                    newinput = newinput + '<td><button class="missed_signout_btn missed_ur_btn"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "01111") || (transstatus === "10111") || (transstatus === "21111")) {
+                } else if ((transstatus === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") ) {
                     newinput = newinput + '<td><button class="saved_visit_btn"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></td>';
-                } else if (transstatus === "00010") {
-                    newinput = newinput + '<td><button class="first_visitout_btn"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></td>';
-                } else if (transstatus === "20010") {
-                    newinput = newinput + '<td><button class="update_visitout_btn"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "01010") || (transstatus === "10010") || (transstatus === "21010")) {
-                    newinput = newinput + '<td><button class="return_visitout_btn"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "01110") || (transstatus === "10110") || (transstatus === "21110")) {
+                } else if ( (transstatus === "<%= VisitorVisitInformation::MUST_SIGN_OUT %>")) {
                     newinput = newinput + '<td><button class="return2_visitout_btn"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "02222") || (transstatus === "12222") || (transstatus === "22222")) {
+                } else if ( (transstatus === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>")) {
                     newinput = newinput + '<td><button class="saved_missed_btn"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></td>';
                 } else {
                     newinput = newinput + '<td>Error!</td>';
@@ -521,19 +507,6 @@
         });
 
 
-//NOTE: Save in case preregistration is allowed
-        /*
-            $("#create_visitor_btn").click(function () {
-              document.getElementById("visitor_form").reset();
-              document.getElementById("visitor_person_name").readOnly = false;
-              document.getElementById("company").readOnly = false;
-              document.getElementById("phone").readOnly = false;
-              document.getElementById("email").readOnly = false;
-              document.getElementById("person_image_src").readOnly = false;
-              document.getElementById("visitor_submit_btn").innerHTML = "Create";
-              $("#visitor_form_div").show();
-            });
-        */
 
         $("#close_visitor_form_btn, #visitor_cancel_btn").click(function (e) {
             e.preventDefault();
@@ -591,11 +564,12 @@
 
 
         $(".return_visitin_btn, .return_visitout_btn, .return2_visitout_btn, .missed_cr_btn, .missed_ur_btn").click(function () {
-            if ($(this).hasClass("missed_signout_btn")) {
+//            if ($(this).hasClass("missed_signout_btn")) {
                 document.getElementById("record_datetime_out").readOnly = false;
-            } else {
-                document.getElementById("record_datetime_out").readOnly = true;
-            }
+                document.getElementById("record_datetime_in").readOnly = false;
+//            } else {
+//                document.getElementById("record_datetime_out").readOnly = true;
+//            }
             var x = this.parentNode;
             x = x.parentNode;
             x = x.parentNode;
@@ -625,7 +599,7 @@
                 $("#record_visit_form #record_datetime_in").val(document.getElementById("visitors_log_table").rows[thisrow].cells[11].innerText);
                 $("#record_visit_form #record_datetime_out").val(document.getElementById("visitors_log_table").rows[thisrow].cells[12].innerText);
                 var thistransid = document.getElementById("visitors_log_table").rows[thisrow].cells[15].innerText;
-                if ((thistransid === "01110") || (thistransid === "10110") || (thistransid === "21110") || (thistransid === "01102") || (thistransid === "10102") || (thistransid === "21102")) {
+                if ((thistransid === "<%= VisitorVisitInformation::MUST_SIGN_OUT %>") || (thistransid === "10110") || (thistransid === "21110") || (thistransid === "01102") || (thistransid === "10102") || (thistransid === "21102")) {
                     document.getElementById("record_visit_submit_btn").innerHTML = "Update";
                 } else {
                     document.getElementById("record_visit_submit_btn").innerHTML = "Create";

@@ -51,7 +51,7 @@
         person_id: '<%= visit.visitor_id %>',
         status: "<%= visit.status %>",
         recorded_by: "<%= visit.recorded_by %>",
-        datetime: "<%= visit.updated_at.to_i*1000 %>"
+        datetime: "<%= visit.created_at.to_i*1000 %>"
     })
     <% end %>
 
@@ -246,117 +246,117 @@
         }
     }
 
-    function displayVisitTrans(v, thisperson_id, visitorsignid) {
-        var t = -1, foundtrans = false, thistrans = "", transstatus, savedentry, timerecorded, timesignout;
-        while ((foundtrans === false) && (t < visitors_transactions.length)) {
-            t += 1;
-            if ((visitors_transactions[t].visitor_sign_id === visitorsignid) && (visitors_transactions[t].person_id === thisperson_id)) {
-                foundtrans = true;
-            }
-        }
-        if (foundtrans === true) {
-            thistrans = '<div id="visit_transactions_' + visitorsignid + '" class="visitor_transactions_div"><div class="row"><div class="col-xs-2">' +
-                '<a  href="/visitor_8.jpeg" id= "attachment" filename="/visitors/visitor_"'+ visitors_signs[v].id +'".jpeg" class="icon-only icon-magnifier lightbox_preview jpeg" >' +
-                ' <img class="thumbpict" src="' + visitors_signs[v].person_image_url + '"> </a></div><div class="col-xs-3"><strong>Company:</strong><br>' + visitors_signs[v].company + '</div><div class="col-xs-2"><strong>Phone:</strong><br>' + visitors_signs[v].phone + '</div><div class="col-xs-5"><strong>Email:</strong><br>' + visitors_signs[v].email + '</div></div><div class="row"><div class="col-xs-2"><strong>U.S. Citizen:</strong><br>' + visitors_signs[v].citizen + '</div><div class="col-xs-3"><strong>Person Visiting:</strong><br>' + visitors_signs[v].person_visiting + '</div><div class="col-xs-2"><strong>Classified:</strong><br>' + visitors_signs[v].classified + '</div><div class="col-xs-5"><strong>Visit Reason:</strong><br>' + visitors_signs[v].reason + '</div></div>';
-            transstatus = visitors_transactions[t].status;
-            //        alert('transstatus = ' + transstatus);
-            thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
 
-            if (transstatus.indexOf("1") === 0) {
-                thistrans = thistrans + '<button class="return_user_btn">';
-            } else if (transstatus.indexOf("0") === 0) {
-                thistrans = thistrans + '<button class="new_user_btn">';
-            } else {
-                if (transstatus.indexOf("2") === 0) {
-                    thistrans = thistrans + '<button class="update_user_btn">';
-                }
-            }
-            d = new Date(Number(visitors_signs[v].datetime_in));
-            thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-
-            thistrans = thistrans + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
-
-            if ((transstatus === "01000") || (transstatus === "21000")) {
-                d = new Date(Number(visitors_transactions[t].datetime));
-                timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
-                if (transstatus === "01000") {
-                    thistrans = thistrans + '<button class="first_visitin_btn">';
-                } else {
-                    thistrans = thistrans + '<button class="update_visitin_btn">';
-                }
-                thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
-            }
-
-            savedentry = false;
-            while ((t < visitors_transactions.length - 1) && (savedentry === false)) {
-                t += 1;
-                if (visitors_transactions[t].visitor_sign_id === visitorsignid) {
-                    transstatus = visitors_transactions[t].status;
-                    //  alert('transstatus = ' + transstatus);
-                    d = new Date(Number(visitors_transactions[t].datetime));
-                    timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-
-                    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
-                    if (transstatus === "21000") {
-                        thistrans = thistrans + '<button class="update_visitin_btn">';
-                    }
-                    if ((transstatus === "01100") || (transstatus === "10100") || (transstatus === "21100")) {
-                        thistrans = thistrans + '<button class="visitin_recorded_btn">';
-                    }
-                    if (transstatus === "00010") {
-                        thistrans = thistrans + '<button class="first_visitout_btn">';
-                    } else if (transstatus === "20010") {
-                        thistrans = thistrans + '<button class="update_visitout_btn">';
-                    } else {
-                        if ((transstatus === "01110") || (transstatus === "10110") || (transstatus === "21110") || (transstatus === "10010")) {
-                            thistrans = thistrans + '<button class="return_visitout_btn">';
-                        }
-                    }
-                    if ((transstatus === "01111") || (transstatus === "10111") || (transstatus === "21111")) {
-                        thistrans = thistrans + '<button class="saved_visit_btn">';
-                    } else {
-                        if ((transstatus === "02222") || (transstatus === "12222") || (transstatus === "22222")) {
-                            thistrans = thistrans + '<button class="saved_missed_btn">';
-                        }
-                    }
-                    if ((transstatus === "00002") || (transstatus === "20002")) {
-                        thistrans = thistrans + '<button class="missed2_signout_btn">';
-                    } else {
-                        if ((transstatus === "10002") || (transstatus === "01002") || (transstatus === "21002") || (transstatus === "01102") || (transstatus === "10102") || (transstatus === "21102")) {
-                            thistrans = thistrans + '<button class="missed_signout_btn">';
-                        }
-                    }
-                    if ((transstatus === "01100") || (transstatus === "10100") || (transstatus === "21000") || (transstatus === "21100")) {
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
-                    } else if ((transstatus === "00010") || (transstatus === "01010") || (transstatus === "10010") || (transstatus === "21010") || (transstatus === "01110") || (transstatus === "10110") || (transstatus === "20010") || (transstatus === "21110")) {
-                        d = new Date(Number(visitors_signs[v].datetime_out));
-                        timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div></div>';
-                    } else if ((transstatus === "01111") || (transstatus === "10111") || (transstatus === "21111") || (transstatus === "02222") || (transstatus === "12222") || (transstatus === "22222")) {
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
-                    } else if ((transstatus === "10002") || (transstatus === "01002") || (transstatus === "21002") || (transstatus === "01102") || (transstatus === "10102") || (transstatus === "21102") || (transstatus === "00002") || (transstatus === "20002")) {
-                        if (visitors_signs[v].datetime_out === "") {
-                            thistrans = thistrans + '<span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> </div></div>';
-                        } else {
-                            d = new Date(Number(visitors_signs[v].datetime_out));
-                            timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                            thistrans = thistrans + '<span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div></div>';
-                        }
-                    } else {
-                        thistrans = thistrans + 'Error!';
-                    }
-                    if ((transstatus === "01111") || (transstatus === "02222") || (transstatus === "10111") || (transstatus === "12222") || (transstatus === "21111") || (transstatus === "22222")) {
-                        savedentry = true;
-                    }
-                }
-            }
-            thistrans = thistrans + '</div>';
-
-            $("#display_visitor_transactions").append(thistrans);
-        }
-    }
-
+    //    function displayAllTrans(thisperson_id) {
+    //        //  alert('display all transactions for person with id = ' + thisperson_id);
+    //        var t, thistrans, foundtrans, transstatus, savedentry, timerecorded, timesignout, v, visitfound, prevvisit;
+    //        for (t = 0; t < visitors_transactions.length; t += 1) {
+    //            thistrans = "";
+    //            foundtrans = false;
+    //            if (visitors_transactions[t].person_id === thisperson_id) {
+    //                visitfound = false;
+    //                v = -1;
+    //                while ((visitfound === false) && (v < visitors_signs.length - 1)) {
+    //                    v += 1;
+    //                    if (visitors_signs[v].visitor_sign_id === visitors_transactions[t].visitor_sign_id) {
+    //                        visitfound = true;
+    //                    }
+    //                }
+    //                if (visitfound === true) {
+    //                    transstatus = visitors_transactions[t].status;
+    //                    thistrans = thistrans + '<br><div class="row"><div class="col-xs-2"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '"></div><div class="col-xs-3"><strong>Company:</strong><br>' + visitors_signs[v].company + '</div><div class="col-xs-2"><strong>Phone:</strong><br>' + visitors_signs[v].phone + '</div><div class="col-xs-5"><strong>Email:</strong><br>' + visitors_signs[v].email + '</div></div><div class="row"><div class="col-xs-2"><strong>U.S. Citizen:</strong><br>' + visitors_signs[v].citizen + '</div><div class="col-xs-3"><strong>Person Visiting:</strong><br>' + visitors_signs[v].person_visiting + '</div><div class="col-xs-2"><strong>Classified:</strong><br>' + visitors_signs[v].classified + '</div><div class="col-xs-5"><strong>Visit Reason:</strong><br>' + visitors_signs[v].reason + '</div></div>';
+    ////
+    //
+    ////                    real_transstatus = transstatus.substring(1, 5)
+    ////                    if( (real_transstatus === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") || (real_transstatus === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>") ){
+    //                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    //
+    //                        d = new Date(Number(visitors_signs[v].datetime_in));
+    //                        thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+    //                        thistrans = thistrans + '<button class="new_user_btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
+    //                        d = new Date(Number(visitors_transactions[t].datetime));
+    //                        timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+    //                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2"><button class="first_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
+    ////                    }
+    //
+    ////                    if ((real_transstatus === "<%= VisitorVisitInformation::RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT %>")) {
+    //
+    //                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    //                        d = new Date(Number(visitors_signs[v].datetime_in));
+    //                        thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+    ////                        if ( ((real_transstatus === "<%= VisitorVisitInformation::RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT %>"))) {
+    //                            thistrans = thistrans + '<button class="return_user_btn">';
+    ////                        } else {
+    //                            thistrans = thistrans + '<button class="update_user_btn">';
+    ////                        }
+    //                        thistrans = thistrans + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
+    ////                    }
+    ////                    if ((real_transstatus === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>")) {
+    //                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    //                        d = new Date(Number(visitors_transactions[t].datetime));
+    //                        timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+    //                        //  thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    ////                        if (real_transstatus === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") {
+    //                            thistrans = thistrans + '<button class="update_visitin_btn">';
+    ////                        } else {
+    //                            thistrans = thistrans + '<button class="visitin_recorded_btn">';
+    ////                        }
+    //                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
+    ////                    }
+    ////                    if ( (real_transstatus === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>")) {
+    //                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    //                        d = new Date(Number(visitors_signs[v].datetime_out));
+    //                        timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+    //                        //    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    //                        thistrans = thistrans + '<button class="return_visitout_btn">';
+    //
+    //                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div></div>';
+    ////                    }
+    ////                    if ( (real_transstatus === "<%= VisitorVisitInformation::ALL_VISITOR_SAVED %>")  || (real_transstatus === "<%= VisitorVisitInformation::ALL_MISSED_SIGN_OUT %>")) {
+    //                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    //                        d = new Date(Number(visitors_transactions[t].datetime));
+    //                        timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+    //                        //    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    ////                        if ( (real_transstatus === "<%= VisitorVisitInformation::ALL_VISITOR_SAVED %>") ) {
+    //                            thistrans = thistrans + '<button class="saved_visit_btn">';
+    ////                        } else {
+    ////                            if ((real_transstatus === "02222") || (real_transstatus === "12222") || (real_transstatus === "22222")) {
+    //                                thistrans = thistrans + '<button class="saved_missed_btn">';
+    ////                            }
+    ////                        }
+    //                        thistrans = thistrans + '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div><br>';
+    //                    }
+    //                    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    //
+    ////                    if ((real_transstatus === "00002") || (real_transstatus === "20002")) {
+    //                        thistrans = thistrans + '<button class="missed2_signout_btn">';
+    ////                    } else {
+    ////                        if ( (real_transstatus === "<%= VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT %>") ) {
+    //                            thistrans = thistrans + '<button class="missed_signout_btn">';
+    ////                        }
+    ////                    }
+    ////                    if ( (real_transstatus === "<%= VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT %>") ) {
+    //                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+    ////                        if (visitors_signs[v].datetime_out === "") {
+    //                            thistrans = thistrans + '<span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> </div></div>';
+    ////                        } else {
+    //                            d = new Date(Number(visitors_signs[v].datetime_out));
+    //                            timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+    //                            thistrans = thistrans + '<span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div></div>';
+    ////                        }
+    ////                    }
+    //
+    //
+    //                    thistrans = thistrans + '</div>';
+    //
+    //                    $("#display_visitor_transactions").append(thistrans);
+    ////                }
+    ////                else {
+    ////                    alert('visitor sign not found');
+    ////                }
+    //            }
+    //        }
+    //    }
 
     function displayAllTrans(thisperson_id) {
         //  alert('display all transactions for person with id = ' + thisperson_id);
@@ -376,12 +376,13 @@
                 if (visitfound === true) {
                     transstatus = visitors_transactions[t].status;
                     //    alert(transstatus);
-                    if ((transstatus === "01000") || (transstatus === "10000") || (transstatus === "20000")) {
-                        thistrans = thistrans + '<br><div class="row"><div class="col-xs-2"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '"></div><div class="col-xs-3"><strong>Company:</strong><br>' + visitors_signs[v].company + '</div><div class="col-xs-2"><strong>Phone:</strong><br>' + visitors_signs[v].phone + '</div><div class="col-xs-5"><strong>Email:</strong><br>' + visitors_signs[v].email + '</div></div><div class="row"><div class="col-xs-2"><strong>U.S. Citizen:</strong><br>' + visitors_signs[v].citizen + '</div><div class="col-xs-3"><strong>Person Visiting:</strong><br>' + visitors_signs[v].person_visiting + '</div><div class="col-xs-2"><strong>Classified:</strong><br>' + visitors_signs[v].classified + '</div><div class="col-xs-5"><strong>Visit Reason:</strong><br>' + visitors_signs[v].reason + '</div></div>';
-                    }
+//                    if ((transstatus === "01000") || (transstatus === "10000") || (transstatus === "20000")) {
+                    thistrans = thistrans + '<br><div class="row"><div class="col-xs-2"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '"></div><div class="col-xs-3"><strong>Company:</strong><br>' + visitors_signs[v].company + '</div><div class="col-xs-2"><strong>Phone:</strong><br>' + visitors_signs[v].phone + '</div><div class="col-xs-5"><strong>Email:</strong><br>' + visitors_signs[v].email + '</div></div><div class="row"><div class="col-xs-2"><strong>U.S. Citizen:</strong><br>' + visitors_signs[v].citizen + '</div><div class="col-xs-3"><strong>Person Visiting:</strong><br>' + visitors_signs[v].person_visiting + '</div><div class="col-xs-2"><strong>Classified:</strong><br>' + visitors_signs[v].classified + '</div><div class="col-xs-5"><strong>Visit Reason:</strong><br>' + visitors_signs[v].reason + '</div></div>';
+//                    }
                     thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
 
-                    if (transstatus === "01000") {
+                    // CHECK IS THE USER IS NEW OR RETURNED
+                    if(transstatus.substring(0, 1) === "0") {
                         d = new Date(Number(visitors_signs[v].datetime_in));
                         thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
                         thistrans = thistrans + '<button class="new_user_btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
@@ -389,83 +390,99 @@
                         timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
                         thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2"><button class="first_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
                     }
-
-
-                    if ((transstatus === "10000") || (transstatus === "20000")) {
+                    else
+//                        if (transstatus.substring(0, 1) === "1")
+                    {
                         d = new Date(Number(visitors_signs[v].datetime_in));
                         thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        if (transstatus === "10000") {
-                            thistrans = thistrans + '<button class="return_user_btn">';
-                        } else {
-                            thistrans = thistrans + '<button class="update_user_btn">';
-                        }
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
-                    } else if ((transstatus === "21000") || (transstatus === "01100") || (transstatus === "10100") || (transstatus === "21100")) {
-                        d = new Date(Number(visitors_transactions[t].datetime));
-                        timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        //  thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
-                        if (transstatus === "21000") {
-                            thistrans = thistrans + '<button class="update_visitin_btn">';
-                        } else {
-                            thistrans = thistrans + '<button class="visitin_recorded_btn">';
-                        }
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
-                    } else if ((transstatus === "00010") || (transstatus === "20010") || (transstatus === "01110") || (transstatus === "10110") || (transstatus === "21110") || (transstatus === "10010")) {
-                        d = new Date(Number(visitors_signs[v].datetime_out));
-                        timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        //    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
-                        if (transstatus === "00010") {
-                            thistrans = thistrans + '<button class="first_visitout_btn">';
-                        } else if (transstatus === "20010") {
-                            thistrans = thistrans + '<button class="update_visitout_btn">';
-                        } else {
-                            thistrans = thistrans + '<button class="return_visitout_btn">';
-                        }
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div></div>';
-                    } else if ((transstatus === "01111") || (transstatus === "10111") || (transstatus === "21111") || (transstatus === "02222") || (transstatus === "12222") || (transstatus === "22222")) {
-                        d = new Date(Number(visitors_transactions[t].datetime));
-                        timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        //    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
-                        if ((transstatus === "01111") || (transstatus === "10111") || (transstatus === "21111")) {
-                            thistrans = thistrans + '<button class="saved_visit_btn">';
-                        } else {
-                            if ((transstatus === "02222") || (transstatus === "12222") || (transstatus === "22222")) {
-                                thistrans = thistrans + '<button class="saved_missed_btn">';
-                            }
-                        }
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div><br>';
-                    } else {
+                        thistrans = thistrans + '<button class="return_user_btn">';
 
-                        if ((transstatus === "00002") || (transstatus === "20002")) {
-                            thistrans = thistrans + '<button class="missed2_signout_btn">';
-                        } else {
-                            if ((transstatus === "10002") || (transstatus === "01002") || (transstatus === "21002") || (transstatus === "01102") || (transstatus === "10102") || (transstatus === "21102")) {
-                                thistrans = thistrans + '<button class="missed_signout_btn">';
-                            }
-                        }
-                        if ((transstatus === "10002") || (transstatus === "01002") || (transstatus === "21002") || (transstatus === "01102") || (transstatus === "10102") || (transstatus === "21102") || (transstatus === "00002") || (transstatus === "20002")) {
-                            if (visitors_signs[v].datetime_out === "") {
-                                thistrans = thistrans + '<span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> </div></div>';
-                            } else {
-                                d = new Date(Number(visitors_signs[v].datetime_out));
-                                timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                                thistrans = thistrans + '<span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div></div>';
-                            }
-                        }
+                        thistrans = thistrans + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
+
+                    }
+//                    else
+//                    {
+//                        d = new Date(Number(visitors_signs[v].datetime_in));
+//                        thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+//
+//                        thistrans = thistrans + '<button class="update_user_btn">';
+//                        thistrans = thistrans + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
+//
+//                    }
+                    if((transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") || (transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>")){
+                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+                        thistrans = thistrans + '<button class="visitin_recorded_btn">';
+                        d = new Date(Number(visitors_transactions[t].datetime));
+                        timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
+
                     }
 
-                    thistrans = thistrans + '</div>';
+                    ////                    } else if ((transstatus === "00010") || (transstatus === "20010") || (transstatus === "01110") || (transstatus === "10110") || (transstatus === "21110") || (transstatus === "10010")) {
 
-                    $("#display_visitor_transactions").append(thistrans);
+//
                 }
-                else {
-                    alert('visitor sign not found');
+
+                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>")
+                {
+                    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+                    d = new Date(Number(visitors_signs[v].datetime_out));
+                    timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+
+                    thistrans = thistrans + '<button class="return_visitout_btn">';
+                    thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div></div>';
+
                 }
+
+                //All Visitor Transactions Saved (Not Missed Sign Out)
+                if (transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ALL_VISITOR_SAVED %>") {
+                    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+                    d = new Date(Number(visitors_transactions[t].datetime));
+                    timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+                    thistrans = thistrans + '<button class="saved_visit_btn">';
+                    thistrans = thistrans + '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div><br>';
+                }
+                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ALL_MISSED_SIGN_OUT %>" ||  transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>" )
+                {
+                    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+                    if( transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>" )
+                    {
+
+                        thistrans = thistrans + '<button class="missed2_signout_btn">';
+                        d = new Date(Number(visitors_signs[v].datetime_out));
+                        timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
+                        thistrans = thistrans + '<span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div></div>';
+
+
+                    }
+                    else {
+
+                    thistrans = thistrans + '<button class="saved_missed_btn">';  thistrans = thistrans + '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div><br>';
+
+                    }
+
+                }
+
+                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT %>")
+                {
+                    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+                    thistrans = thistrans + '<button class="missed2_signout_btn">';
+                    thistrans = thistrans + '<span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></div>' +
+                        '<div class="col-xs-10"><strong>Date/Time Sign Out:</strong> </div></div>';
+
+                }
+
+
+
+                thistrans = thistrans + '</div>';
+
+                $("#display_visitor_transactions").append(thistrans);
+//                } else {
+//                    alert('visitor sign not found');
+//                }
             }
         }
     }
-
-
 
     $(document).ready(function () {
         var url_string = window.location.href;
@@ -473,28 +490,28 @@
         var thisperson_id = url.searchParams.get("personid");
         var visitorsignid = url.searchParams.get("visitorsignid");
 
-        if (visitorsignid === "all") {
+//        if (visitorsignid === "all") {
             $("#more_filter_btns_div").show();
             resetFilterBtns();
             setTimeout(function () {
                 $("#view_all_btn").addClass("btn-grey");
             }, 600);
             displayAllTrans(thisperson_id);
-        } else {
-            $("#more_filter_btns_div").hide();
-            var v = -1, visitfound = false;
-            while ((v < visitors_signs.length - 1) && (visitfound === false)) {
-                v += 1;
-                if (visitors_signs[v].visitor_sign_id === visitorsignid) {
-                    visitfound = true;
-                }
-            }
-            if (visitfound === true) {
-                document.getElementById("visitor_name").innerHTML = visitors_signs[v].person_name;
-                document.getElementById("count_all").innerHTML = '';
-            }
-            displayVisitTrans(v, thisperson_id, visitorsignid);
-        }
+//        } else {
+//            $("#more_filter_btns_div").show();
+//            var v = -1, visitfound = false;
+//            while ((v < visitors_signs.length - 1) && (visitfound === false)) {
+//                v += 1;
+//                if (visitors_signs[v].visitor_sign_id === visitorsignid) {
+//                    visitfound = true;
+//                }
+//            }
+//            if (visitfound === true) {
+//                document.getElementById("visitor_name").innerHTML = visitors_signs[v].person_name;
+//                document.getElementById("count_all").innerHTML = '';
+//            }
+//            displayAllTrans(v, thisperson_id, visitorsignid);
+//        }
 
 
         /* NOTE: Hold for now
