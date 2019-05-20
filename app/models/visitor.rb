@@ -153,6 +153,8 @@ class Visitor < ApplicationRecord
         display_classified: last_visit&.classified?,
         display_date_in: last_visit&.sign_in_date.try(:to_date),
         display_time_in: last_visit&.sign_in_date&.strftime('%I:%M %p'),
+        display_date_out: last_visit&.sign_out_date.try(:to_date),
+        display_time_out: last_visit&.sign_out_date&.strftime('%I:%M %p')
     }
   end
 

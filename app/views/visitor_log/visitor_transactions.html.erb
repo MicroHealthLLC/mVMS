@@ -50,7 +50,7 @@
         visitor_sign_id: "<%= visit.visitor_id %>",
         person_id: '<%= visit.visitor_id %>',
         status: "<%= visit.status %>",
-        recorded_by: "<%= visit.recorded_by.presence || 'Himself' %>",
+        recorded_by: "<%= visit.recorded_by.presence || 'Visitor' %>",
         datetime: "<%= visit.created_at.to_i*1000 %>"
     })
     <% end %>
