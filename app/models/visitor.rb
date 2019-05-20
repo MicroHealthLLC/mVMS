@@ -16,6 +16,7 @@
 
 class Visitor < ApplicationRecord
   has_many :visitor_visit_informations, :dependent => :destroy
+  attr_accessor :last_visits
 
   include Filterable
   # Filter scopes
@@ -54,20 +55,14 @@ class Visitor < ApplicationRecord
   #   "01110"
   # end
 
-  # ['All Visitor Transactions Saved', "#{VisitorVisitInformation::ALL_VISITOR_SAVED}"],
-  #     ['All Missed Sign Out Visitor Transactions Saved', "#{VisitorVisitInformation::ALL_MISSED_SIGN_OUT}"],
-  #     ['Sign In Recorded*', "#{VisitorVisitInformation::SIGN_IN_RECORDED}"],
-  #     ['Must Record Sign Out*', "#{VisitorVisitInformation::MUST_SIGN_OUT}"],
-  #     ['Should Update Return Visitor', "#{VisitorVisitInformation::SHOULD_UPDATE_RETURN_VISITOR}"],
-  #     ['Missed Sign Out: Must Record Sign In/Out', "#{VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT}"]
-  # ],
+
   scope :f_status, ->(status){
     case status
       when "#{VisitorVisitInformation::SHOULD_UPDATE_RETURN_VISITOR}" then info_missing
       when "#{VisitorVisitInformation::ALL_VISITOR_SAVED}" then all_visitor_saved
       when "#{VisitorVisitInformation::ALL_MISSED_SIGN_OUT}" then all_missed_visitor_saved
       when "#{VisitorVisitInformation::SIGN_IN_RECORDED}" then sign_in_present
-      when "#{VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT}" then sign_in_outdate
+      when "#{VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT}" then sign_out_outdate
       when  "#{VisitorVisitInformation::MUST_SIGN_OUT}" then must_sign_out
       when '01110' then where(nil)
       else
@@ -76,7 +71,7 @@ class Visitor < ApplicationRecord
   }
 
   def self.info_missing
-    where("visitor_visit_informations.email = :empty OR visitor_visit_informations.phone = :empty OR visitor_visit_informations.company = :empty OR visitor_visit_informations.name = :empty", empty: '')
+    where("visitors.email = :empty OR visitors.phone = :empty OR visitors.company = :empty OR visitors.name = :empty", empty: '')
   end
 
   def self.all_visitor_saved
@@ -84,7 +79,7 @@ class Visitor < ApplicationRecord
   end
 
   def self.all_missed_visitor_saved
-    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL").where.not(visitor_visit_informations: {recorded_by: [nil, '']})
+    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NOT NULL").where.not(visitor_visit_informations: {recorded_by: [nil, '']})
   end
 
   def self.sign_in_present
@@ -92,11 +87,11 @@ class Visitor < ApplicationRecord
   end
 
   def self.must_sign_out
-    where("visitor_visit_informations.sign_in_date < ? ", 2.hours.ago )
+    where("visitor_visit_informations.sign_in_date < ? AND visitor_visit_informations.sign_in_date > ?", 2.hours.ago, Date.today.to_date )
   end
 
-  def self.sign_in_outdate
-    where("visitor_visit_informations.sign_in_date IS NULL OR visitor_visit_informations.sign_in_date < ? ", Date.today.to_date )
+  def self.sign_out_outdate
+    where("visitor_visit_informations.sign_out_date IS NULL AND (visitor_visit_informations.sign_in_date IS NULL OR visitor_visit_informations.sign_in_date < ?) ", Date.today.to_date )
   end
 
   scope :f_visits, ->(status){

@@ -40,6 +40,14 @@ class WelcomeController < ApplicationController
   end
 
   def update_visitor
+    if params[:record_datetime_out].present? && params[:record_datetime_out] != 'NaN'
+      sign_out_date = Time.at(params[:record_datetime_out][0..-4].to_i) rescue nil
+      if sign_out_date > Time.now
+        flash[:error] = "Signout time not valid"
+        redirect_back(fallback_location: '/visitor_log')
+        return
+      end
+    end
     visitor = Visitor.find_by_id params[:record_visit_id]
     if visitor
       last_visits = visitor.visitor_visit_informations.where( sign_out_date: nil )
@@ -126,6 +134,7 @@ class WelcomeController < ApplicationController
           avatar: params[:person_image_url]
       }
     end
+    visitor.avatar = visitor.avatar.presence || params[:person_image_url]
     visitor.save
     if visitor.persisted?
       visitor.visitor_visit_informations.create({

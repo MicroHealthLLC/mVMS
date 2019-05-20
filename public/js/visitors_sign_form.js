@@ -127,12 +127,6 @@ function initWebCam(){
                 updateQueryImageResults()
             }
         });
-
-        // Webcam.set( 'constraints', { //set the constraints and initialize camera device (0 or 1 for back and front - varies which is which depending on device)
-        //     width: 1920,
-        //     height: 1080,
-        //
-        // } );
     }
 
     else
