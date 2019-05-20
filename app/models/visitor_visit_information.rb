@@ -76,10 +76,10 @@ class VisitorVisitInformation < ApplicationRecord
           return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT
         else
           if sign_in_date < 2.hours.ago
+            return MUST_SIGN_OUT
           else
-            SIGN_IN_RECORDED
+            return SIGN_IN_RECORDED
           end
-          return MUST_SIGN_OUT
         end
       end
     elsif sign_out_date.present?

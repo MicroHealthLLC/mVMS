@@ -50,7 +50,7 @@
         visitor_sign_id: "<%= visit.visitor_id %>",
         person_id: '<%= visit.visitor_id %>',
         status: "<%= visit.status %>",
-        recorded_by: "<%= visit.recorded_by %>",
+        recorded_by: "<%= visit.recorded_by.presence || 'Himself' %>",
         datetime: "<%= visit.created_at.to_i*1000 %>"
     })
     <% end %>
@@ -222,9 +222,7 @@
     </div>
   </div><!-- log_key  -->
 
-  <div id="filter_btns_div">
-    <button id="view_all_btn" class="btn btn-default filter_btn"><span id="count_all"></span>View All</button>
-  </div>
+
   <div id="more_filter_btns_div">
     <button id="new_update_filter" class="btn btn-default filter_btn">(<span id="count_newupdate">0</span>) Create/Update Visitor Info</button>
     <button id="missed_signout_filter" class="btn btn-default filter_btn">(<span id="count_missed">0</span>) Missed Sign Out</button>
@@ -514,18 +512,18 @@
 //        }
 
 
-        /* NOTE: Hold for now
+        // NOTE: Hold for now
             var newcreatevisitor = document.querySelectorAll(".new_user_btn, .update_user_btn");
             document.getElementById("count_newupdate").innerHTML = newcreatevisitor.length;
             var missedsignout = document.querySelectorAll(".missed_signout_btn, .missed2_signout_btn");
             document.getElementById("count_missed").innerHTML = missedsignout.length;
             var i, transcontainerdiv = document.querySelectorAll(".visitor_transactions_div");
-            if (visitorsignid === "all") {
+//            if (visitorsignid === "all") {
               document.getElementById("count_all").innerHTML = '(' + transcontainerdiv.length + ') ';
-            } else {
-              document.getElementById("count_all").innerHTML = '';
-            }
-        */
+//            } else {
+//              document.getElementById("count_all").innerHTML = '';
+//            }
+        //
 
 
         $("#view_all_btn").click(function () {

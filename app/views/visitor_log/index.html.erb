@@ -15,7 +15,7 @@
         email: "<%= v.email %>",
         reason: "<%= v.last_visit.visit_reason %>",
         person_visiting: "<%=  v.last_visit.person.try(:name) %>",
-        citizen: "<%= v.us_citizen ? 'yes' : 'no' %>",
+        citizen: "<%= v.us_citizen.to_s == 'true' ? 'yes' : 'no' %>",
         classified: "<%= v.last_visit.classified  ? 'yes' : 'no'  %>",
         person_signature_url: "",
         datetime_in: "<%= v.last_visit.sign_in_date&.in_time_zone('Eastern Time (US & Canada)').to_i %>000",
@@ -25,7 +25,8 @@
 </script>
 <script type="text/javascript" charset="utf-8">
     var visitors_transactions = [ ]
-    <% VisitorVisitInformation.where(visitor_id: @visitors.pluck(:id)).reverse.each do |visit| %>
+    <% vv = VisitorVisitInformation.select('MAX(id) AS id').where(visitor_id: @visitors.pluck(:id)).group('visitor_id').map(&:id) %>
+    <% VisitorVisitInformation.where(id: vv).each do |visit| %>
     visitors_transactions.push({
         trans_id: "<%= visit.id %>",
         visitor_sign_id: "<%= visit.visitor_id %>",

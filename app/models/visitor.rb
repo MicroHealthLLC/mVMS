@@ -35,7 +35,7 @@ class Visitor < ApplicationRecord
   }
   scope :f_visit_reason, ->(reason) { where(visitor_visit_informations: {visit_reason: reason}) }
   scope :f_person_visiting, ->(person_id) { where(visitor_visit_informations: {person_visiting_id: person_id}) }
-  scope :f_us_citizen, ->(us_citizen) { where(us_citizen: us_citizen) }
+  scope :f_us_citizen, ->(us_citizen) { where('visitors.us_citizen = :value', value: us_citizen) }
   scope :f_classified, ->(classified) { where(visitor_visit_informations: {classified: classified}) }
   scope :sorted_by, ->(sort) { order("#{sort.presence || 'visitors.id'} ASC") }
 
@@ -54,20 +54,41 @@ class Visitor < ApplicationRecord
   #   "01110"
   # end
 
+  # ['All Visitor Transactions Saved', "#{VisitorVisitInformation::ALL_VISITOR_SAVED}"],
+  #     ['All Missed Sign Out Visitor Transactions Saved', "#{VisitorVisitInformation::ALL_MISSED_SIGN_OUT}"],
+  #     ['Sign In Recorded*', "#{VisitorVisitInformation::SIGN_IN_RECORDED}"],
+  #     ['Must Record Sign Out*', "#{VisitorVisitInformation::MUST_SIGN_OUT}"],
+  #     ['Should Update Return Visitor', "#{VisitorVisitInformation::SHOULD_UPDATE_RETURN_VISITOR}"],
+  #     ['Missed Sign Out: Must Record Sign In/Out', "#{VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT}"]
+  # ],
   scope :f_status, ->(status){
     case status
-      when '02222' then
-        where(visitor_visit_informations: {person_visiting_id: nil})
-      when '01111' then sign_in_present
-      when '10002' then sign_in_outdate
-      when '20000' then must_sign_out
+      when "#{VisitorVisitInformation::SHOULD_UPDATE_RETURN_VISITOR}" then info_missing
+      when "#{VisitorVisitInformation::ALL_VISITOR_SAVED}" then all_visitor_saved
+      when "#{VisitorVisitInformation::ALL_MISSED_SIGN_OUT}" then all_missed_visitor_saved
+      when "#{VisitorVisitInformation::SIGN_IN_RECORDED}" then sign_in_present
+      when "#{VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT}" then sign_in_outdate
+      when  "#{VisitorVisitInformation::MUST_SIGN_OUT}" then must_sign_out
       when '01110' then where(nil)
       else
         where(nil)
     end
   }
+
+  def self.info_missing
+    where("visitor_visit_informations.email = :empty OR visitor_visit_informations.phone = :empty OR visitor_visit_informations.company = :empty OR visitor_visit_informations.name = :empty", empty: '')
+  end
+
+  def self.all_visitor_saved
+    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL").where(visitor_visit_informations: {recorded_by: [nil, '']})
+  end
+
+  def self.all_missed_visitor_saved
+    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL").where.not(visitor_visit_informations: {recorded_by: [nil, '']})
+  end
+
   def self.sign_in_present
-    where("visitor_visit_informations.sign_in_date IS NOT NULL ")
+    where("visitor_visit_informations.sign_in_date > ? AND visitor_visit_informations.sign_out_date IS NULL AND", 2.hours.ago)
   end
 
   def self.must_sign_out
