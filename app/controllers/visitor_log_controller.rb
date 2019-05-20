@@ -3,15 +3,14 @@ class VisitorLogController < BaseController
 
   def index
     require 'csv'
-    @visitors = Visitor.filter(filter_params).sorted_by(params[:sort_by]).paginate(page: params[:page], per_page: 15)
-    respond_to do |format|
+     respond_to do |format|
       format.html{
-
+        @visitors = Visitor.filter(filter_params).sorted_by(params[:sort_by]).paginate(page: params[:page], per_page: 15)
       }
       format.csv{
         @csv =  CSV.generate do |csv|
           csv << Visitor.csv_header
-          @visitors.filter(filter_params).signed_in.each do |visitor|
+          Visitor.unscoped.includes(visitor_visit_informations: [:person]).references(visitor_visit_informations: [:person]).filter(filter_params).sorted_by(params[:sort_by]).signed_in.each do |visitor|
             csv<< visitor.to_csv
           end
         end
