@@ -17,7 +17,7 @@
 class Visitor < ApplicationRecord
   has_many :visitor_visit_informations, :dependent => :destroy
   attr_accessor :last_visits
-
+  include ActionView::Helpers::NumberHelper
   include Filterable
   # Filter scopes
   scope :f_name, ->(name) { where('LOWER(name) LIKE :name_search', name_search: "%#{name.downcase}%") }
@@ -112,7 +112,13 @@ class Visitor < ApplicationRecord
 
   default_scope { includes(:visitor_visit_informations).references(:visitor_visit_informations) }
   validates_presence_of :name, :email, :avatar
+  validates_presence_of :phone
+  validate :validate_phone_number
   validates_uniqueness_of :email
+
+  def validate_phone_number
+    number_to_phone(phone, raise: true) rescue errors.add(:base, 'Phone number is not valid')
+  end
 
   def personvisiting
     visitor_visit_informations.last.try(:person_visiting)
