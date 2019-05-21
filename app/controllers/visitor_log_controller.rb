@@ -5,7 +5,6 @@ class VisitorLogController < BaseController
     require 'csv'
      respond_to do |format|
       format.html{
-        filter_params
         @visitors = Visitor.filter(filter_params).sorted_by(params[:sort_by]).paginate(page: params[:page], per_page: 15)
 
       }
