@@ -5,7 +5,9 @@ class VisitorLogController < BaseController
     require 'csv'
      respond_to do |format|
       format.html{
+        filter_params
         @visitors = Visitor.filter(filter_params).sorted_by(params[:sort_by]).paginate(page: params[:page], per_page: 15)
+
       }
       format.csv{
         @csv =  CSV.generate do |csv|
@@ -21,12 +23,11 @@ class VisitorLogController < BaseController
 
   def visitor_transactions
     @visitor = Visitor.find_by_id params[:personid]
+    @visitors_transactions = VisitorVisitInformation.where(visitor_id: @visitor.id).order('sign_in_date DESC').paginate(page: params[:page], per_page: 10)
     if @visitor
-      
         if @visitor.avatar
           @visitor.save_image_avatar
         end
-     
     end
 
   end

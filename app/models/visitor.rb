@@ -38,7 +38,7 @@ class Visitor < ApplicationRecord
   scope :f_person_visiting, ->(person_id) { where(visitor_visit_informations: {person_visiting_id: person_id}) }
   scope :f_us_citizen, ->(us_citizen) { where('visitors.us_citizen = :value', value: us_citizen) }
   scope :f_classified, ->(classified) { where(visitor_visit_informations: {classified: classified}) }
-  scope :sorted_by, ->(sort) { order("#{ sort.present? ? "#{sort}" : 'visitor_visit_informations.updated_at DESC'}") }
+  scope :sorted_by, ->(sort) { order("#{ sort.present? ? "#{sort}" : 'visitor_visit_informations.sign_out_date DESC, visitor_visit_informations.sign_in_date DESC'}") }
 
 
   after_create do
@@ -110,7 +110,10 @@ class Visitor < ApplicationRecord
   }
 
 
-  default_scope { includes(:visitor_visit_informations).references(:visitor_visit_informations) }
+  default_scope {
+    @last_visits = VisitorVisitInformation.where(id: VisitorVisitInformation.select('MAX(id) AS id').group('visitor_id').map(&:id) )
+    includes(:visitor_visit_informations).references(:visitor_visit_informations).where(visitor_visit_informations: {id: @last_visits})
+  }
   validates_presence_of :name, :email, :avatar
   validates_presence_of :phone
   validate :validate_phone_number
