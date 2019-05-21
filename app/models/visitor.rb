@@ -83,7 +83,7 @@ class Visitor < ApplicationRecord
   end
 
   def self.sign_in_present
-    where("visitor_visit_informations.sign_in_date > ? AND visitor_visit_informations.sign_out_date IS NULL AND", 2.hours.ago)
+    where("visitor_visit_informations.sign_in_date > ? AND visitor_visit_informations.sign_out_date IS NULL", 2.hours.ago)
   end
 
   def self.must_sign_out
