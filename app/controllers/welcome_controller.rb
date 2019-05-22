@@ -66,6 +66,17 @@ class WelcomeController < ApplicationController
         sign_out_date = Time.at(params[:record_datetime_out][0..-4].to_i) rescue nil
         options.merge!({sign_out_date: sign_out_date}) if sign_out_date
       end
+
+      if options[:sign_out_date]
+        if (last_visits.present? && (last_visit = last_visits.last ) ) or (last_visit = visitor.visitor_visit_informations.last)
+          if (options[:sign_in_date] || last_visit.sign_in_date) > options[:sign_out_date]
+            flash[:error] = 'Time out Is not valid'
+            redirect_back(fallback_location: '/visitor_log')
+            return
+          end
+        end
+      end
+
       if last_visits.present?
 
         last_visits.update_all(options)

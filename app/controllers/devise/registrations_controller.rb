@@ -42,21 +42,22 @@ class Devise::RegistrationsController < DeviseController
 
   # GET /resource/edit
   def edit
-    @core_demographic = User.current.core_demographic || CoreDemographic.new(user_id: User.current.id)
-    respond_to do |format|
-      format.html{
-        render :edit
-      }
-      format.pdf{
-      }
-    end
+    redirect_to user_path(current_user)
+    # @core_demographic = User.current.core_demographic || CoreDemographic.new(user_id: User.current.id)
+    # respond_to do |format|
+    #   format.html{
+    #     render :edit
+    #   }
+    #   format.pdf{
+    #   }
+    # end
   end
 
   # PUT /resource
   # We need to use a copy of the resource because we don't want to change
   # the current user in place.
   def update
-    @core_demographic = User.current.core_demographic || CoreDemographic.new(user_id: User.current.id)
+    # @core_demographic = User.current.core_demographic || CoreDemographic.new(user_id: User.current.id)
 
     self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
     prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
