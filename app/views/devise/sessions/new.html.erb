@@ -28,11 +28,13 @@
 
     <div id="box-right" class="col-xs-12 col-sm-4">
       <div class="container-login-form">
+
         <%= form_for(resource, as: resource_name, url: session_path(resource_name), id: 'login_form') do |f| %>
           <div class="header">
             <h4>Sign in</h4>
           </div>
           <div class="body">
+            <%= render_flash_messages %>
             <div class="form-group">
               <label>E-mail / Username</label>
               <div class="input-group">

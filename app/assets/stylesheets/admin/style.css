@@ -6,6 +6,12 @@ div.flash.error, #errorExplanation {
     border: 2px solid #dd0000;
     color: #880000;
 }
+div.flash.alert, #errorExplanation {
+    /*background: url(../images/exclamation.png) 8px 50% no-repeat;*/
+    background-color: #ffe3e3;
+    border: 2px solid #dd0000;
+    color: #880000;
+}
 
 div.flash.notice {
     /*background: url(../images/true.png) 8px 5px no-repeat;*/

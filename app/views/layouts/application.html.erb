@@ -97,7 +97,7 @@
 </head>
 
 <body>
-<%= render_flash_messages %>
+<%= render_flash_messages unless params[:controller] == 'devise/sessions' %>
 <%= yield %>
 <style>
   a.btn {
