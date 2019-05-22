@@ -29,7 +29,7 @@ class Visitor < ApplicationRecord
     date_from = Date.strptime(dates[0], '%m/%d/%Y') rescue nil
     date_to = Date.strptime(dates[1], '%m/%d/%Y') rescue nil
     if date_from && date_to
-      where("visitor_visit_informations.sign_in_date BETWEEN ? AND ?", date_from, date_to)
+      where("visitor_visit_informations.sign_in_date BETWEEN ? AND ?", date_from.to_time, date_to.to_time.end_of_day)
     else
       where(nil)
     end
