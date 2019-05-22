@@ -91,6 +91,16 @@
         "user[email]" : {
           required : true
         },
+        "user[password]" : {
+          required : true,
+            minlength: 6,
+
+        },
+        "user[password_confirmation]" : {
+          required : true,
+            minlength: 6,
+            equalTo: "#user_password"
+        },
       },
       // Do not change code below
       errorPlacement : function(error, element) {
