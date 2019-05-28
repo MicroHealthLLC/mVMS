@@ -226,7 +226,7 @@
     <button id="view_all_btn" class="btn btn-default filter_btn"><span id="count_all"></span>View All</button>
   </div>
   <div id="more_filter_btns_div">
-    <button id="new_update_filter" class="btn btn-default filter_btn">(<span id="count_newupdate">0</span>) Create/Update Visitor Info</button>
+    <button id="saved_signout_filter" class="btn btn-default filter_btn">(<span id="count_newupdate">0</span>) Saved Sign Out</button>
     <button id="missed_signout_filter" class="btn btn-default filter_btn">(<span id="count_missed">0</span>) Missed Sign Out</button>
   </div>
 
@@ -280,7 +280,7 @@
                         thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2"><button class="first_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
                     }
                     else
-//                        if (transstatus.substring(0, 1) === "1")
+//
                     {
                         d = new Date(Number(visitors_signs[v].datetime_in));
                         thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
@@ -289,15 +289,8 @@
                         thistrans = thistrans + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
 
                     }
-//                    else
-//                    {
-//                        d = new Date(Number(visitors_signs[v].datetime_in));
-//                        thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-//
-//                        thistrans = thistrans + '<button class="update_user_btn">';
-//                        thistrans = thistrans + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
-//
-//                    }
+
+
                     if((transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") || (transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>")){
                         thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
                         thistrans = thistrans + '<button class="visitin_recorded_btn">';
@@ -307,9 +300,6 @@
 
                     }
 
-                    ////                    } else if ((transstatus === "00010") || (transstatus === "20010") || (transstatus === "01110") || (transstatus === "10110") || (transstatus === "21110") || (transstatus === "10010")) {
-
-//
                 }
 
                 if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>")
@@ -346,7 +336,7 @@
                     }
                     else {
 
-                    thistrans = thistrans + '<button class="saved_missed_btn">';  thistrans = thistrans + '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div><br>';
+                        thistrans = thistrans + '<button class="saved_missed_btn">';  thistrans = thistrans + '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div><br>';
 
                     }
 
@@ -379,86 +369,33 @@
         var thisperson_id = url.searchParams.get("personid");
         var visitorsignid = url.searchParams.get("visitorsignid");
 
-//        if (visitorsignid === "all") {
-            $("#more_filter_btns_div").show();
-            resetFilterBtns();
-            setTimeout(function () {
-                $("#view_all_btn").addClass("btn-grey");
-            }, 600);
-            displayAllTrans(thisperson_id);
-//        } else {
-//            $("#more_filter_btns_div").show();
-//            var v = -1, visitfound = false;
-//            while ((v < visitors_signs.length - 1) && (visitfound === false)) {
-//                v += 1;
-//                if (visitors_signs[v].visitor_sign_id === visitorsignid) {
-//                    visitfound = true;
-//                }
-//            }
-//            if (visitfound === true) {
-//                document.getElementById("visitor_name").innerHTML = visitors_signs[v].person_name;
-//                document.getElementById("count_all").innerHTML = '';
-//            }
-//            displayAllTrans(v, thisperson_id, visitorsignid);
-//        }
+
+        $("#more_filter_btns_div").show();
+        resetFilterBtns();
+        setTimeout(function () {
+            $("#view_all_btn").addClass("btn-grey");
+        }, 600);
+        displayAllTrans(thisperson_id);
 
 
         // NOTE: Hold for now
-            var newcreatevisitor = document.querySelectorAll(".new_user_btn, .update_user_btn");
-            document.getElementById("count_newupdate").innerHTML = newcreatevisitor.length;
-            var missedsignout = document.querySelectorAll(".missed_signout_btn, .missed2_signout_btn");
-            document.getElementById("count_missed").innerHTML = missedsignout.length;
-            var i, transcontainerdiv = document.querySelectorAll(".visitor_transactions_div");
-//            if (visitorsignid === "all") {
-//              document.getElementById("count_all").innerHTML = '(' + transcontainerdiv.length + ') ';
-//            } else {
-//              document.getElementById("count_all").innerHTML = '';
-//            }
-        //
+        var savedsignout = document.querySelectorAll(".saved_visit_btn, .return_visitout_btn");
+        document.getElementById("count_newupdate").innerHTML = savedsignout.length;
+        var missedsignout = document.querySelectorAll(".missed_signout_btn, .missed2_signout_btn");
+        document.getElementById("count_missed").innerHTML = missedsignout.length;
+        var i, transcontainerdiv = document.querySelectorAll(".visitor_transactions_div");
 
 
         $("#view_all_btn").click(function () {
-            if (document.getElementById("more_filter_btns_div").style.display === "block") {
-                resetFilterBtns();
-                setTimeout(function () {
-                    $("#view_all_btn").addClass("btn-grey");
-                    for (i = 0; i < transcontainerdiv.length; i += 1) {
-                        transcontainerdiv[i].style.display = "block";
-                    }
-                }, 600);
-            } else {
-                window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=all";
-            }
+            window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=all";
         });
 
-        $("#new_update_filter").click(function () {
-            resetFilterBtns();
-            setTimeout(function () {
-                $("#new_update_filter").addClass("btn-grey");
-                for (i = 0; i < transcontainerdiv.length; i += 1) {
-                    var x = transcontainerdiv[i].innerHTML;
-                    if ((x.indexOf("new_user_btn") > -1) || (x.indexOf("update_user_btn") > -1)) {
-                        transcontainerdiv[i].style.display = "block";
-                    } else {
-                        transcontainerdiv[i].style.display = "none";
-                    }
-                }
-            }, 600);
+        $("#saved_signout_filter").click(function () {
+            window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=sso";
         });
 
         $("#missed_signout_filter").click(function () {
-            resetFilterBtns();
-            setTimeout(function () {
-                $("#missed_signout_filter").addClass("btn-grey");
-                for (i = 0; i < transcontainerdiv.length; i += 1) {
-                    var x = transcontainerdiv[i].innerHTML;
-                    if ((x.indexOf("missed_signout_btn") > -1) || (x.indexOf("missed2_signout_btn") > -1)) {
-                        transcontainerdiv[i].style.display = "block";
-                    } else {
-                        transcontainerdiv[i].style.display = "none";
-                    }
-                }
-            }, 600);
+            window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=mso";
         });
 
     });

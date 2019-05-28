@@ -75,7 +75,7 @@ class Visitor < ApplicationRecord
   end
 
   def self.all_visitor_saved
-    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL").where(visitor_visit_informations: {recorded_by: [nil, '']})
+    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NOT NULL").where(visitor_visit_informations: {recorded_by: [nil, '']})
   end
 
   def self.all_missed_visitor_saved
@@ -87,7 +87,7 @@ class Visitor < ApplicationRecord
   end
 
   def self.must_sign_out
-    where("visitor_visit_informations.sign_in_date < ? AND visitor_visit_informations.sign_in_date > ?", 2.hours.ago, Date.today.to_date )
+    where("visitor_visit_informations.sign_in_date < ? AND visitor_visit_informations.sign_in_date > ? AND visitor_visit_informations.sign_out_date IS NULL", 2.hours.ago, Date.today.to_date )
   end
 
   def self.sign_out_outdate
@@ -103,7 +103,7 @@ class Visitor < ApplicationRecord
         v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
         where(id: v.pluck(:visitor_id))
       when 'need_info' then
-        where(nil)
+        where("visitors.email = :empty OR visitors.phone = :empty OR visitors.company = :empty OR visitors.name = :empty", empty: '')
       else
         where(nil)
     end

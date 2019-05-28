@@ -3,7 +3,7 @@ class VisitorLogController < BaseController
 
   def index
     require 'csv'
-     respond_to do |format|
+    respond_to do |format|
       format.html{
         @visitors = Visitor.filter(filter_params).sorted_by(params[:sort_by]).paginate(page: params[:page], per_page: 15)
 
@@ -22,13 +22,20 @@ class VisitorLogController < BaseController
 
   def visitor_transactions
     @visitor = Visitor.find_by_id params[:personid]
-    @visitors_transactions = VisitorVisitInformation.where(visitor_id: @visitor.id).order('sign_in_date DESC').paginate(page: params[:page], per_page: 10)
-    if @visitor
-        if @visitor.avatar
-          @visitor.save_image_avatar
-        end
-    end
+    scope = VisitorVisitInformation.where(visitor_id: @visitor.id).order('sign_in_date DESC')
+    filter = params[:visitorsignid]
+    case filter
+      when 'mso' then  scope = scope.where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL")
+      when 'sso' then  scope = scope.where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NOT NULL")
+      else
 
+    end
+    @visitors_transactions = scope.paginate(page: params[:page], per_page: 10)
+    if @visitor
+      if @visitor.avatar
+        @visitor.save_image_avatar
+      end
+    end
   end
 
   def visitor_log
