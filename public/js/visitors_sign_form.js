@@ -109,11 +109,9 @@ function initWebCam(){
     iOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
     if(iOS){
         Webcam.set({
-            width: 300,
             constraints: { facingMode: { exact: "user" }  },
-            height: 300,
-            dest_width: 300,
-            dest_height: 300,
+            width: 320,
+            height: 240,
             image_format: 'jpeg',
             jpeg_quality: 90,
             user_callback: function(data_uri) {
@@ -132,10 +130,8 @@ function initWebCam(){
     else
     {
         Webcam.set({
-            width: 300,
-            height: 300,
-            dest_width: 300,
-            dest_height: 300,
+            width: 320,
+            height: 240,
             image_format: 'jpeg',
             jpeg_quality: 90
         });
@@ -415,6 +411,17 @@ $(document).ready(function () {
         alert('Log event that visitor canceled on Sign In - Visit Information screen');
         window.location.href = "visitors.html";
     });
+    $("#signature_cleat_btn").click(function (e) {
+        $('.jSignature').remove()
+        setTimeout(function()
+        {
+            var x = $('#person_signature_sig');
+            x.jSignature();
+            x.change(function(){
+                $('#person_signature').val(x.jSignature('getData'));
+            });
+        }, 100);
+    })
     $("#visit_next_btn").click(function (e) {
         e.preventDefault();
         var validVisit = validateVisitInfo();
@@ -423,6 +430,7 @@ $(document).ready(function () {
             $("#visit_info").hide();
             $("#visitor_signature").show();
             $(document).ready(function() {
+                $('.jSignature').remove()
                 var x = $('#person_signature_sig');
                 x.jSignature();
                 x.change(function(){
