@@ -89,7 +89,7 @@ function styleRadios() {
 
 function validateSignature() {
     validform = true;
-    if ((window.location.href.indexOf("signin") > 0) && ($("#person_signature").val().trim() === "")) {
+    if ((window.location.href.indexOf("signin") > 0) && ($("#person_signature").val().trim() === "") && $('#person_signature_sig').jSignature('getData', 'native').length === 0) {
         validform = false;
     }
     return validform;
