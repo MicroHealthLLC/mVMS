@@ -272,7 +272,7 @@
 
                     // CHECK IS THE USER IS NEW OR RETURNED
                     if(transstatus.substring(0, 1) === "0") {
-                        d = new Date(Number(visitors_signs[v].datetime_in));
+                        d = new Date(Number(visitors_transactions[t].datetime));
                         thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
                         thistrans = thistrans + '<button class="new_user_btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
                         d = new Date(Number(visitors_transactions[t].datetime));
@@ -282,7 +282,7 @@
                     else
 //
                     {
-                        d = new Date(Number(visitors_signs[v].datetime_in));
+                        d = new Date(Number(visitors_transactions[t].datetime));
                         thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
                         thistrans = thistrans + '<button class="return_user_btn">';
 
