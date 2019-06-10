@@ -40,11 +40,11 @@ p.badgelogo {text-align:center;}
 #person_signature_div {margin-top:20px;}
 #visitor_sign_form #person_signature {height:3em;}
 table tr td {font-size:1.25em;}
-.btn {margin:20px 0 0 40px;width:6em;height:2.5em;font-size:1.5em;display:inline-block;}
+.btn {margin:20px 0 0 30px;width:6em;height:2.5em;font-size:1.5em;display:inline-block;}
 .signbtn {margin:40px auto 40px auto;width:4em;height:4em;font-size:3em;display:inline-block;}
 
 .readonly_contact {background-color:#efefef;}
-#contact_back_btn, #visit_back_btn, #signature_back_btn, #summary_back_btn, #exit_btn {margin-left:0px;}
+#contact_back_btn, #visit_back_btn, #signature_clear_btn, #summary_back_btn, #exit_btn {margin-left:0px;}
 .buttonrow {margin-top:10px;text-align:right;}
 .buttonrow2 {margin-top:0px;text-align:center;}
 #visitor_badge {width:384px;height:223px;margin:0px auto 20px auto;padding-top:20px;border:1px solid gray;background-color:#ffffff;}

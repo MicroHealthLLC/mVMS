@@ -89,7 +89,7 @@ function styleRadios() {
 
 function validateSignature() {
     validform = true;
-    if ((window.location.href.indexOf("signin") > 0) && ($("#person_signature").val().trim() === "") && $('#person_signature_sig').jSignature('getData', 'native').length === 0) {
+    if ((window.location.href.indexOf("signin") > 0) && ($("#person_signature").val().trim() === "") || $('#person_signature_sig').jSignature('getData', 'native').length === 0) {
         validform = false;
     }
     return validform;
@@ -411,7 +411,7 @@ $(document).ready(function () {
         alert('Log event that visitor canceled on Sign In - Visit Information screen');
         window.location.href = "visitors.html";
     });
-    $("#signature_cleat_btn").click(function (e) {
+    $("#signature_clear_btn").click(function (e) {
         $('.jSignature').remove()
         setTimeout(function()
         {
@@ -446,6 +446,7 @@ $(document).ready(function () {
 
     $("#signature_back_btn").click(function (e) {
         e.preventDefault();
+        $('.jSignature').remove()
         $("#signature_complete_msg").hide();
         $("#visitor_signature").hide();
         $("#visit_info").show();
