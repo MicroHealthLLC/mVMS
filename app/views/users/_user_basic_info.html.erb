@@ -1,41 +1,54 @@
-<%= form_for(user, url: change_basic_info_user_path(user), html: { method: :put, class: 'form-horizontal', id: 'smart-form-register' }) do |f| %>
 
-    <fieldset>
-      <legend></legend>
+<fieldset>
+  <legend></legend><div class="col-sm-4 col-md-3 col-lg-3">
+
+  <div class="row">
+    <div id="files" class="files col-xs-12" >
+      <%= render partial: 'uploader/display_image', locals: {user: user} %>
+    </div>
+    <div  class="files col-xs-12 col-sm-12 col-md-10 col-lg-8 margin-top-10"  align="center">
+      <%= render partial: 'uploader/upload' %>
+    </div>
+
+  </div>
+</div>
+<div class="col-sm-8 col-md-9 col-lg-9">
+
+  <%= form_for(user, url: change_basic_info_user_path(user), html: { method: :put, class: 'form-horizontal', id: 'smart-form-register' }) do |f| %>
 
 
-      <div class="form-group">
-        <label class="col-md-2 control-label">Email</label>
-        <div class="col-md-9">
-          <%= f.email_field :email, placeholder: 'Email' , class: 'form-control' %>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Email</label>
+          <div class="col-md-9">
+            <%= f.email_field :email, placeholder: 'Email' , class: 'form-control' %>
+          </div>
         </div>
-      </div>
 
-      <div class="form-group">
-        <label class="col-md-2 control-label">Administrator</label>
-        <div class="col-md-9">
-          <%= f.check_box :admin %>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Administrator</label>
+          <div class="col-md-9">
+            <%= f.check_box :admin %>
+          </div>
         </div>
-      </div>
 
 
 
-      <div class="form-group">
-        <label class="col-md-2 control-label">Active</label>
-        <div class="col-md-9">
-          <%= f.check_box :state %>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Active</label>
+          <div class="col-md-9">
+            <%= f.check_box :state %>
+          </div>
         </div>
-      </div>
 
 
 
-      <div class="form-group" >
-        <div class="col-md-11">
-          <%= f.submit "Update", class: 'btn btn-success pull-right' %>
+        <div class="form-group" >
+          <div class="col-md-11">
+            <%= f.submit "Update", class: 'btn btn-success pull-right' %>
+          </div>
         </div>
-      </div>
-    </fieldset>
-<% end %>
+
+  <% end %> </div>      </fieldset>
 <script>
     // Validation
     $(function() {

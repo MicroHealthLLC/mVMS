@@ -24,7 +24,8 @@
 //= require admin/buttons.colVis.min
 //= require admin/dataTables.buttons.min
 //= require plugin/datatables/buttons.html5.min
-
+//= require jquery-fileupload/basic
+//= require jquery-fileupload/vendor/tmpl
 
 //= require moment
 //= require bootstrap-datetimepicker.js

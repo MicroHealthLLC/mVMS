@@ -87,4 +87,7 @@ gem 'prawn-table'
 gem 'prawn-print'
 # Environment variables
 gem 'figaro'
-gem 'elastic-apm'
+# gem 'elastic-apm'
+gem 'pry-rails'
+gem 'rails-pry'
+gem "jquery-fileupload-rails"
