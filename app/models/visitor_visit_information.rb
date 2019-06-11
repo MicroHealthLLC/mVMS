@@ -92,4 +92,12 @@ class VisitorVisitInformation < ApplicationRecord
   end
 
 
+
+  def self.missed_sign_out
+    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL")
+  end
+
+  def self.saved_sign_out
+    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NOT NULL")
+  end
 end

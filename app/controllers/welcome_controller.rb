@@ -135,7 +135,8 @@ class WelcomeController < ApplicationController
     visitor = Visitor.where({
                                 email: params[:email].to_s.strip
                             }).first_or_initialize
-    if params[:update_contact].to_s == 'true' or visitor.new_record?
+    created_updated_visitor = (params[:update_contact].to_s == 'true' || visitor.new_record?)
+    if created_updated_visitor
       visitor.attributes = {
           phone: params[:phone],
           company: params[:company],
@@ -152,7 +153,11 @@ class WelcomeController < ApplicationController
                                                     visit_reason: params[:reason],
                                                     classified: !(params[:classified]== 'no'),
                                                     person_visiting_id: Person.find_by_name(params[:person_visiting]).try(:id),
-                                                    sign_in_date: Time.now
+                                                    sign_in_date: Time.now,
+                                                    phone: params[:phone],
+                                                    company: params[:company],
+                                                    name: params[:person_name],
+                                                    updated: created_updated_visitor
                                                 })
       render json: {success: true, visitor: visitor.id }
     else

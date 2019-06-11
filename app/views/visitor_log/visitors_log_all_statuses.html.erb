@@ -29,6 +29,9 @@
     var visitors_transactions = [ ]
     <% VisitorVisitInformation.all.each do |visit| %>
     visitors_transactions.push({
+        company: "<%= visit.company %>",
+        phone: "<%= visit.phone %>",
+        name: "<%= visit.name %>",
         trans_id: "<%= visit.id %>",
         visitor_sign_id: "<%= visit.visitor_id %>",
         person_id: '<%= visit.visitor_id %>',
@@ -766,34 +769,6 @@
             }, 600);
         });
 
-        /*
-            $("#new_company_filter").click(function () {
-              resetFilterBtns();
-              setTimeout(function () {
-                $("#new_company_filter").addClass("btn-grey");
-                var r, thisco, theserows = document.getElementById("visitors_log_table").getElementsByTagName("tr");
-                for (r = 1; r < theserows.length; r += 1) {
-                  if ($(theserows[r]).find("td").hasClass("newcompany")) {
-                    theserows[r].style.display = "";
-                  } else {
-                    theserows[r].style.display = "none";
-                  }
-                }
-              }, 600);
-            });
-            var nc, newcompanies = document.querySelectorAll(".newcompany");
-            for (nc = 0; nc < newcompanies.length; nc += 1) {
-              newcompanies[nc].addEventListener("click", function () {
-                var addco = confirm("Add this company to the Companies List?");
-                if (addco) {
-                  companies.push(this.innerText);
-                  $(this).removeClass("newcompany");
-                //  alert(companies[companies.length - 1]);
-                }
-              });
-            }
-        */
-
         $("#filter_visitors_btn").click(function () {
             $("#visitor_form_div, #record_visit_form_div, #export_form_div").hide();
             $("#filter_form_div").show();
@@ -812,20 +787,6 @@
             $("#export_form_div").hide();
         });
 
-
-//NOTE: Save in case preregistration is allowed
-        /*
-            $("#create_visitor_btn").click(function () {
-              document.getElementById("visitor_form").reset();
-              document.getElementById("visitor_person_name").readOnly = false;
-              document.getElementById("company").readOnly = false;
-              document.getElementById("phone").readOnly = false;
-              document.getElementById("email").readOnly = false;
-              document.getElementById("person_image_src").readOnly = false;
-              document.getElementById("visitor_submit_btn").innerHTML = "Create";
-              $("#visitor_form_div").show();
-            });
-        */
 
         $("#close_visitor_form_btn, #visitor_cancel_btn").click(function (e) {
             e.preventDefault();

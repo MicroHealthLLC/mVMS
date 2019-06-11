@@ -25,8 +25,9 @@ class VisitorLogController < BaseController
     scope = VisitorVisitInformation.where(visitor_id: @visitor.id).order('sign_in_date DESC')
     filter = params[:visitorsignid]
     case filter
-      when 'mso' then  scope = scope.where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL")
-      when 'sso' then  scope = scope.where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NOT NULL")
+      when 'mso' then  scope = scope.missed_sign_out
+      when 'sso' then  scope = scope.saved_sign_out
+      when 'cuv' then  scope = scope.where(updated: true)
       else
 
     end

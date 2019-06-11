@@ -46,12 +46,19 @@
     var visitors_transactions = [ ]
     <% @visitors_transactions.each do |visit| %>
     visitors_transactions.push({
+        company: "<%= visit.company %>",
+        phone: "<%= visit.phone %>",
+        name: "<%= visit.name %>",
         trans_id: "<%= visit.id %>",
+        person_visiting: "<%= visit.person.try(:name) %>",
         visitor_sign_id: "<%= visit.visitor_id %>",
         person_id: '<%= visit.visitor_id %>',
         status: "<%= visit.status %>",
         recorded_by: "<%= visit.recorded_by.presence || 'Visitor' %>",
-        datetime: "<%= visit.created_at.to_i*1000 %>"
+        datetime: "<%= visit.created_at.to_i*1000 %>",
+        datetime_in: "<%= visit.sign_in_date&.in_time_zone('Eastern Time (US & Canada)').to_i %>000",
+        datetime_out: "<%=  visit.sign_out_date ? visit.sign_out_date.in_time_zone('Eastern Time (US & Canada)').to_i * 1000 : '' %>"
+
     })
     <% end %>
 
@@ -136,7 +143,11 @@
 
   <!-- ***********************************************************************************************   -->
 
-
+<style>
+  #log_key button{
+    cursor: default;
+  }
+</style>
   <div id="export_form_div">
     <button id="close_export_div_btn"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
     <form id="export_form">
@@ -226,8 +237,9 @@
     <button id="view_all_btn" class="btn btn-default filter_btn"><span id="count_all"></span>View All</button>
   </div>
   <div id="more_filter_btns_div">
-    <button id="saved_signout_filter" class="btn btn-default filter_btn">(<span id="count_newupdate">0</span>) Saved Sign Out</button>
-    <button id="missed_signout_filter" class="btn btn-default filter_btn">(<span id="count_missed">0</span>) Missed Sign Out</button>
+    <button id="create_update_filter" class="btn btn-default filter_btn">(<span id="count_create_update"><%= @visitor.visitor_visit_informations.where(updated: true).count %></span>) Create/Update Visitor Info</button>
+    <button id="saved_signout_filter" class="btn btn-default filter_btn">(<span id="count_newupdate"><%= @visitor.visitor_visit_informations.saved_sign_out.count %></span>) Saved Sign Out</button>
+    <button id="missed_signout_filter" class="btn btn-default filter_btn">(<span id="count_missed"><%= @visitor.visitor_visit_informations.missed_sign_out.count %></span>) Missed Sign Out</button>
   </div>
 
   <div id="display_visitor_transactions">
@@ -266,7 +278,7 @@
                     transstatus = visitors_transactions[t].status;
                     //    alert(transstatus);
 //                    if ((transstatus === "01000") || (transstatus === "10000") || (transstatus === "20000")) {
-                    thistrans = thistrans + '<div id="visit_transactions_\' + thisperson_id + \'" class="visitor_transactions_div"><br><div class="row"><div class="col-xs-2"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '"></div><div class="col-xs-3"><strong>Company:</strong><br>' + visitors_signs[v].company + '</div><div class="col-xs-2"><strong>Phone:</strong><br>' + visitors_signs[v].phone + '</div><div class="col-xs-5"><strong>Email:</strong><br>' + visitors_signs[v].email + '</div></div><div class="row"><div class="col-xs-2"><strong>U.S. Citizen:</strong><br>' + visitors_signs[v].citizen + '</div><div class="col-xs-3"><strong>Person Visiting:</strong><br>' + visitors_signs[v].person_visiting + '</div><div class="col-xs-2"><strong>Classified:</strong><br>' + visitors_signs[v].classified + '</div><div class="col-xs-5"><strong>Visit Reason:</strong><br>' + visitors_signs[v].reason + '</div></div>';
+                    thistrans = thistrans + '<div id="visit_transactions_\' + thisperson_id + \'" class="visitor_transactions_div"><br><div class="row"><div class="col-xs-2"><img class="thumbpict" src="' + visitors_signs[v].person_image_url + '"></div><div class="col-xs-3"><strong>Company:</strong><br>' + visitors_transactions[t].company + '</div><div class="col-xs-2"><strong>Phone:</strong><br>' + visitors_transactions[t].phone + '</div><div class="col-xs-5"><strong>Email:</strong><br>' + visitors_signs[v].email + '</div></div><div class="row"><div class="col-xs-2"><strong>U.S. Citizen:</strong><br>' + visitors_signs[v].citizen + '</div><div class="col-xs-3"><strong>Person Visiting:</strong><br>' + visitors_transactions[t].person_visiting + '</div><div class="col-xs-2"><strong>Classified:</strong><br>' + visitors_transactions[t].classified + '</div><div class="col-xs-5"><strong>Visit Reason:</strong><br>' + visitors_signs[v].reason + '</div></div>';
 //                    }
                     thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
 
@@ -305,7 +317,7 @@
                 if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>")
                 {
                     thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
-                    d = new Date(Number(visitors_signs[v].datetime_out));
+                    d = new Date(Number(visitors_transactions[t].datetime_out));
                     timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
 
                     thistrans = thistrans + '<button class="return_visitout_btn">';
@@ -328,7 +340,7 @@
                     {
 
                         thistrans = thistrans + '<button class="missed2_signout_btn">';
-                        d = new Date(Number(visitors_signs[v].datetime_out));
+                        d = new Date(Number(visitors_transactions[t].datetime_out));
                         timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
                         thistrans = thistrans + '<span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
 
@@ -378,20 +390,16 @@
         displayAllTrans(thisperson_id);
 
 
-        // NOTE: Hold for now
-        var savedsignout = document.querySelectorAll(".saved_visit_btn, .return_visitout_btn");
-        document.getElementById("count_newupdate").innerHTML = savedsignout.length;
-        var missedsignout = document.querySelectorAll(".missed_signout_btn, .missed2_signout_btn");
-        document.getElementById("count_missed").innerHTML = missedsignout.length;
-        var i, transcontainerdiv = document.querySelectorAll(".visitor_transactions_div");
-
-
         $("#view_all_btn").click(function () {
             window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=all";
         });
 
         $("#saved_signout_filter").click(function () {
             window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=sso";
+        });
+
+        $("#create_update_filter").click(function () {
+            window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=cuv";
         });
 
         $("#missed_signout_filter").click(function () {

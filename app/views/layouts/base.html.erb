@@ -64,6 +64,26 @@
     // DO NOT REMOVE : GLOBAL FUNCTIONS!
     pageSetUp();
   });
+
+  $('.minifyme').on('click', function(){
+      console.log('clicked mini')
+      m = localStorage.getItem('is_minified')
+      if(m ==='minify')
+      {
+          localStorage.setItem('is_minified', '')
+      }
+      else {
+          localStorage.setItem('is_minified', 'minify')
+      }
+  });
+  $(document).ready(function(){
+      m = localStorage.getItem('is_minified')
+      if(m ==='minify')
+      {
+          $('body').addClass('minified')
+      }
+  })
+
 </script>
 
 </body>
