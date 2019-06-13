@@ -149,6 +149,12 @@ class WelcomeController < ApplicationController
     visitor.avatar = visitor.avatar.presence || params[:person_image_url]
     visitor.save
     if visitor.persisted?
+      visitor_update_info = if visitor.visitor_visit_informations.count > 0
+                              vl =  visitor.visitor_visit_informations.last
+                              vl.name.eql?(params[:person_name]) && vl.company.eql?(params[:company]) && vl.phone.eql?(params[:phone])
+                            else
+                              true
+                            end
       visitor.visitor_visit_informations.create({
                                                     visit_reason: params[:reason],
                                                     classified: !(params[:classified]== 'no'),
@@ -157,7 +163,7 @@ class WelcomeController < ApplicationController
                                                     phone: params[:phone],
                                                     company: params[:company],
                                                     name: params[:person_name],
-                                                    updated: created_updated_visitor
+                                                    updated: visitor_update_info
                                                 })
       render json: {success: true, visitor: visitor.id }
     else

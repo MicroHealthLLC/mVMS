@@ -27,7 +27,7 @@
         person_id: '<%= v.id %>',
         person_image_url: "<%= v.avatar %>",
         first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
-        update_contact: false,
+        update_contact: '<%= v.last_visit.updated %>',
         person_name: "<%= v.name %>",
         company: "<%= v.company %>",
         phone: "<%= v.phone %>",

@@ -8,7 +8,7 @@
         person_id: '<%= v.id %>',
         person_image_url: "<%= v.avatar %>",
         first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
-        update_contact: false,
+        update_contact: '<%= v.last_visit.updated %>',
         person_name: "<%= "#{v.name }"%>",
         company: "<%= v.company %>",
         phone: "<%= v.phone %>",
@@ -228,7 +228,7 @@
                 newinput = newinput + '<td>' + visitors_signs[v].company + '</td><td>' + visitors_signs[v].phone + '</td><td>' + visitors_signs[v].email + '</td><td class="hideme" hidden>' + visitors_signs[v].reason + '</td><td>' + thisreason + '</td><td>' + visitors_signs[v].person_visiting + '</td><td>' + visitors_signs[v].citizen + '</td><td>' + visitors_signs[v].classified + '</td><td>' + thistimein + '</td><td>' + thistimeout + '</td>'
                 if (visitors_signs[v].first_visit === "true") {
                     newinput = newinput + '<td><span class="new_user_btn">';
-                } else if (visitors_signs[v].update_contact === true) {
+                } else if (visitors_signs[v].update_contact === 'true') {
                     newinput = newinput + '<td><span class="update_user_btn">';
                 } else {
                     newinput = newinput + '<td><span class="return_user_btn">';
