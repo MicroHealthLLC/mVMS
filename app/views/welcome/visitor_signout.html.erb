@@ -130,8 +130,8 @@
                 <h3 style="margin: auto; align-content: center">
                   Please look at the camera so your face may be recognized.
                 </h3>
-                <div id="person_image_camera" style="width: 300px;height: 300px; overflow: hidden; margin: auto"> </div>
-                <div id="person_image" style="width: 300px;height: 300px; margin: auto; overflow: hidden" hidden> </div>
+                <div id="person_image_camera" style="width: 300px;height: 270px; overflow: hidden; margin: auto"> </div>
+                <div id="person_image" style="width: 300px;height: 270px; margin: auto; overflow: hidden" hidden> </div>
                 <%= image_tag 'loading.gif', id: 'loading', style: 'width: 50px;   position: absolute; top: 46px;    right: 29%; display: none' %>
               </div>
             </div>
@@ -315,12 +315,10 @@
               iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
               if (iOS) {
                   Webcam.set({
-                      width: 280,
                       constraints: {facingMode: {exact: "user"}},
-                      height: 300,
-                      dest_width: 280,
-                      dest_height: 300,
-                      image_format: 'png',
+                      width: 320,
+                      height: 240,
+                      image_format: 'jpeg',
                       jpeg_quality: 90,
                       user_callback: function (data_uri) {
                           document.getElementById('person_image').innerHTML = '<img id="inputImgq" src="' + data_uri + '"/>';
@@ -335,12 +333,10 @@
 
               else {
                   Webcam.set({
-                      width: 280,
-                      height: 300,
-                      dest_width: 300,
-                      dest_height: 300,
+                      width: 320,
+                      height: 240,
                       image_format: 'jpeg',
-                      jpeg_quality: 180
+                      jpeg_quality: 90
                   });
                   $('#person_image_camera').on('click', function () {
                       $('#person_image_camera').hide()
