@@ -77,16 +77,37 @@ class WelcomeController < ApplicationController
         end
       end
 
+      @errors = []
       if last_visits.present?
 
-        last_visits.update_all(options)
+        last_visits.each do |visit|
+          if @errors.empty?
+            unless visit.update(options)
+              @errors << visit.errors.full_messages
+            end
+          end
+        end
       else
         last_visit = visitor.visitor_visit_informations.last
-        last_visit.update(options)
+        unless last_visit.update(options)
+          @errors << last_visit.errors.full_messages
+        end
       end
 
     end
-    redirect_back(fallback_location: '/visitor_log')
+
+    respond_to do |format|
+      format.html{
+        flash[:error] = @errors.join('\n') if @errors.present?
+      redirect_back(fallback_location: '/visitor_log')}
+      format.js do
+        if @errors.blank?
+          render js: 'window.location.reload()'
+        else
+          render js: "alert('#{@errors.join('\n')}')"
+        end
+      end
+    end
   end
   def visitor_bye
 

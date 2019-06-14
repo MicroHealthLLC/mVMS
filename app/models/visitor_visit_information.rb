@@ -35,6 +35,16 @@ class VisitorVisitInformation < ApplicationRecord
   ALL_MISSED_SIGN_OUT = '2222'
   MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT ='0110'
 
+  validate :check_time
+
+  def check_time
+    if sign_out_date.present? && sign_in_date.present?
+      if sign_out_date < sign_in_date
+        errors.add(:base, 'Time Sign out is not correct')
+      end
+    end
+  end
+
   def self.global_status
       if where(sign_out_date: nil).blank?
         ALL_VISITOR_SAVED

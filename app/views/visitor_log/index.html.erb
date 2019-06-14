@@ -186,6 +186,15 @@
         }
     }
 
+    function convert_time(time_text){
+        if(time_text !== '')
+        {
+
+            time = moment(time_text, 'MMM DD, YYYY at HH:mm')
+            return (time.month() + 1)+'/'+ time.dates() +'/'+time.year()+' '+ time.hours()+':'+time.minutes()+''
+        }
+    }
+
 
 
     $(document).ready(function () {
@@ -597,8 +606,8 @@
                     $("#record_visit_form #classified_no").prop("checked", "true");
 //                    $("#record_visit_form #classified_yes").prop("disabled", "true");
                 }
-                $("#record_visit_form #record_datetime_in").val(document.getElementById("visitors_log_table").rows[thisrow].cells[11].innerText);
-                $("#record_visit_form #record_datetime_out").val(document.getElementById("visitors_log_table").rows[thisrow].cells[12].innerText);
+                $("#record_visit_form #record_datetime_in").val(convert_time(document.getElementById("visitors_log_table").rows[thisrow].cells[11].innerText));
+                $("#record_visit_form #record_datetime_out").val(convert_time(document.getElementById("visitors_log_table").rows[thisrow].cells[12].innerText));
                 var thistransid = document.getElementById("visitors_log_table").rows[thisrow].cells[15].innerText;
                 if ((thistransid === "<%= VisitorVisitInformation::MUST_SIGN_OUT %>") || (thistransid === "10110") || (thistransid === "21110") || (thistransid === "01102") || (thistransid === "10102") || (thistransid === "21102")) {
                     document.getElementById("record_visit_submit_btn").innerHTML = "Update";

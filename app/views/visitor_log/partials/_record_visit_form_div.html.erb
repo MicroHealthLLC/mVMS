@@ -1,6 +1,6 @@
 <div id="record_visit_form_div">
   <button id="close_record_visit_form_btn"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
-  <form id="record_visit_form">
+  <%= form_tag '',  id: "record_visit_form" do%>
     <div class="form-group">
       <h2>Record Person Visit</h2>
 
@@ -111,7 +111,7 @@
         <button type="submit" id="record_visit_submit_btn" class="btn btn-success">Create</button>
       </div>
     </div>
-  </form>
+  <% end %>
 </div><!-- record_visit_div  -->
 
 
