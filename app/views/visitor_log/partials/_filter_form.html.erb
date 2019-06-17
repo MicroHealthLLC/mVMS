@@ -42,7 +42,7 @@
 
           <div class="col-md-2 col-sm-4 col-xs-6">
             <label>Visit Reason:</label>
-            <%= f.select :f_visit_reason, options_for_select(Reason.pluck(:name),
+            <%= f.select :f_visit_reason, options_for_select([Reason.pluck(:name), 'Other'].flatten,
                                                              selected: params.dig(:filter, :f_visit_reason) ), {include_blank: true}, class: 'form-control' %>
           </div>
           <div class="col-md-2 col-sm-4 col-xs-6">

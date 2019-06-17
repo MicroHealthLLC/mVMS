@@ -34,7 +34,13 @@ class Visitor < ApplicationRecord
       where(nil)
     end
   }
-  scope :f_visit_reason, ->(reason) { where(visitor_visit_informations: {visit_reason: reason}) }
+  scope :f_visit_reason, ->(reason) do
+    if reason == 'Other'
+      where.not(visitor_visit_informations: {visit_reason: Reason.pluck(:name)})
+    else
+      where(visitor_visit_informations: {visit_reason: reason})
+    end
+  end
   scope :f_person_visiting, ->(person_id) { where(visitor_visit_informations: {person_visiting_id: person_id}) }
   scope :f_us_citizen, ->(us_citizen) { where('visitors.us_citizen = :value', value: us_citizen) }
   scope :f_classified, ->(classified) { where(visitor_visit_informations: {classified: classified}) }
