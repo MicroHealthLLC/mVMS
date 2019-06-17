@@ -120,7 +120,8 @@ class Visitor < ApplicationRecord
   validates_uniqueness_of :email
 
   def validate_phone_number
-    number_to_phone(phone, raise: true) rescue errors.add(:base, 'Phone number is not valid')
+    tel = phone.strip.gsub(/ *-*\.*/, '')
+    number_to_phone(tel, raise: true) rescue errors.add(:base, 'Phone number is not valid')
   end
 
   def personvisiting

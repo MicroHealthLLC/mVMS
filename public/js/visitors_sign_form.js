@@ -126,7 +126,6 @@ function initWebCam(){
             }
         });
     }
-
     else
     {
         Webcam.set({

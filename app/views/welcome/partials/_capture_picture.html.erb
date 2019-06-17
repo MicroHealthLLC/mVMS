@@ -103,6 +103,11 @@
       <div class="col-xs-7 col-sm-6" id="camera_msg">
         Please look at the camera so your face may be recognized.
       </div>
+      <div class="col-xs-7 col-sm-6" id="msg_welcome" style="display: none">
+        <h3>
+          Welcome Back <span id="visitor_firstname"></span>
+        </h3>
+      </div>
       <div class="col-xs-5 col-sm-6" >
         <div id="person_image_camera" style="width: 300px;height: 270px; overflow: hidden"> </div>
         <div id="person_image" style="width: 300px;height: 270px; overflow: hidden" hidden> </div>
@@ -114,8 +119,9 @@
     </div>
     <div class="col-xs-12 col-sm-12" hidden >
 
-      <% Visitor.where.not(avatar:nil).where("visitor_visit_informations.sign_in_date >= ?", 1.day.ago).order('visitor_visit_informations.id DESC').each do |v| %>
-          <img class="inputImg" id="inputImg" src='<%= v.avatar %>' data-label="<%= v.email%>"/>
+      <% Visitor.where.not(avatar:nil).where("visitor_visit_informations.sign_in_date >= ? AND sign_out_date IS NULL ", 3.day.ago).
+          order('visitor_visit_informations.id DESC').each do |v| %>
+          <img class="inputImg" id="inputImg" src='<%= v.avatar %>' data-label="<%= v.email%>" data-name="<%= v.name %>"/>
       <% end %>
       <canvas id="overlay" />
     </div>
@@ -216,6 +222,7 @@
                   if (new Date().getTime() - timer < 10000){
                       imgEl = $('.inputImg').get(i);
                       label = $(imgEl).data('label')
+                      name = $(imgEl).data('name')
                       const fullFaceDescriptions = await faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
                       console.log('time = '+ (new Date().getTime() / 1000))
                       if (!fullFaceDescriptions.length) {
@@ -227,6 +234,7 @@
                           for(j=0; j< faceMatcher.labeledDescriptors.length; j++)
                           {
                               faceMatcher.labeledDescriptors[j]['_label'] = label
+                              faceMatcher.labeledDescriptors[j]['_name'] = name
                           }
                           faceMatchers.push(faceMatcher )
                           found = drawFaceRecognitionResults()
@@ -254,6 +262,9 @@
           if(best_match.indexOf(label) >= 0)
           {
               found = true;
+              $('#camera_msg').hide()
+              $('#msg_welcome').show()
+              $('#visitor_firstname').html(faceMatcher.labeledDescriptors[0]['_name'])
               $('#capture_person_email').val(label)
           }
 
