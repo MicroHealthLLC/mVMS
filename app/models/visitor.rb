@@ -46,22 +46,6 @@ class Visitor < ApplicationRecord
   scope :f_classified, ->(classified) { where(visitor_visit_informations: {classified: classified}) }
   scope :sorted_by, ->(sort) { order("#{ sort.present? ? "#{sort}" : 'visitor_visit_informations.sign_in_date DESC, visitor_visit_informations.sign_out_date DESC'}") }
 
-
-  after_create do
-    save_image_avatar
-  end
-  # def status
-  #   if  classified.nil? or person.nil?
-  #     return '02222'
-  #   end
-  #   return '01111' if sign_out_date.present?
-  #   return '10002' if sign_in_date.nil?
-  #   return '10002' if sign_in_date.to_date < Date.today.to_date
-  #   return '01100' if 2.hours.ago < sign_in_date
-  #   "01110"
-  # end
-
-
   scope :f_status, ->(status){
     case status
       when "#{VisitorVisitInformation::SHOULD_UPDATE_RETURN_VISITOR}" then info_missing
@@ -75,6 +59,27 @@ class Visitor < ApplicationRecord
         where(nil)
     end
   }
+
+  scope :f_visits, ->(status){
+    case status
+      when 'first_visit' then
+        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) = 1')
+        where(id: v.pluck(:visitor_id))
+      when 'return_visitor' then
+        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
+        where(id: v.pluck(:visitor_id)).where({info_updated: true})
+      when 'need_info' then
+        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
+        where(id: v.pluck(:visitor_id)).where({info_updated: false})
+      else
+        where(nil)
+    end
+  }
+
+  after_create do
+    save_image_avatar
+  end
+
 
   def self.info_missing
     where("visitors.email = :empty OR visitors.phone = :empty OR visitors.company = :empty OR visitors.name = :empty", empty: '')
@@ -100,21 +105,6 @@ class Visitor < ApplicationRecord
     where("visitor_visit_informations.sign_out_date IS NULL AND (visitor_visit_informations.sign_in_date IS NULL OR visitor_visit_informations.sign_in_date < ?) ", Date.today.to_date )
   end
 
-  scope :f_visits, ->(status){
-    case status
-      when 'first_visit' then
-        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) = 1')
-        where(id: v.pluck(:visitor_id))
-      when 'return_visitor' then
-        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
-        where(id: v.pluck(:visitor_id))
-      when 'need_info' then
-        where("visitors.email = :empty OR visitors.phone = :empty OR visitors.company = :empty OR visitors.name = :empty", empty: '')
-      else
-        where(nil)
-    end
-  }
-
 
   default_scope {
     @last_visits = VisitorVisitInformation.where(id: VisitorVisitInformation.select('MAX(id) AS id').group('visitor_id').map(&:id) )
@@ -126,7 +116,7 @@ class Visitor < ApplicationRecord
   validates_uniqueness_of :email
 
   def validate_phone_number
-    tel = phone.strip.gsub(/ *-*\.*/, '')
+    tel = phone.to_s.strip.gsub(/ *-*\.*/, '')
     number_to_phone(tel, raise: true) rescue errors.add(:base, 'Phone number is not valid')
   end
 

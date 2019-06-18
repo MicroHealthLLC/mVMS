@@ -40,66 +40,80 @@ class WelcomeController < ApplicationController
   end
 
   def update_visitor
-    if params[:record_datetime_out].present? && params[:record_datetime_out] != 'NaN'
-      sign_out_date = Time.at(params[:record_datetime_out][0..-4].to_i) rescue nil
-      if sign_out_date > Time.now
-        flash[:error] = "Signout time not valid"
-        redirect_back(fallback_location: '/visitor_log')
-        return
-      end
-    end
-    visitor = Visitor.find_by_id params[:record_visit_id]
-    if visitor
-      last_visits = visitor.visitor_visit_informations.where( sign_out_date: nil )
-      options = {
-          visit_reason: params[:record_reason],
-          classified: params[:classified],
-          person_visiting_id: Person.find_by_name( params[:person_visiting]).id,
-          recorded_by: current_user.full_name
-      }
-      if params[:record_datetime_in].present? && params[:record_datetime_in] != 'NaN'
-        sign_in_date = Time.at(params[:record_datetime_in][0..-4].to_i) rescue nil
-        options.merge!({sign_in_date: sign_in_date}) if sign_in_date
-      end
-
+    @errors = []
+    if Visitor.find_by_id(params[:record_visit_id]).present?
       if params[:record_datetime_out].present? && params[:record_datetime_out] != 'NaN'
         sign_out_date = Time.at(params[:record_datetime_out][0..-4].to_i) rescue nil
-        options.merge!({sign_out_date: sign_out_date}) if sign_out_date
-      end
-
-      if options[:sign_out_date]
-        if (last_visits.present? && (last_visit = last_visits.last ) ) or (last_visit = visitor.visitor_visit_informations.last)
-          if (options[:sign_in_date] || last_visit.sign_in_date) > options[:sign_out_date]
-            flash[:error] = 'Time out Is not valid'
-            redirect_back(fallback_location: '/visitor_log')
-            return
-          end
+        if sign_out_date > Time.now
+          flash[:error] = "Signout time not valid"
+          redirect_back(fallback_location: '/visitor_log')
+          return
         end
       end
+      visitor = Visitor.find_by_id params[:record_visit_id]
+      if visitor
+        last_visits = visitor.visitor_visit_informations.where( sign_out_date: nil )
+        options = {
+            visit_reason: params[:record_reason],
+            classified: params[:classified],
+            person_visiting_id: Person.find_by_name( params[:person_visiting]).id,
+            recorded_by: current_user.full_name
+        }
+        if params[:record_datetime_in].present? && params[:record_datetime_in] != 'NaN'
+          sign_in_date = Time.at(params[:record_datetime_in][0..-4].to_i) rescue nil
+          options.merge!({sign_in_date: sign_in_date}) if sign_in_date
+        end
 
-      @errors = []
-      if last_visits.present?
+        if params[:record_datetime_out].present? && params[:record_datetime_out] != 'NaN'
+          sign_out_date = Time.at(params[:record_datetime_out][0..-4].to_i) rescue nil
+          options.merge!({sign_out_date: sign_out_date}) if sign_out_date
+        end
 
-        last_visits.each do |visit|
-          if @errors.empty?
-            unless visit.update(options)
-              @errors << visit.errors.full_messages
+        if options[:sign_out_date]
+          if (last_visits.present? && (last_visit = last_visits.last ) ) or (last_visit = visitor.visitor_visit_informations.last)
+            if (options[:sign_in_date] || last_visit.sign_in_date) > options[:sign_out_date]
+              flash[:error] = 'Time out Is not valid'
+              redirect_back(fallback_location: '/visitor_log')
+              return
             end
           end
         end
-      else
-        last_visit = visitor.visitor_visit_informations.last
-        unless last_visit.update(options)
-          @errors << last_visit.errors.full_messages
+        if last_visits.present?
+
+          last_visits.each do |visit|
+            if @errors.empty?
+              unless visit.update(options)
+                @errors << visit.errors.full_messages
+              end
+            end
+          end
+        else
+          last_visit = visitor.visitor_visit_informations.last
+          unless last_visit.update(options)
+            @errors << last_visit.errors.full_messages
+          end
+        end
+
+      end
+    else
+      if params[:visitor_person_id] && (visitor = Visitor.find_by_id(params[:visitor_person_id]))
+        options = {
+            info_updated: true,
+            name: params[:visitor_person_name],
+            company: params[:company],
+            phone: params[:phone],
+            email: params[:email]
+        }
+        if visitor.update(options)
+        else
+          @errors << visitor.errors.full_messages
         end
       end
-
     end
-
     respond_to do |format|
       format.html{
         flash[:error] = @errors.join('\n') if @errors.present?
-      redirect_back(fallback_location: '/visitor_log')}
+        redirect_back(fallback_location: '/visitor_log')}
       format.js do
         if @errors.blank?
           render js: 'window.location.reload()'
@@ -176,6 +190,9 @@ class WelcomeController < ApplicationController
                             else
                               true
                             end
+      if visitor_update_info
+        visitor.update_columns({info_updated: false})
+      end
       visitor.visitor_visit_informations.create({
                                                     visit_reason: params[:reason],
                                                     classified: !(params[:classified]== 'no'),
