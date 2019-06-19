@@ -153,7 +153,12 @@ function initWebCam(){
 
 
     if(iOS)
-        $('#open_picture').trigger('click')
+    {
+        // $('.webcamjs-ios-text').css('position', 'absolution')
+        $('.webcamjs-ios-text').html("CLICK ME")
+        // $('#open_picture').trigger('click')
+    }
+
 }
 $(document).ready(function () {
     $("#capture_photo").hide();

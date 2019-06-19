@@ -127,9 +127,8 @@
               </div>
               <div class="col-xs-12 col-sm-12" >
 
-                <h3 style="margin: auto; align-content: center">
-                  Please look at the camera so your face may be recognized.
-                </h3>
+                <h3 style="margin: auto;text-align: center; align-content: center;font-size: 40px">Take a picture first</h3>
+
                 <div id="person_image_camera" style="width: 300px;height: 270px; overflow: hidden; margin: auto"> </div>
                 <div id="person_image" style="width: 300px;height: 270px; margin: auto; overflow: hidden" hidden> </div>
                 <%= image_tag 'loading.gif', id: 'loading', style: 'width: 50px;   position: absolute; top: 46px;    right: 29%; display: none' %>
@@ -328,7 +327,6 @@
                           updateQueryImageResults();
                       }
                   });
-
               }
 
               else {
@@ -360,6 +358,12 @@
               initFaceDetectionControls()
               run();
               initWebCam()
+              if(iOS)
+              {
+                  // $('.webcamjs-ios-text').css('position', 'absolution')
+                  $('.webcamjs-ios-text').html("CLICK ME")
+                  // $('#open_picture').trigger('click')
+              }
           })
 
       </script>
@@ -439,3 +443,14 @@
 
   <% end %>
 </div>
+<style>
+  .webcamjs-ios-text{
+    position: absolute;
+    left: 45%;
+    bottom: 35px;
+  }
+  .webcamjs-ios-placeholder
+  {
+    background-image: url('/images/camera.png');
+  }
+</style>
