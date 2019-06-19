@@ -189,7 +189,8 @@
           {
               alert('We did not detect your face. please try again')
               $( '#person_image' ).hide()
-              $('#person_image_camera').show()
+              $('#person_image_camera').show();
+              $('.webcamjs-ios-placeholder').css('background-image', "url('/images/camera.png')")
           }
           $('#loading').hide()
           console.log('time = '+ (new Date().getTime() / 1000))
@@ -252,7 +253,10 @@
           }
           if(!found)
           {
-              console.log('not recognized')
+              alert('Your face was not recognized. Please enter your email in the box below.')
+              console.log('not recognized');
+              $('#email_row').show()
+              $('#capture_next_btn').show()
           }
       }
 
