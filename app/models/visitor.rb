@@ -20,10 +20,10 @@ class Visitor < ApplicationRecord
   include ActionView::Helpers::NumberHelper
   include Filterable
   # Filter scopes
-  scope :f_name, ->(name) { where('LOWER(name) LIKE :name_search', name_search: "%#{name.downcase}%") }
-  scope :f_company, ->(company) { where('LOWER(company) LIKE :company', company: "%#{company.downcase}%") }
-  scope :f_email, ->(email) { where('LOWER(email) LIKE :email', email: "%#{email.downcase}%") }
-  scope :f_phone, ->(phone) { where('LOWER(phone) LIKE :phone', phone: "%#{phone.downcase}%") }
+  scope :f_name, ->(name) { where('LOWER(visitors.name) LIKE :name_search', name_search: "%#{name.downcase}%") }
+  scope :f_company, ->(company) { where('LOWER(visitors.company) LIKE :company', company: "%#{company.downcase}%") }
+  scope :f_email, ->(email) { where('LOWER(visitors.email) LIKE :email', email: "%#{email.downcase}%") }
+  scope :f_phone, ->(phone) { where('LOWER(visitors.phone) LIKE :phone', phone: "%#{phone.downcase}%") }
   scope :f_date_range, ->(range) {
     dates = range.split('-').map(&:strip)
     date_from = Date.strptime(dates[0], '%m/%d/%Y') rescue nil
@@ -82,7 +82,7 @@ class Visitor < ApplicationRecord
 
 
   def self.info_missing
-    where("visitors.email = :empty OR visitors.phone = :empty OR visitors.company = :empty OR visitors.name = :empty", empty: '')
+    where("visitors.email = :empty OR visitors.phone = :empty OR visitors.company = :empty OR visitors.name = :empty OR visitors.info_updated = :info_updated", empty: '', info_updated: false)
   end
 
   def self.all_visitor_saved
