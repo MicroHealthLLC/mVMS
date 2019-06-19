@@ -156,9 +156,17 @@ function initWebCam(){
     {
         // $('.webcamjs-ios-text').css('position', 'absolution')
         $('.webcamjs-ios-text').html("CLICK ME")
-        // $('#open_picture').trigger('click')
+        performClick('open_picture')
     }
 
+}
+function performClick(elemId) {
+    var elem = document.getElementById(elemId);
+    if(elem && document.createEvent) {
+        var evt = document.createEvent("MouseEvents");
+        evt.initEvent("click", true, false);
+        elem.dispatchEvent(evt);
+    }
 }
 $(document).ready(function () {
     $("#capture_photo").hide();

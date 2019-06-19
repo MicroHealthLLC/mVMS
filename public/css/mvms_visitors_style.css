@@ -63,7 +63,7 @@ table tr td {font-size:1.25em;}
 #display_date_div p {font-size:1.5em;font-family:Arial,Helvetica,sans-serif;text-align:left;color:#265a88;}
 #time_out_div label {color:#265a88;font-family:Arial,Helvetica,sans-serif;font-size:1.5em;font-weight:normal;}
 
-#camera_msg {margin-top:60px;margin-bottom:20px;font-size:1.5em;}
+#camera_msg {margin-top:60px;margin-bottom:40px;font-size:1.5em;}
 
 .complete_msg {clear:both;margin-top:0;margin-bottom:20px;font-size:1.25em;font-weight:bold;color:#eb9316;display:none;}
 

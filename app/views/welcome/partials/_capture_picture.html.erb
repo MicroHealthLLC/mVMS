@@ -134,7 +134,7 @@
         If your face is not recognized within a minute, please enter your name in the box below.
       </div>
     </div>
-    <div class="row">
+    <div class="row" id="email_row" hidden>
       <div class="col-xs-12 col-sm-3 col-md-2">
         <label for="capture_person_name">Email:</label>
       </div>
@@ -264,7 +264,9 @@
           {
               found = true;
               $('#camera_msg').hide()
-              $('#msg_welcome').show()
+              $('#msg_welcome').show();
+              $('#email_row').show()
+
               $('#visitor_firstname').html(faceMatcher.labeledDescriptors[0]['_name'])
               $('#capture_person_email').val(label)
           }
