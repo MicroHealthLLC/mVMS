@@ -48,7 +48,7 @@ class Visitor < ApplicationRecord
 
   scope :f_status, ->(status){
     case status
-      when "#{VisitorVisitInformation::SHOULD_UPDATE_RETURN_VISITOR}" then info_missing
+      when "#{VisitorVisitInformation::SHOULD_UPDATE_INFO_VISITOR}" then info_missing
       when "#{VisitorVisitInformation::ALL_VISITOR_SAVED}" then all_visitor_saved
       when "#{VisitorVisitInformation::ALL_MISSED_SIGN_OUT}" then all_missed_visitor_saved
       when "#{VisitorVisitInformation::SIGN_IN_RECORDED}" then sign_in_present
@@ -80,6 +80,10 @@ class Visitor < ApplicationRecord
     save_image_avatar
   end
 
+  def name
+    n = super
+    n.to_s.split.map(&:capitalize)*' '
+  end
 
   def self.info_missing
     where("visitors.email = :empty OR visitors.phone = :empty OR visitors.company = :empty OR visitors.name = :empty OR visitors.info_updated = :info_updated", empty: '', info_updated: false)

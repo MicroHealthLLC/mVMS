@@ -25,12 +25,14 @@ class VisitorVisitInformation < ApplicationRecord
   RETURN_VISITOR = '11000'
   RETURN_VISITOR_NEED_INFO_UPDATE = '11001'
 
-  SHOULD_UPDATE_RETURN_VISITOR = '0000'
+  SHOULD_UPDATE_INFO_VISITOR = '0000'
   SIGN_IN_RECORDED = '0001'
   SIGN_IN_OUT_RECORDED = '0010'
+  
   ADMIN_SIGN_IN_OUT_RECORDED = '0011'
   MUST_SIGN_OUT = '0100'
   RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT = '0101'
+  
   ALL_VISITOR_SAVED = '1111'
   ALL_MISSED_SIGN_OUT = '2222'
   MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT ='0110'
@@ -62,10 +64,14 @@ class VisitorVisitInformation < ApplicationRecord
   end
 
   def visitor_status
+    if !visitor.info_updated? && VisitorVisitInformation.where(visitor_id: visitor.id).where('id <= ?', self.id).count <= 1
+      return SHOULD_UPDATE_INFO_VISITOR
+    end
+
     if sign_in_date.present? && sign_out_date.present?
-      return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT if  sign_out_date < sign_in_date
-      if visitor.email.blank? || visitor.phone.blank? || visitor.company.blank? || visitor.name.blank?
-        return SHOULD_UPDATE_RETURN_VISITOR
+      return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT if sign_out_date < sign_in_date
+      if !visitor.info_updated?
+        return SHOULD_UPDATE_INFO_VISITOR
       else
         if recorded_by
           return ADMIN_SIGN_IN_OUT_RECORDED
