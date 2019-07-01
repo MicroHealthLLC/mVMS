@@ -53,6 +53,7 @@ class Visitor < ApplicationRecord
       when "#{VisitorVisitInformation::ALL_MISSED_SIGN_OUT}" then all_missed_visitor_saved
       when "#{VisitorVisitInformation::SIGN_IN_RECORDED}" then sign_in_present
       when "#{VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT}" then sign_out_outdate
+      when  "#{VisitorVisitInformation::RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT}" then return_visitor_need_indate_info_then_sign_out
       when  "#{VisitorVisitInformation::MUST_SIGN_OUT}" then must_sign_out
       when '01110' then where(nil)
       else
@@ -87,6 +88,10 @@ class Visitor < ApplicationRecord
 
   def self.info_missing
     where("visitors.email = :empty OR visitors.phone = :empty OR visitors.company = :empty OR visitors.name = :empty OR visitors.info_updated = :info_updated", empty: '', info_updated: false)
+  end
+
+  def self.return_visitor_need_indate_info_then_sign_out
+    info_missing.must_sign_out
   end
 
   def self.all_visitor_saved

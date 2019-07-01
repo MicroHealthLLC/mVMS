@@ -32,7 +32,7 @@ class VisitorVisitInformation < ApplicationRecord
   ADMIN_SIGN_IN_OUT_RECORDED = '0011'
   MUST_SIGN_OUT = '0100'
   RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT = '0101'
-  
+
   ALL_VISITOR_SAVED = '1111'
   ALL_MISSED_SIGN_OUT = '2222'
   MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT ='0110'
@@ -90,7 +90,7 @@ class VisitorVisitInformation < ApplicationRecord
         unless visitor.info_updated?
           return RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT
         end
-        if sign_in_date.to_date < 1.day.ago
+        if sign_in_date.to_date < 1.day.ago.to_date
           return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT
         else
           if sign_in_date < 2.hours.ago
