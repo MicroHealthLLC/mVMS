@@ -138,7 +138,7 @@ class Visitor < ApplicationRecord
   end
 
   def last_visit
-    visitor_visit_informations.last || VisitorVisitInformation.new
+    @last_visit ||= visitor_visit_informations.order(:sign_in_date).last || VisitorVisitInformation.new
   end
 
   def status
@@ -153,7 +153,6 @@ class Visitor < ApplicationRecord
   end
 
   def to_json
-    last_visit = visitor_visit_informations.last
     {
         display_name: self.name,
         display_company: self.company,
