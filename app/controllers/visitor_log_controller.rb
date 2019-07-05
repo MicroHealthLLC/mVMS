@@ -5,7 +5,7 @@ class VisitorLogController < BaseController
     require 'csv'
     respond_to do |format|
       format.html{
-        @visitors = Visitor.filter(filter_params).sorted_by(params[:sort_by]).paginate(page: params[:page], per_page: 15)
+        @visitors = Visitor.init_vvi.filter(filter_params).sorted_by(params[:sort_by]).paginate(page: params[:page], per_page: 15)
 
       }
       format.csv{
@@ -18,6 +18,10 @@ class VisitorLogController < BaseController
         send_data @csv, filename: 'visitor_log.csv'
       }
     end
+  end
+
+  def admin
+    redirect_to '/visitor_log'
   end
 
   def visitor_transactions

@@ -114,11 +114,11 @@ class Visitor < ApplicationRecord
     where("visitor_visit_informations.sign_out_date IS NULL AND (visitor_visit_informations.sign_in_date IS NULL OR visitor_visit_informations.sign_in_date < ?) ", Date.today.to_date )
   end
 
-
-  default_scope {
+  def self.init_vvi
     @last_visits = VisitorVisitInformation.where(id: VisitorVisitInformation.select('MAX(id) AS id').group('visitor_id').map(&:id) )
     includes(:visitor_visit_informations).references(:visitor_visit_informations).where(visitor_visit_informations: {id: @last_visits})
-  }
+  end
+
   validates_presence_of :name, :email, :avatar
   validates_presence_of :phone
   validate :validate_phone_number

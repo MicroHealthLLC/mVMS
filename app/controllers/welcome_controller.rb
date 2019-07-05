@@ -167,33 +167,34 @@ class WelcomeController < ApplicationController
   end
 
   def create_visitor
-    visitor = Visitor.where({
+    @visitor = Visitor.where({
                                 email: params[:email].to_s.strip
                             }).first_or_initialize
-    created_updated_visitor = (params[:update_contact].to_s == 'true' || visitor.new_record?)
+
+    created_updated_visitor = (params[:update_contact].to_s == 'true' || @visitor.new_record?)
     if created_updated_visitor
-      visitor.attributes = {
+      @visitor.attributes = {
           phone: params[:phone],
           company: params[:company],
           name: params[:person_name],
           us_citizen: params[:citizen],
-          person_signature: params[:person_signature],
+          person_signature: params[:person_signature_url],
           avatar: params[:person_image_url]
       }
     end
-    visitor.avatar = visitor.avatar.presence || params[:person_image_url]
-    visitor.save
-    if visitor.persisted?
-      visitor_update_info = if visitor.visitor_visit_informations.count > 0
-                              vl =  visitor.visitor_visit_informations.last
+    @visitor.avatar = @visitor.avatar.presence || params[:person_image_url]
+
+    if @visitor.save
+      visitor_update_info = if @visitor.visitor_visit_informations.count > 0
+                              vl =  @visitor.visitor_visit_informations.last
                               vl.name.eql?(params[:person_name]) && vl.company.eql?(params[:company]) && vl.phone.eql?(params[:phone])
                             else
                               true
                             end
       if visitor_update_info
-        visitor.update_columns({info_updated: false})
+        @visitor.update_columns({info_updated: false})
       end
-      visitor.visitor_visit_informations.create({
+      @visitor.visitor_visit_informations.create({
                                                     visit_reason: params[:reason],
                                                     classified: !(params[:classified]== 'no'),
                                                     person_visiting_id: Person.find_by_name(params[:person_visiting]).try(:id),
@@ -203,9 +204,9 @@ class WelcomeController < ApplicationController
                                                     name: params[:person_name],
                                                     updated: visitor_update_info
                                                 })
-      render json: {success: true, visitor: visitor.id }
+      render json: {success: true, visitor: @visitor.id, attributes: @visitor.attributes }
     else
-      render json: {success: false, errors: visitor.errors.full_messages  }
+      render json: {success: false, errors: @visitor.errors.full_messages  }
     end
 
   end

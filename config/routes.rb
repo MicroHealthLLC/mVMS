@@ -3,9 +3,9 @@ Rails.application.routes.draw do
   match '/setup', to: 'setup#index', via: [:get, :post]
   match '/authentication_setup', to: 'settings#authentication', via: [:get, :post]
   resources :people
-  get 'admin', to: 'visitor_log#index'
   get 'visitor_log/index'
   get '/visitor_log', to: 'visitor_log#index'
+  get 'admin', to: 'visitor_log#admin'
   get 'visitor_log/:action', controller: 'visitor_log'
   resources :companies
   resources :reasons

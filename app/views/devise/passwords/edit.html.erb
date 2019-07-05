@@ -1,25 +1,63 @@
-<h2>Change your password</h2>
+<link rel="stylesheet" href="/css/bootstrap-theme2.css">
+<link rel="stylesheet" href="/css/mvms_style.css">
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <%= devise_error_messages! %>
-  <%= f.hidden_field :reset_password_token %>
+<div id="admin-login" class="container">
+  <div class="row">
+    <div id="box-left" class="col-sm-8">
+      <div class="row">
+        <div id="section-1" class="col-xs-12 col-sm-6">
+          <%= image_tag section_1_image(@page_content) %>
+          <p><%= @page_content.section_1_body  if @page_content.present? %></p>
+        </div>
+        <div id="section-2" class="col-xs-12 col-sm-6">
+          <%= image_tag section_2_image(@page_content) %>
+        </div>
+      </div>
 
-  <div class="field">
-    <%= f.label :password, "New password" %><br />
-    <% if @minimum_password_length %>
-      <em>(<%= @minimum_password_length %> characters minimum)</em><br />
-    <% end %>
-    <%= f.password_field :password, autofocus: true, autocomplete: "off" %>
+      <div class="row">
+        <div id="section-3" class="col-xs-12 col-sm-6">
+          <p class="heading"><%= @page_content.section_3_title if @page_content.present?  %></p>
+          <p class="body"><%= @page_content.section_3_body  if @page_content.present? %></p>
+        </div>
+        <div id="section-4" class="col-xs-12 col-sm-6">
+          <p class="heading"><%= @page_content.section_4_title  if @page_content.present? %></p>
+          <p class="body"><%= @page_content.section_3_body  if @page_content.present? %></p>
+        </div>
+      </div>
+    </div>
+
+    <div id="box-right" class="col-xs-12 col-sm-4">
+      <div class="container-login-form">
+        <h2>Change your password</h2>
+
+        <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+          <%= devise_error_messages! %>
+          <%= f.hidden_field :reset_password_token %>
+
+          <div class="form-group">
+            <label> <%= f.label :password, "New password" %></label>
+            <% if @minimum_password_length %>
+              <em>(<%= @minimum_password_length %> characters minimum)</em><br />
+            <% end %>
+            <%= f.password_field :password, autofocus: true, autocomplete: "off", class: 'form-control' %>
+          </div>
+
+          <div class="form-group">
+            <label> <%= f.label :password_confirmation, "Confirm new password" %></label>
+            <%= f.password_field :password_confirmation, autofocus: true, autocomplete: "off", class: 'form-control' %>
+          </div>
+
+          <div class="actions">
+            <%= f.submit "Change my password" %>
+          </div>
+        <% end %>
+
+      </div>
+
+    </div>
   </div>
+</div>
 
-  <div class="field">
-    <%= f.label :password_confirmation, "Confirm new password" %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
-  </div>
 
-  <div class="actions">
-    <%= f.submit "Change my password" %>
-  </div>
-<% end %>
 
-<%= render "devise/shared/links" %>
+

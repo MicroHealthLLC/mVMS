@@ -79,6 +79,12 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
+  if File.exist?("#{Rails.root}/config/emails.yml")
+    emails = YAML::load(File.open("#{Rails.root}/config/emails.yml"))
+    config.action_mailer.delivery_method = emails['email_delivery']['delivery_method']
+    config.action_mailer.smtp_settings = emails['email_delivery']['smtp_settings'].symbolize_keys
+    config.action_mailer.default_url_options = emails['action_mailer_config'].symbolize_keys
+  end
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
