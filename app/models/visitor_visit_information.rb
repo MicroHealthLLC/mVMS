@@ -90,7 +90,7 @@ class VisitorVisitInformation < ApplicationRecord
         unless visitor.info_updated?
           return RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT
         end
-        if sign_in_date.to_date < 1.day.ago.to_date
+        if sign_in_date.to_date <= 1.day.ago.to_date
           return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT
         else
           if sign_in_date < 2.hours.ago
