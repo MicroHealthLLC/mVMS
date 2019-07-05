@@ -120,7 +120,7 @@
             <div class="row">
               <div class="col-xs-12 col-sm-12" id="hidden_imgs" hidden>
 
-                <% Visitor.where.not(avatar:nil).where(visitor_visit_informations: {sign_out_date: nil}).where("visitor_visit_informations.sign_in_date >= ?", 1.day.ago).order('visitor_visit_informations.id DESC').each do |v| %>
+                <% Visitor.init_vvi.where.not(avatar:nil).where(visitor_visit_informations: {sign_out_date: nil}).where("visitor_visit_informations.sign_in_date >= ?", 1.day.ago).order('visitor_visit_informations.id DESC').each do |v| %>
                     <img class="inputImg" id="inputImg" src='<%= v.avatar %>' data-label="<%= v.email%>"/>
                 <% end %>
                 <canvas id="overlay" />
