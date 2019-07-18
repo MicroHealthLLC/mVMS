@@ -1,0 +1,16 @@
+Hello <%= @person.name %>
+<br/>
+you have a new visit:
+<br/>
+Visitor:
+<br/>
+<% if @visitor.avatar.present? %>
+  <%= image_tag @visitor.avatar %>
+<% end  %>
+<ul>
+  <li>Name: <%= @visitor.name %> </li>
+  <li>Company: <%= @visitor.company %> </li>
+  <li>Email: <%= @visitor.email %></li>
+  <li>Phone: <%= @visitor.phone %> </li>
+  <li>Reason: <%= @vvi.visit_reason %></li>
+</ul>

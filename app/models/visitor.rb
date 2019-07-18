@@ -99,7 +99,8 @@ class Visitor < ApplicationRecord
   end
 
   def self.all_missed_visitor_saved
-    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NOT NULL").where.not(visitor_visit_informations: {recorded_by: [nil, '']})
+    where("visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NOT NULL").
+        where.not(visitor_visit_informations: {recorded_by: [nil, '']})
   end
 
   def self.sign_in_present
@@ -119,7 +120,8 @@ class Visitor < ApplicationRecord
     includes(:visitor_visit_informations).references(:visitor_visit_informations).where(visitor_visit_informations: {id: @last_visits})
   end
 
-  validates_presence_of :name, :email, :avatar
+  validates_presence_of :name, :email
+  validates_presence_of :avatar, on: :create
   validates_presence_of :phone
   validate :validate_phone_number
   validates_uniqueness_of :email

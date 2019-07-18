@@ -291,7 +291,6 @@
                         thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2"><button class="first_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
                     }
                     else
-//
                     {
                         d = new Date(Number(visitors_transactions[t].datetime));
                         thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);

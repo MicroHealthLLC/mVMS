@@ -47,6 +47,15 @@ class VisitorVisitInformation < ApplicationRecord
     end
   end
 
+  after_create :send_notification
+
+
+  def send_notification
+    if person && person.email.present?
+      NotificationMailer.notify_person(self.id, self.visitor_id, person.id).deliver_now
+    end
+  end
+
   def self.global_status
       if where(sign_out_date: nil).blank?
         ALL_VISITOR_SAVED
