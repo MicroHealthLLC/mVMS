@@ -1,0 +1,82 @@
+<div class="row">
+  <div class="col-md-12">
+    <%= form_for(@visitor, :html => {class: 'form-horizontal'})  do |f| %>
+      <div class="form-group">
+        <%= f.label 'Avatar', class: 'col-md-2 control-label' %>
+        <div class="col-md-9">
+          <%= image_tag(f.object.avatar, id: 'avatar_img') if @visitor.avatar.present?  %>
+        </div>
+
+      </div>
+
+      <div class="form-group">
+        <%= f.label 'Add/Change Avatar', class: 'col-md-2 control-label' %>
+        <div class="col-md-9">
+
+          <%= file_field_tag :avatar, onchange: 'previewFile()'%>
+          <%= f.text_area :avatar, style: 'display: none' %>
+        </div>
+
+      </div>
+      <script>
+          function previewFile() {
+              var preview = document.getElementById('avatar_img');
+              var preview_text = document.getElementById('visitor_avatar');
+              var file    = document.querySelector('input[type=file]').files[0];
+              var reader  = new FileReader();
+
+              reader.addEventListener("load", function () {
+                  preview.src = reader.result;
+                  preview_text.value = reader.result;
+              }, false);
+
+              if (file) {
+                  reader.readAsDataURL(file);
+              }
+          }
+      </script>
+      <div class="form-group">
+        <%= f.label 'Name', class: 'col-md-2 control-label' %>
+        <div class="col-md-9">
+          <%= f.text_field :name, class: 'form-control' %>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <%= f.label 'Company', class: 'col-md-2 control-label' %>
+        <div class="col-md-9">
+          <%= f.text_field :company, class: 'form-control' %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label 'Phone', class: 'col-md-2 control-label' %>
+        <div class="col-md-9">
+          <%= f.text_field :phone, class: 'form-control' %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label 'Email', class: 'col-md-2 control-label' %>
+        <div class="col-md-9">
+          <%= f.email_field :email, class: 'form-control' %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= f.label 'US Citizen', class: 'col-md-2 control-label' %>
+        <div class="col-md-9">
+          <%= f.check_box :us_citizen %>
+        </div>
+      </div>
+
+      <div class="form-group" >
+        <div class="col-md-11">
+          <%= link_to 'Cancel', '/admin', class: 'btn btn-warning pull-right' %>
+          <%= f.submit 'Save', class: 'btn btn-success pull-right' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

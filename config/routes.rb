@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :visitors, except: [:index, :new, :create, :show]
   get 'setup/index'
   match '/setup', to: 'setup#index', via: [:get, :post]
   match '/authentication_setup', to: 'settings#authentication', via: [:get, :post]
