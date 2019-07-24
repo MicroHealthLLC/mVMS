@@ -324,8 +324,8 @@ $(document).ready(function () {
                         document.getElementById("phone").value = json['phone']
                         document.getElementById("person_name").value = json['name']
                         document.getElementById("email").value = $("#capture_person_email").val().trim()
-                        document.getElementById("citizen_yes").value = json['us_citizen']
-                        document.getElementById("citizen_yes").value = !json['us_citizen']
+                        // document.getElementById("citizen_yes").value = json['us_citizen']
+                        // document.getElementById("citizen_yes").value = !json['us_citizen']
                         $("#capture_complete_msg").hide();
                         $("#capture_photo").hide();
                         document.getElementById("company").readOnly = false;
@@ -562,8 +562,8 @@ $(document).ready(function () {
             email: $("#email").val().trim(),
             reason: $('#reason').val(),
             person_visiting: $("#person_visiting").val().trim(),
-            citizen: $("input[name='citizen']:checked").val(),
-            classified: $("input[name='classified']:checked").val(),
+            citizen: document.getElementById("citizen_yes").checked,
+            classified: document.getElementById("classified_yes").checked,
             person_signature_url: $('#person_signature').val(),
             datetime_in: $("#datetime_in").val(),
             datetime_out: $("#datetime_out").val()
