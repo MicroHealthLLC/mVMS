@@ -196,7 +196,7 @@ class WelcomeController < ApplicationController
       end
       @visitor.visitor_visit_informations.create({
                                                     visit_reason: params[:reason],
-                                                    classified: !(params[:classified]== 'no'),
+                                                    classified: (params[:classified] == 'true'),
                                                     person_visiting_id: Person.find_by_name(params[:person_visiting]).try(:id),
                                                     sign_in_date: Time.now,
                                                     phone: params[:phone],

@@ -26,7 +26,7 @@ class VisitorLogController < BaseController
 
   def visitor_transactions
     @visitor = Visitor.find_by_id params[:personid]
-    scope = VisitorVisitInformation.where(visitor_id: @visitor.id).order('sign_in_date DESC')
+    scope = VisitorVisitInformation.where(visitor_id: @visitor.id).order('id DESC')
     filter = params[:visitorsignid]
     case filter
       when 'mso' then  scope = scope.missed_sign_out

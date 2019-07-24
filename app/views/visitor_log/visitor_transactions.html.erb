@@ -144,11 +144,11 @@
 
   <!-- ***********************************************************************************************   -->
 
-<style>
-  #log_key button{
-    cursor: default;
-  }
-</style>
+  <style>
+    #log_key button{
+      cursor: default;
+    }
+  </style>
   <div id="export_form_div">
     <button id="close_export_div_btn"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
     <form id="export_form">
@@ -288,7 +288,7 @@
                         thistrans = thistrans + '<button class="new_user_btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
                         d = new Date(Number(visitors_transactions[t].datetime));
                         timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2"><button class="first_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
+                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2"><button class="first_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"></div></div>';
                     }
                     else
                     {
@@ -306,13 +306,13 @@
                         thistrans = thistrans + '<button class="visitin_recorded_btn">';
                         d = new Date(Number(visitors_transactions[t].datetime));
                         timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
+                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"></div></div>';
 
                     }
 
                 }
 
-                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>")
+                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>" || visitors_transactions[t].datetime_out )
                 {
                     thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
                     d = new Date(Number(visitors_transactions[t].datetime_out));
