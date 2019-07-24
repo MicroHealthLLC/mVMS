@@ -191,7 +191,7 @@
         {
 
             time = moment(time_text, 'MMM DD, YYYY at HH:mm')
-            return (time.month() + 1)+'/'+ time.dates() +'/'+time.year()+' '+ time.hours()+':'+time.minutes()+''
+            return (time.month() + 1)+'/'+ time.dates() +'/'+time.year()+', '+ time.format('hh')+':'+time.format('mm')+ ':'+time.format('ss')+ ' ' + time.format('A') + ""
         }
     }
 
