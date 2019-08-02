@@ -23,19 +23,15 @@ class VisitorVisitInformation < ApplicationRecord
 
   FIRST_TIME_VISITOR = '00111'
   RETURN_VISITOR = '11000'
-  RETURN_VISITOR_NEED_INFO_UPDATE = '11001'
 
-  SHOULD_UPDATE_INFO_VISITOR = '0000'
+
   SIGN_IN_RECORDED = '0001'
   SIGN_IN_OUT_RECORDED = '0010'
-  
-  ADMIN_SIGN_IN_OUT_RECORDED = '0011'
   MUST_SIGN_OUT = '0100'
-  RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT = '0101'
+  ADMIN_SIGN_IN_OUT_RECORDED = '0011'
 
-  ALL_VISITOR_SAVED = '1111'
-  ALL_MISSED_SIGN_OUT = '2222'
-  MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT ='0110'
+
+
 
   validate :check_time
 
@@ -56,14 +52,6 @@ class VisitorVisitInformation < ApplicationRecord
     end
   end
 
-  def self.global_status
-      if where(sign_out_date: nil).blank?
-        ALL_VISITOR_SAVED
-      else
-        ALL_MISSED_SIGN_OUT
-      end
-  end
-
   def self.global_visit_status
     if where(nil).count > 1
       FIRST_TIME_VISITOR
@@ -73,44 +61,25 @@ class VisitorVisitInformation < ApplicationRecord
   end
 
   def visitor_status
-    if !visitor.info_updated? && VisitorVisitInformation.where(visitor_id: visitor.id).where('id <= ?', self.id).count <= 1
-      return SHOULD_UPDATE_INFO_VISITOR
-    end
-
     if sign_in_date.present? && sign_out_date.present?
-      return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT if sign_out_date < sign_in_date
-      if !visitor.info_updated?
-        return SHOULD_UPDATE_INFO_VISITOR
-      else
-        if recorded_by
-          return ADMIN_SIGN_IN_OUT_RECORDED
-        end
-        return SIGN_IN_OUT_RECORDED
+      return MUST_SIGN_OUT if sign_out_date < sign_in_date
+      if recorded_by
+        return ADMIN_SIGN_IN_OUT_RECORDED
       end
+      return SIGN_IN_OUT_RECORDED
     end
     if sign_in_date.nil? && sign_out_date.nil?
-      unless visitor.info_updated?
-        return RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT
-      else
-        return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT
-      end
+        return MUST_SIGN_OUT
     elsif sign_in_date.present?
       if sign_out_date.nil?
-        unless visitor.info_updated?
-          return RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT
-        end
         if sign_in_date.to_date <= 1.day.ago.to_date
-          return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT
+          return MUST_SIGN_OUT
         else
-          if sign_in_date < 2.hours.ago
-            return MUST_SIGN_OUT
-          else
             return SIGN_IN_RECORDED
-          end
         end
       end
     elsif sign_out_date.present?
-      return MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT
+      return MUST_SIGN_OUT
     end
   end
 

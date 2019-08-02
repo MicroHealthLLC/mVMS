@@ -73,8 +73,7 @@
 
         <div class="col-md-2 col-sm-4 col-xs-6">
           <label>Sign in status:</label>
-          <%= f.select :f_visits, options_for_select([['First Visit', 'first_visit'],['Return Visit', 'return_visitor'],
-                                                      ['Return Visitor Needs Info Updated','need_info']],
+          <%= f.select :f_visits, options_for_select([['First Visit', 'first_visit'],['Return Visit', 'return_visitor']],
                                                      selected: params.dig(:filter, :f_visits) ), {include_blank: true}, class: 'form-control' %>
         </div>
 
@@ -82,15 +81,10 @@
         <div class="col-md-2 col-sm-4 col-xs-6">
           <label>Visit status:</label>
           <%= f.select :f_status, options_for_select([
-                                                         ['Should Update Visitor Info', "#{VisitorVisitInformation::SHOULD_UPDATE_INFO_VISITOR}"],
                                                          ['Sign In Recorded*', "#{VisitorVisitInformation::SIGN_IN_RECORDED}"],
-
-                                                         ['Must Record Sign Out*', "#{VisitorVisitInformation::MUST_SIGN_OUT}"],
-                                                         ['Must Update Return Visitor; Then Must Record Sign In and Sign Out', "1#{VisitorVisitInformation::RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT}"],
-
-                                                         ['All Visitor Transactions Saved', "#{VisitorVisitInformation::ALL_VISITOR_SAVED}"],
-                                                         ['All Missed Sign Out Visitor Transactions Saved', "#{VisitorVisitInformation::ALL_MISSED_SIGN_OUT}"],
-                                                         ['Missed Sign Out: Must Record Sign In/Out', "#{VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT}"]
+                                                         ['Visitor Sign out', "#{VisitorVisitInformation::SIGN_IN_OUT_RECORDED}"],
+                                                         ['Visitor Missed Sign Out', "#{VisitorVisitInformation::MUST_SIGN_OUT}"],
+                                                         ['Missed Sign out Completed', "#{VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED}"],
                                                      ],
                                                      selected: params.dig(:filter, :f_status) ), {include_blank: true}, class: 'form-control' %>
         </div>

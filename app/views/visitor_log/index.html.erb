@@ -8,7 +8,7 @@
         person_id: '<%= v.id %>',
         person_image_url: "<%= v.avatar %>",
         first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
-        update_contact: '<%= v.info_updated %>',
+        update_contact: 'true',
         person_name: "<%= "#{v.name }"%>",
         company: "<%= v.company %>",
         phone: "<%= v.phone %>",
@@ -105,16 +105,13 @@
     <div class="col-xs-12 col-sm-4">
       <button id="new_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> First Time Visitor<br>
       <button id="return_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> Return Visitor<br>
-      <button id="update_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> Return Visitor Needs Info Updated<br>
-      <button id="update_visitin_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Should Update Visitor Info<br>
-      <button id="visitin_recorded_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Sign In Recorded*<br>
+      <button id="visitin_recorded_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Sign In Recorded<br>
     </div>
     <div class="col-xs-12 col-sm-8">
-      <button id="return2_visitout_key"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button> Must Record Sign Out*<br>
-      <button id="update_visitout_key"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button> Must Update Return Visitor; Then Must Record Sign In and Sign Out<br>
-      <button id="saved_visit_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button> All Visitor Transactions Saved<br>
-      <button id="saved_missed_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button> All Missed Sign Out Visitor Transactions Saved<br>
-      <button id="missed_signout_key"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button> Missed Sign Out: Must Record Sign In/Out<br>
+      <button id="visitor_signout_recored_key"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button> Visitor Sign Out*<br>
+      <button id="missed_signout_key"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button> Visitor Missed Sign Out<br>
+      <button id="missed2_signout_key"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button>  Missed sign out Completed<br>
+
     </div>
   </div><!-- log_key  -->
 
@@ -261,20 +258,14 @@
                 //
                 //
                 transstatus = transstatus.substring(1, 5)
-                 if ( (transstatus === "<%= VisitorVisitInformation::RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT %>")) {
-                    newinput = newinput + '<td><button class="update_visitout_btn"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "<%= VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT %>")) {
-                    newinput = newinput + '<td><button class="missed_signout_btn missed_cr_btn"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></td>';
-                } else if (transstatus === "<%= VisitorVisitInformation::SHOULD_UPDATE_INFO_VISITOR %>") {
-                    newinput = newinput + '<td><button class="update_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></td>';
-                } else if (transstatus === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>")  {
+                if (transstatus === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>") {
                     newinput = newinput + '<td><button class="visitin_recorded_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></td>';
-                } else if ((transstatus === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") ) {
-                    newinput = newinput + '<td><button class="saved_visit_btn"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></td>';
                 } else if ( (transstatus === "<%= VisitorVisitInformation::MUST_SIGN_OUT %>")) {
-                    newinput = newinput + '<td><button class="return2_visitout_btn"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></td>';
-                } else if ( (transstatus === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>")) {
-                    newinput = newinput + '<td><button class="saved_missed_btn"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></td>';
+                    newinput = newinput + '<td><button class="missed_signout_btn"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></td>';
+                } else if ((transstatus === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>")) {
+                    newinput = newinput + '<td><button class="visitor_signout_recored_btn"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></td>';
+                }  else if ( (transstatus === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>")) {
+                    newinput = newinput + '<td><button class="missed2_signout_btn"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></td>';
                 } else {
                     newinput = newinput + '<td>Error!</td>';
                 }
@@ -553,7 +544,7 @@
 
 
         $(".first_visitin_btn, .first_visitout_btn, .update_visitin_btn, " +
-            ".update_visitout_btn, .missed_fv_btn, .missed_uv_btn").click(function () {
+            ".update_visitout_btn, .missed_signout_key, .missed_uv_btn").click(function () {
             setTimeout(function () {
                 $("#visitor_form #visitor_person_id").val(document.getElementById("visitors_log_table").rows[thisrow].cells[1].innerText);
                 $("#visitor_form #visitor_person_name").val(document.getElementById("visitors_log_table").rows[thisrow].cells[2].innerText);
@@ -573,7 +564,7 @@
         });
 
 
-        $(".return_visitin_btn, .return_visitout_btn, .return2_visitout_btn, .missed_cr_btn, .missed_ur_btn").click(function () {
+        $(".return_visitin_btn, .missed_signout_btn, .return2_visitout_btn, .missed_cr_btn, .missed_ur_btn").click(function () {
 //            if ($(this).hasClass("missed_signout_btn")) {
                 document.getElementById("record_datetime_out").readOnly = false;
                 document.getElementById("record_datetime_in").readOnly = false;

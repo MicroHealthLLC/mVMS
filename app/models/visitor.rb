@@ -164,7 +164,7 @@ class Visitor < ApplicationRecord
 
         display_reason: last_visit&.visit_reason,
         display_personvisit: last_visit&.person.try(:name),
-        display_citizen: self.us_citizen?,
+        display_citizen: (self.us_citizen == 'true'),
 
         display_classified: last_visit&.classified?,
         display_date_in: last_visit&.sign_in_date.try(:to_date),

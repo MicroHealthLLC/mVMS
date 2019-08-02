@@ -27,7 +27,7 @@
         person_id: '<%= v.id %>',
         person_image_url: "<%= v.avatar %>",
         first_visit: "<%= v.visitor_visit_informations.count > 1 ? false : true %>",
-        update_contact: '<%= v.last_visit.updated %>',
+        update_contact: 'true',
         person_name: "<%= v.name %>",
         company: "<%= v.company %>",
         phone: "<%= v.phone %>",
@@ -215,20 +215,17 @@
 
 
   <h2>Visitor: <span id="visitor_name"><%= link_to @visitor.name, edit_visitor_path(@visitor) %></span></h2>
-
   <div id="log_key" class="row">
-    <div class="col-xs-12 col-md-6">
-      <button id="new_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> First Time Visitor Sign In<br>
-      <button id="return_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> Return Visitor Sign In<br>
-      <button id="update_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> Return Visitor With Updated Info Sign In<br>
-      <button id="first_visitin_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Visitor Created<br>
-      <button id="update_visitin_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Return Visitor Info Updated<br>
+    <div class="col-xs-12 col-sm-4">
+      <button id="new_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> First Time Visitor<br>
+      <button id="return_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> Return Visitor<br>
       <button id="visitin_recorded_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Sign In Recorded<br>
     </div>
-    <div class="col-xs-12 col-md-6">
-      <button id="return_visitout_key"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button> Visitor Signed Out<br>
-      <button id="missed_signout_key"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button> Visitor Completes Missed Sign Out<br>
-      <button id="missed2_signout_key"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button> Visitor Does Not Complete Missed Sign Out<br>
+    <div class="col-xs-12 col-sm-8">
+      <button id="visitor_signout_recored_key"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button> Visitor Sign Out*<br>
+      <button id="missed_signout_key"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button> Visitor Missed Sign Out<br>
+      <button id="missed2_signout_key"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button>  Missed sign out Completed<br>
+
     </div>
   </div><!-- log_key  -->
 
@@ -288,7 +285,7 @@
                         thistrans = thistrans + '<button class="new_user_btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
                         d = new Date(Number(visitors_transactions[t].datetime));
                         timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2"><button class="first_visitin_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"></div></div>';
+
                     }
                     else
                     {
@@ -318,20 +315,14 @@
                     d = new Date(Number(visitors_transactions[t].datetime_out));
                     timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
 
-                    thistrans = thistrans + '<button class="return_visitout_btn">';
+                    thistrans = thistrans + '<button class="visitor_signout_recored_btn">';
                     thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
 
                 }
 
                 //All Visitor Transactions Saved (Not Missed Sign Out)
-                if (transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ALL_VISITOR_SAVED %>") {
-                    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
-                    d = new Date(Number(visitors_transactions[t].datetime));
-                    timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                    thistrans = thistrans + '<button class="saved_visit_btn">';
-                    thistrans = thistrans + '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div><br>';
-                }
-                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ALL_MISSED_SIGN_OUT %>" ||  transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>" )
+
+                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>" )
                 {
                     thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
                     if( transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>" )
@@ -349,15 +340,6 @@
                         thistrans = thistrans + '<button class="saved_missed_btn">';  thistrans = thistrans + '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div><br>';
 
                     }
-
-                }
-
-                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT %>")
-                {
-                    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
-                    thistrans = thistrans + '<button class="missed2_signout_btn">';
-                    thistrans = thistrans + '<span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></div>' +
-                        '<div class="col-xs-10"><strong>Date/Time Sign Out:</strong> </div></div>';
 
                 }
 
