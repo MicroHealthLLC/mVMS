@@ -99,18 +99,18 @@
               { controller: "visitor_log", action: 'visitor_log', format: 'csv', params: {filter: params[:filter] ? params[:filter].permit! : {}} } ,
               class: 'btn btn-default pull-right'%>
 
-  <p>*If applicable, visitor was created/updated</p>
+  <!-- l<p>*If applicable, visitor was created/updated</p>  -->
 
   <div id="log_key" class="row">
     <div class="col-xs-12 col-sm-4">
       <button id="new_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> First Time Visitor<br>
       <button id="return_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> Return Visitor<br>
-      <button id="visitin_recorded_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Sign In Recorded<br>
+      <button id="visitin_recorded_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Visitor Signed In<br>
     </div>
     <div class="col-xs-12 col-sm-8">
-      <button id="visitor_signout_recored_key"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button> Visitor Sign Out*<br>
+      <button id="visitor_signout_recored_key"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button> Visitor Signed Out<br>
       <button id="missed_signout_key"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button> Visitor Missed Sign Out<br>
-      <button id="missed2_signout_key"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button>  Missed sign out Completed<br>
+      <button id="missed2_signout_key"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button> Missed Sign Out Completed<br>
 
     </div>
   </div><!-- log_key  -->
@@ -132,7 +132,7 @@
   </div><!-- filter_btns_div  -->
   <%= render partial: 'visitor_log/partials/filter_form' %>
   <div id="visitors_log_table_div">
-    <p id="transaction_instruction"><strong>INSTRUCTIONS:</strong> Click on a transaction status icon to record the next appropriate transaction, until status symbol is <span class="nobr">All Visitor</span> Transactions <span class="nobr">Saved (<button id="saved_visit_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span> or <span class="nobr">All Missed</span> Sign Out Visitor Transactions <span class="nobr">Saved (<button id="saved_missed_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span></p>
+  <!--   <p id="transaction_instruction"><strong>INSTRUCTIONS:</strong> Click on a transaction status icon to record the next appropriate transaction, until status symbol is <span class="nobr">All Visitor</span> Transactions <span class="nobr">Saved (<button id="saved_visit_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span> or <span class="nobr">All Missed</span> Signansactions <span class="n Out Visitor Trobr">Saved (<button id="saved_missed_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span></p>  -->
     <table id="visitors_log_table" class="table two-axis">
       <thead>
       <tr>
