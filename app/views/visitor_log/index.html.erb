@@ -94,10 +94,10 @@
   <!--- *******************************************************************************************  -->
 
 
-  <h2>Visitors Log</h2>
   <%= link_to 'export CSV',
               { controller: "visitor_log", action: 'visitor_log', format: 'csv', params: {filter: params[:filter] ? params[:filter].permit! : {}} } ,
               class: 'btn btn-default pull-right'%>
+  <h2>Visitors Log</h2>
 
   <!-- l<p>*If applicable, visitor was created/updated</p>  -->
 
