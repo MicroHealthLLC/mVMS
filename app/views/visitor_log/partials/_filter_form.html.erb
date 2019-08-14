@@ -81,10 +81,10 @@
         <div class="col-md-2 col-sm-4 col-xs-6">
           <label>Visit status:</label>
           <%= f.select :f_status, options_for_select([
-                                                         ['Sign In Recorded*', "#{VisitorVisitInformation::SIGN_IN_RECORDED}"],
-                                                         ['Visitor Sign out', "#{VisitorVisitInformation::SIGN_IN_OUT_RECORDED}"],
+                                                         ['Visitor Signed In', "#{VisitorVisitInformation::SIGN_IN_RECORDED}"],
+                                                         ['Visitor Signed Out', "#{VisitorVisitInformation::SIGN_IN_OUT_RECORDED}"],
                                                          ['Visitor Missed Sign Out', "#{VisitorVisitInformation::MUST_SIGN_OUT}"],
-                                                         ['Missed Sign out Completed', "#{VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED}"],
+                                                         ['Missed Sign Out Completed', "#{VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED}"],
                                                      ],
                                                      selected: params.dig(:filter, :f_status) ), {include_blank: true}, class: 'form-control' %>
         </div>
