@@ -48,32 +48,28 @@ class Visitor < ApplicationRecord
 
   scope :f_status, ->(status){
     case status
-      when "#{VisitorVisitInformation::SHOULD_UPDATE_INFO_VISITOR}" then info_missing
-      when "#{VisitorVisitInformation::ALL_VISITOR_SAVED}" then all_visitor_saved
-      when "#{VisitorVisitInformation::ALL_MISSED_SIGN_OUT}" then all_missed_visitor_saved
-      when "#{VisitorVisitInformation::SIGN_IN_RECORDED}" then sign_in_present
-      when "#{VisitorVisitInformation::MISSED_SIGN_OUT_MUST_RECORD_SIGN_IN_OUT}" then sign_out_outdate
-      when  "#{VisitorVisitInformation::RETURN_VISITOR_NEED_INFO_UPDATE_THEN_RECORD_SIGN_IN_OUT}" then return_visitor_need_indate_info_then_sign_out
-      when  "#{VisitorVisitInformation::MUST_SIGN_OUT}" then must_sign_out
-      when '01110' then where(nil)
-      else
-        where(nil)
+    when "#{VisitorVisitInformation::SIGN_IN_RECORDED}" then sign_in_present
+    when  "#{VisitorVisitInformation::SIGN_IN_OUT_RECORDED}" then sign_out_recorded
+    when  "#{VisitorVisitInformation::MUST_SIGN_OUT}" then must_sign_out
+    when  "#{VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED}" then must_sign_out
+    else
+      where(nil)
     end
   }
 
   scope :f_visits, ->(status){
     case status
-      when 'first_visit' then
-        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) = 1')
-        where(id: v.pluck(:visitor_id))
-      when 'return_visitor' then
-        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
-        where(id: v.pluck(:visitor_id)).where({info_updated: true})
-      when 'need_info' then
-        v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
-        where(id: v.pluck(:visitor_id)).where({info_updated: false})
-      else
-        where(nil)
+    when 'first_visit' then
+      v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) = 1')
+      where(id: v.pluck(:visitor_id))
+    when 'return_visitor' then
+      v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
+      where(id: v.pluck(:visitor_id))
+    when 'need_info' then
+      v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
+      where(id: v.pluck(:visitor_id)).where({info_updated: false})
+    else
+      where(nil)
     end
   }
 
@@ -109,6 +105,14 @@ class Visitor < ApplicationRecord
 
   def self.must_sign_out
     where("visitor_visit_informations.sign_in_date < ? AND visitor_visit_informations.sign_in_date > ? AND visitor_visit_informations.sign_out_date IS NULL", 2.hours.ago, Date.today.to_date )
+  end
+
+  def self.sign_out_recorded
+    where("visitor_visit_informations.sign_out_date IS NOT NULL" ).where(visitor_visit_informations: {recorded_by: [nil, '']})
+  end
+
+  def self.admin_sign_out_recorded
+    where("visitor_visit_informations.sign_out_date IS NOT NULL" ).where.not(visitor_visit_informations: {recorded_by: [nil, '']})
   end
 
   def self.sign_out_outdate

@@ -261,7 +261,7 @@
                 if (transstatus === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>") {
                     newinput = newinput + '<td><button class="visitin_recorded_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></td>';
                 } else if ( (transstatus === "<%= VisitorVisitInformation::MUST_SIGN_OUT %>")) {
-                    newinput = newinput + '<td><button class="missed_signout_btn"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></td>';
+                    newinput = newinput + '<td><button class="missed_signout_btn"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></td>';
                 } else if ((transstatus === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>")) {
                     newinput = newinput + '<td><button class="visitor_signout_recored_btn"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></td>';
                 }  else if ( (transstatus === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>")) {
