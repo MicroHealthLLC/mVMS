@@ -298,14 +298,14 @@
                     }
 
 
-                    if((transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") || (transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>")){
+                  //  if((transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") || (transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>")){
                         thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
                         thistrans = thistrans + '<button class="visitin_recorded_btn">';
                         d = new Date(Number(visitors_transactions[t].datetime));
                         timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
                         thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Signed In:</strong> ' + timerecorded + '</div><div class="col-xs-5"></div></div>';
 
-                    }
+                  //  }
 
                 }
 
