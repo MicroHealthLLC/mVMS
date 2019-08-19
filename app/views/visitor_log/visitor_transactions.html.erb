@@ -282,7 +282,7 @@
                     if(transstatus.substring(0, 1) === "0") {
                         d = new Date(Number(visitors_transactions[t].datetime));
                         thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        thistrans = thistrans + '<button class="new_user_btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
+                        thistrans = thistrans + '<button class="new_user_btn"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Visitor Created:</strong> ' + thistimein + '</div></div>';
                         d = new Date(Number(visitors_transactions[t].datetime));
                         timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
 
@@ -293,19 +293,19 @@
                         thistimein = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
                         thistrans = thistrans + '<button class="return_user_btn">';
 
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Sign In:</strong> ' + thistimein + '</div></div>';
+                        thistrans = thistrans + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></button></div><div class="col-xs-10"><strong>Date/Time Visitor Updated:</strong> ' + thistimein + '</div></div>';
 
                     }
 
 
-                    if((transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") || (transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>")){
+                  //  if((transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>") || (transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_RECORDED %>")){
                         thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
                         thistrans = thistrans + '<button class="visitin_recorded_btn">';
                         d = new Date(Number(visitors_transactions[t].datetime));
                         timerecorded = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Recorded:</strong> ' + timerecorded + '</div><div class="col-xs-5"></div></div>';
+                        thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Signed In:</strong> ' + timerecorded + '</div><div class="col-xs-5"></div></div>';
 
-                    }
+                  //  }
 
                 }
 
@@ -316,7 +316,7 @@
                     timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
 
                     thistrans = thistrans + '<button class="visitor_signout_recored_btn">';
-                    thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
+                    thistrans = thistrans + '<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Signed Out:</strong> ' + timesignout + '</div><div class="col-xs-5"></div></div>';
 
                 }
 
@@ -331,7 +331,7 @@
                         thistrans = thistrans + '<button class="missed2_signout_btn">';
                         d = new Date(Number(visitors_transactions[t].datetime_out));
                         timesignout = monthNames[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + ("0" + d.getHours()).slice(-2) + ':' + ("0" + d.getMinutes()).slice(-2);
-                        thistrans = thistrans + '<span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Sign Out:</strong> ' + timesignout + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
+                        thistrans = thistrans + '<span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong>Date/Time Signed Out:</strong> ' + timesignout + '</div><div class="col-xs-5"><strong>Recorded by:</strong> ' + visitors_transactions[t].recorded_by + '</div></div>';
 
 
                     }
