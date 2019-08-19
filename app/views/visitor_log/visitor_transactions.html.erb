@@ -320,6 +320,15 @@
 
                 }
 
+                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::MUST_SIGN_OUT %>")
+                {
+                    thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
+
+                    thistrans = thistrans + '<button class="missed_signout_btn">';
+                    thistrans = thistrans + '<span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button></div><div class="col-xs-5"><strong></div><div class="col-xs-5"></div></div>';
+
+                }
+
                 //All Visitor Transactions Saved (Not Missed Sign Out)
 
                 if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED %>" )
