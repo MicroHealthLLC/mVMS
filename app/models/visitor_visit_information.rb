@@ -24,7 +24,6 @@ class VisitorVisitInformation < ApplicationRecord
   FIRST_TIME_VISITOR = '00111'
   RETURN_VISITOR = '11000'
 
-
   SIGN_IN_RECORDED = '0001'
   SIGN_IN_OUT_RECORDED = '0010'
   MUST_SIGN_OUT = '0100'
@@ -34,6 +33,7 @@ class VisitorVisitInformation < ApplicationRecord
 
 
   validate :check_time
+  # validate :check_signout
 
   def check_time
     if sign_out_date.present? && sign_in_date.present?
@@ -42,6 +42,10 @@ class VisitorVisitInformation < ApplicationRecord
       end
     end
   end
+
+  # def check_signout
+  #   errors.add(:base, 'You should signout')
+  # end
 
   after_create :send_notification
 
@@ -62,7 +66,7 @@ class VisitorVisitInformation < ApplicationRecord
 
   def visitor_status
     if sign_in_date.present? && sign_out_date.present?
-      return MUST_SIGN_OUT if sign_out_date < sign_in_date
+      return MUST_SIGN_OUT if sign_out_date <= sign_in_date
       if recorded_by
         return ADMIN_SIGN_IN_OUT_RECORDED
       end

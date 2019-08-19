@@ -51,7 +51,7 @@ class Visitor < ApplicationRecord
     when "#{VisitorVisitInformation::SIGN_IN_RECORDED}" then sign_in_present
     when  "#{VisitorVisitInformation::SIGN_IN_OUT_RECORDED}" then sign_out_recorded
     when  "#{VisitorVisitInformation::MUST_SIGN_OUT}" then must_sign_out
-    when  "#{VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED}" then must_sign_out
+    when  "#{VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED}" then admin_sign_out_recorded
     else
       where(nil)
     end
@@ -104,7 +104,7 @@ class Visitor < ApplicationRecord
   end
 
   def self.must_sign_out
-    where("visitor_visit_informations.sign_in_date < ? AND visitor_visit_informations.sign_in_date > ? AND visitor_visit_informations.sign_out_date IS NULL", 2.hours.ago, Date.today.to_date )
+    where("visitor_visit_informations.sign_in_date < ? AND visitor_visit_informations.sign_out_date IS NULL", Date.today.to_date )
   end
 
   def self.sign_out_recorded

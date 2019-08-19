@@ -547,6 +547,7 @@ $(document).ready(function () {
 
     $("#signin_btn").click(function (e) {
         e.preventDefault();
+        $("#signin_btn").attr('disabled', 'disabled');
         var thistime = Date.now();
         $("#datetime_in").val(thistime);
         //NOTE: Will be changed to submit form later, but for now just seed test

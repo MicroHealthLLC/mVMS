@@ -6,7 +6,6 @@ class VisitorLogController < BaseController
     respond_to do |format|
       format.html{
         @visitors = Visitor.init_vvi.filter(filter_params).sorted_by(params[:sort_by]).paginate(page: params[:page], per_page: 15)
-
       }
       format.csv{
         @csv =  CSV.generate do |csv|
