@@ -309,7 +309,8 @@
 
                 }
 
-                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>" || visitors_transactions[t].datetime_out )
+              //  if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>" || visitors_transactions[t].datetime_out )
+                if(transstatus.substring(1, 5) === "<%= VisitorVisitInformation::SIGN_IN_OUT_RECORDED %>")
                 {
                     thistrans = thistrans + '<div class="row datetimerecord"><div class="col-xs-2">';
                     d = new Date(Number(visitors_transactions[t].datetime_out));
