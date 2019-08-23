@@ -8,9 +8,9 @@ end
 ruby '2.5.3'
 
 
-gem 'rails', '~> 5.2.2'
+gem 'rails', '~> 5.2.3'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+# gem 'sqlite3'
 # Use Puma as the app server
 gem 'puma'
 gem 'jquery-rails'
@@ -88,6 +88,7 @@ gem 'prawn-print'
 # Environment variables
 gem 'figaro'
 gem 'elastic-apm'
+ gem 'letter_opener'
 gem 'pry-rails'
 gem 'rails-pry'
 gem "jquery-fileupload-rails"
