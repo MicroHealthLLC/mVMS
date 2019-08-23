@@ -30,11 +30,11 @@ class VisitorLogController < BaseController
     case filter
       when 'mso' then  scope = scope.missed_sign_out
       when 'sso' then  scope = scope.saved_sign_out
-      when 'cuv' then  scope = scope.where(updated: true)
+      when 'cuv' then  scope = scope.where(nil)
       else
 
     end
-    @visitors_transactions = scope.paginate(page: params[:page], per_page: 10)
+    @visitors_transactions = params[:visitorsignid] == 'all' ? scope.paginate(page: params[:page], per_page: scope.count)  : scope.paginate(page: params[:page], per_page: 2)
     if @visitor
       if @visitor.avatar
         @visitor.save_image_avatar

@@ -230,10 +230,14 @@
   </div><!-- log_key  -->
 
   <div id="filter_btns_div">
+    <% if params[:visitorsignid] != 'all'  %>
     <button id="view_all_btn" class="btn btn-default filter_btn"><span id="count_all"></span>View All</button>
+      <% else %>
+      <button id="view_rencent_btn" class="btn btn-default filter_btn"><span id="count_all"></span>Most recent</button>
+      <% end %>
   </div>
   <div id="more_filter_btns_div">
-    <button id="create_update_filter" class="btn btn-default filter_btn">(<span id="count_create_update"><%= @visitor.visitor_visit_informations.where(updated: true).count %></span>) Create/Update Visitor Info</button>
+    <button id="create_update_filter" class="btn btn-default filter_btn">(<span id="count_create_update"><%= @visitor.visitor_visit_informations.count %></span>) Total Visits</button>
     <button id="saved_signout_filter" class="btn btn-default filter_btn">(<span id="count_newupdate"><%= @visitor.visitor_visit_informations.saved_sign_out.count %></span>) Saved Sign Out</button>
     <button id="missed_signout_filter" class="btn btn-default filter_btn">(<span id="count_missed"><%= @visitor.visitor_visit_informations.missed_sign_out.count %></span>) Missed Sign Out</button>
   </div>
@@ -382,6 +386,10 @@
 
         $("#view_all_btn").click(function () {
             window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=all";
+        });
+
+         $("#view_rencent_btn").click(function () {
+            window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=recent";
         });
 
         $("#saved_signout_filter").click(function () {
