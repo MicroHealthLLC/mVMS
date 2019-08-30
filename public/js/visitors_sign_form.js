@@ -467,6 +467,7 @@ $(document).ready(function () {
         e.preventDefault();
         var validUser = validateSignature();
         if (validUser === true) {
+            $("#signin_btn").removeAttr('disabled');
             $("#signature_complete_msg").hide();
             $("#visitor_signature").hide();
             setupSummary();
@@ -578,7 +579,10 @@ $(document).ready(function () {
                 if(json['success'])
                     window.location.href = "/visitor_badge?visitor_id="+json["visitor"];
                 else
+                {
+                    $("#signin_btn").removeAttr('disabled');
                     alert(json['errors'])
+                }
             }
         })
     });

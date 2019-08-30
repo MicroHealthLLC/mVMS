@@ -7,6 +7,11 @@ class VisitorsController < BaseController
 
   def update
     @visitor.update(visitor_params)
+    VisitorVisitInformation.where(:visitor_id => @visitor.id).update_all({
+        name: @visitor.name,
+        company: @visitor.company,
+        phone: @visitor.phone,
+                                                                         })
     redirect_to "/visitor_log/visitor_transactions?personid=#{@visitor.id}"
   end
 
