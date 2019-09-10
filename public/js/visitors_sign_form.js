@@ -107,11 +107,23 @@ function open_picture(){
 function initWebCam(){
 
     iOS =  /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
+    var width = 320;
+    var height = 240;
+
+    if(screen.width < screen.height) {
+        width = 240;
+        height = 320;
+    }
     if(iOS){
+
         Webcam.set({
             constraints: { facingMode: { exact: "user" }  },
-            width: 320,
-            height: 240,
+            width: width,
+            height: height,
+            dest_width: width,
+            dest_height: height,
+            crop_width: width,
+            crop_height: height,
             image_format: 'jpeg',
             jpeg_quality: 90,
             user_callback: function(data_uri) {
@@ -129,8 +141,8 @@ function initWebCam(){
     else
     {
         Webcam.set({
-            width: 320,
-            height: 240,
+            width: width,
+            height: height,
             image_format: 'jpeg',
             jpeg_quality: 90
         });
