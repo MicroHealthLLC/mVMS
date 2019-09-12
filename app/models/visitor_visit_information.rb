@@ -93,10 +93,16 @@ class VisitorVisitInformation < ApplicationRecord
 
 
 
-  def self.missed_sign_out
-    where("(visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL AND visitor_visit_informations.sign_in_date < ?) OR ( visitor_visit_informations.sign_in_date < visitor_visit_informations.sign_out_date )   OR (visitor_visit_informations.sign_in_date IS NULL)
- ",
+#  def self.missed_sign_out
+#    where("(visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL AND visitor_visit_informations.sign_in_date < ?) OR ( visitor_visit_informations.sign_in_date < visitor_visit_informations.sign_out_date )   OR (visitor_visit_informations.sign_in_date IS NULL)
+# ",
+#
+#          Date.today)
+#  end
 
+
+  def self.missed_sign_out
+    where("(visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL AND visitor_visit_informations.sign_in_date < ?)",
           Date.today)
   end
 
