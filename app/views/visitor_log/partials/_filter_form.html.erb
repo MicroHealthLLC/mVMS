@@ -98,10 +98,10 @@
         <%= f.submit 'Filter Most Recent', class: 'btn btn-success btn-block' %>
       </div>
       <div class="pull-right col-md-2 col-sm-4 col-xs-6">
-        <%= link_to 'Clear', '/visitor_log', class: 'btn btn-default btn-block' %>
+        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#options_filter">More options</button>
       </div>
       <div class="pull-right col-md-2 col-sm-4 col-xs-6">
-        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#options_filter">More options</button>
+        <%= link_to 'Clear All', '/visitor_log', class: 'btn btn-default btn-block' %>
       </div>
     </div>
   <% end %>
