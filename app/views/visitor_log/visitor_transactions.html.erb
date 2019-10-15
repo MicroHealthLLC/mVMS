@@ -34,7 +34,7 @@
         email: "<%= v.email %>",
         reason: "<%= v.last_visit.visit_reason %>",
         person_visiting: "<%=  v.last_visit.person.try(:name) %>",
-        citizen: "<%= v.us_citizen.to_s == 'true' ? 'yes' : 'no' %>",
+        citizen: "<%= v.us_citizen.to_s.in?( ['true', '1']) ? 'Yes' : 'No' %>",
         classified: "<%= v.last_visit.classified  ? 'yes' : 'no' %>",
         person_signature_url: "",
         datetime_in: "<%= v.last_visit.sign_in_date&.in_time_zone('Eastern Time (US & Canada)').to_i %>000",

@@ -11,6 +11,7 @@ class VisitorsController < BaseController
         name: @visitor.name,
         company: @visitor.company,
         phone: @visitor.phone,
+        us_citizen: @visitor.us_citizen
                                                                          })
     redirect_to "/visitor_log/visitor_transactions?personid=#{@visitor.id}"
   end
