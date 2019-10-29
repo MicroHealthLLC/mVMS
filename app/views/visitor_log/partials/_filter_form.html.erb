@@ -60,7 +60,7 @@
                                                               selected: params.dig(:filter, :f_person_visiting) ), {include_blank: true},  class: 'form-control' %>
         </div>
         <div class="col-md-2 col-sm-4 col-xs-6">
-          <label>US Citizen:</label>
+          <label>U.S. Citizen:</label>
           <%= f.select :f_us_citizen, options_for_select([['Yes', true], ['No', false]],
                                                          selected: params.dig(:filter, :f_us_citizen) ), {include_blank: true}, class: 'form-control' %>
         </div>
