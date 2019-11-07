@@ -236,10 +236,10 @@
       <button id="view_rencent_btn" class="btn btn-default filter_btn"><span id="count_all"></span>Most recent</button>
       <% end %>
   </div>
-  <div id="more_filter_btns_div">
-    <button id="create_update_filter" class="btn btn-default filter_btn">(<span id="count_create_update"><%= @visitor.visitor_visit_informations.count %></span>) Total Visits</button>
-    <button id="saved_signout_filter" class="btn btn-default filter_btn">(<span id="count_newupdate"><%= @visitor.visitor_visit_informations.saved_sign_out.count %></span>) Saved Sign Out</button>
-    <button id="missed_signout_filter" class="btn btn-default filter_btn">(<span id="count_missed"><%= @visitor.visitor_visit_informations.missed_sign_out.count %></span>) Missed Sign Out</button>
+  <div id="more_filter_trans_btns_div">
+    <p id="trans_count_row"><span id="create_update_filter" class="trans_count">(<span id="count_create_update"><%= @visitor.visitor_visit_informations.count %></span>) Total Visits</span>
+    <span id="saved_signout_filter" class="trans_count">(<span id="count_newupdate"><%= @visitor.visitor_visit_informations.saved_sign_out.count %></span>) Saved Sign Out</span>
+    <span id="missed_signout_filter">(<span id="count_missed"><%= @visitor.visitor_visit_informations.missed_sign_out.count %></span>) Missed Sign Out</span></p>
   </div>
 
   <div id="display_visitor_transactions">
@@ -376,7 +376,7 @@
         var visitorsignid = url.searchParams.get("visitorsignid");
 
 
-        $("#more_filter_btns_div").show();
+        $("#more_filter_trans_btns_div").show();
         resetFilterBtns();
         setTimeout(function () {
             $("#view_all_btn").addClass("btn-grey");
@@ -391,7 +391,7 @@
          $("#view_rencent_btn").click(function () {
             window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=recent";
         });
-
+    /*
         $("#saved_signout_filter").click(function () {
             window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=sso";
         });
@@ -403,7 +403,7 @@
         $("#missed_signout_filter").click(function () {
             window.location.href = "visitor_transactions.html?personid=" + thisperson_id + "&visitorsignid=mso";
         });
-
+    */
     });
 </script>
 
