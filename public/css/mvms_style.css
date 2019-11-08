@@ -11,8 +11,8 @@ h1 {margin-top:0;text-align:right;}
 #filter_submit_btn {margin-right:10px;float:right;}
 #filter_btns_div, #more_filter_btns_div {margin:20px auto; padding:0px;text-align:left;float:left;}
 #more_filter_trans_btns_div {margin:20px auto; padding:0px;text-align:left;float:left;}
-#trans_count_row {margin:10px 0 10px 20px}
-.trans_count {margin-right:2em}
+#trans_count_row {margin:10px 0 10px 20px;}
+.trans_count {margin-right:2em;}
 #display_visitor_transactions {clear:both;}
 /*
 #not_signedout_filter, #update_visitor_filter, #new_company_filter {width:12em;}
