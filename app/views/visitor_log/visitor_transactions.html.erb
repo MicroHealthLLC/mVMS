@@ -260,8 +260,8 @@
 
     function displayMostRecentTrans(thisperson_id) {
         //  alert('display most recent transactions for person with id = ' + thisperson_id);
-        var t = 0, thistrans, foundtrans, transstatus, savedentry, timerecorded, timesignout, v, visitfound, prevvisit;
-        while ((t < visitors_transactions.length) && (t < 5)) {
+        var t = 0, recenttrans = 0, thistrans, foundtrans, transstatus, savedentry, timerecorded, timesignout, v, visitfound, prevvisit;
+        while ((t < visitors_transactions.length) && (recenttrans < 5)) {
             thistrans = "";
             foundtrans = false;
             if (visitors_transactions[t].person_id === thisperson_id) {
@@ -274,6 +274,7 @@
                     }
                 }
                 if (visitfound === true) {
+                    recenttrans += 1;
                     transstatus = visitors_transactions[t].status;
                     //    alert(transstatus);
     //                    if ((transstatus === "01000") || (transstatus === "10000") || (transstatus === "20000")) {
