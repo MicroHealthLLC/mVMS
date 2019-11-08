@@ -34,7 +34,7 @@ class VisitorLogController < BaseController
       else
 
     end
-    @visitors_transactions = params[:visitorsignid] == 'all' ? scope.paginate(page: params[:page], per_page: scope.count)  : scope.paginate(page: params[:page], per_page: 5)
+    @visitors_transactions = params[:visitorsignid] == 'all' ? scope.paginate(page: params[:page], per_page: 5) : scope.paginate(page: params[:page], per_page: scope.count) 
     if @visitor
       if @visitor.avatar
         @visitor.save_image_avatar
