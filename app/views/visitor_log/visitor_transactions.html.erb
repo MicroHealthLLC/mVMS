@@ -231,10 +231,12 @@
 
   <div id="filter_btns_div">
     <% if params[:visitorsignid] != 'all'  %>
-    <button id="view_all_btn" class="btn btn-default filter_btn"><span id="count_all"></span>View All</button>
-      <% else %>
-      <button id="view_rencent_btn" class="btn btn-default filter_btn"><span id="count_all"></span>Most recent</button>
+      <% if @visitor.visitor_visit_informations.count > 5 %>
+        <button id="view_all_btn" class="btn btn-default filter_btn"><span id="count_all"></span>View All</button>
       <% end %>
+    <% else %>
+      <button id="view_rencent_btn" class="btn btn-default filter_btn"><span id="count_all"></span>Most Recent</button>
+    <% end %>
   </div>
   <div id="more_filter_trans_btns_div">
     <p id="trans_count_row"><span id="create_update_filter" class="trans_count">(<span id="count_create_update"><%= @visitor.visitor_visit_informations.count %></span>) Total Visits</span>
