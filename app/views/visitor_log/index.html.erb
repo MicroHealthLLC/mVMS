@@ -1,7 +1,7 @@
 
 <script type="text/javascript" src="/js/jquery.basictable.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-    var visitors_signs = [ ]
+    var visitors_signs = [ ], checkdate, total_old_missed_signout = 0, today = new Date(), plusThirty;
     <% @visitors.reverse.each do |v| %>
     visitors_signs.push( {
         visitor_sign_id: '<%= v.id %>',
@@ -22,6 +22,15 @@
         datetime_out: "<%=  v.last_visit.sign_out_date ? v.last_visit.sign_out_date.in_time_zone('Eastern Time (US & Canada)').to_i * 1000 : '' %>"}
     )
     <% end %>
+    for (var i = 0; i < visitors_signs.length; i += 1) {
+        if (visitors_signs[i].datetime_out == '') {
+            checkdate = new Date(Number(visitors_signs[i].datetime_in));        
+            plusThirty = checkdate.setDate(checkdate.getDate()+30);
+            if (today.getTime() > plusThirty) {
+                total_old_missed_signout = total_old_missed_signout + 1;
+            }
+        }
+    }
 </script>
 <script type="text/javascript" charset="utf-8">
     var visitors_transactions = [ ]
@@ -129,7 +138,7 @@
     </div>
   </div><!-- filter_btns_div  -->
   <%= render partial: 'visitor_log/partials/filter_form' %>
-  <div id="old-missed-signout" hidden>WARNING: Admin should complete <span id="missedPassThirty"></span> Missed Sign Out(s) more than 30 days ago.</div>
+  <div id="old-missed-signout" hidden>WARNING: Admin should complete <span id="missedPassThirty"></span><span id="total-missed"> total</span> Missed Sign Out(s) more than 30 days ago.</div>
   <div id="visitors_log_table_div">
   <!--   <p id="transaction_instruction"><strong>INSTRUCTIONS:</strong> Click on a transaction status icon to record the next appropriate transaction, until status symbol is <span class="nobr">All Visitor</span> Transactions <span class="nobr">Saved (<button id="saved_visit_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span> or <span class="nobr">All Missed</span> Signansactions <span class="n Out Visitor Trobr">Saved (<button id="saved_missed_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span></p>  -->
     <table id="visitors_log_table" class="table two-axis">
@@ -189,7 +198,7 @@
     $(document).ready(function () {
         //  visitors_signs = localStorage.getItem("visitors_signs");
         //  visitors_transactions = localStorage.getItem("visitors_transactions");
-        var v, newinput, thisreason, d, e, thistimein, thistimeout, t, transfound, transstatus, plusThirty, old_missed_signout = 0, today = new Date();
+        var v, newinput, thisreason, d, e, thistimein, thistimeout, t, transfound, transstatus, old_missed_signout = 0;
         const monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
         //  for (v = 0; v < visitors_signs.length; v += 1) {
         for (v = visitors_signs.length - 1; v >= 0; v -= 1) {
@@ -273,12 +282,23 @@
                         showEmptyCells: true
                     });
                 }, 1200);
-                if (old_missed_signout > 0) {
-                    document.getElementById("missedPassThirty").innerHTML = old_missed_signout;
-                    $("#old-missed-signout").show();
+                if (total_old_missed_signout > 0) {
+                    if (window.location.href = "https://vms.microhealthllc.com/visitor_log") {
+                        document.getElementById("missedPassThirty").innerHTML = total_old_missed_signout;
+                        $("#total-missed").show();
+                        $("#old-missed-signout").show();
+                    } else {
+                        if (old_missed_signout > 0) {
+                            document.getElementById("missedPassThirty").innerHTML = old_missed_signout;
+                            $("#total-missed").hide();
+                            $("#old-missed-signout").show();
+                        } else {
+                            $("#old-missed-signout").hide();
+                        }
+                    }         
                 } else {
                     $("#old-missed-signout").hide();
-                }                    
+                }
             }
         }
         var r, thisbtnclass, thistd, newco = 0, not_signedout = 0, signedout = 0, allsaved = 0, firstvisitor = 0, returnvisitor = 0, updatevisitor = 0, missed_signout = 0, newcompany = 0, theserows = $("#visitors_log_table tr");
