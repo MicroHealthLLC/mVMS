@@ -1,7 +1,7 @@
 
 <script type="text/javascript" src="/js/jquery.basictable.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-    var visitors_signs = [ ], checkdate, total_old_missed_signout = 0, today = new Date(), plusThirty;
+    var visitors_signs = [ ]
     <% @visitors.reverse.each do |v| %>
     visitors_signs.push( {
         visitor_sign_id: '<%= v.id %>',
@@ -21,13 +21,6 @@
         datetime_in: "<%= v.last_visit.sign_in_date&.in_time_zone('Eastern Time (US & Canada)').to_i %>000",
         datetime_out: "<%=  v.last_visit.sign_out_date ? v.last_visit.sign_out_date.in_time_zone('Eastern Time (US & Canada)').to_i * 1000 : '' %>"}
     )
-    if (datetime_out == '') {
-        checkdate = new Date(Number(datetime_in));        
-        plusThirty = checkdate.setDate(checkdate.getDate()+30);
-        if (today.getTime() > plusThirty) {
-            total_old_missed_signout = total_old_missed_signout + 1;
-        }
-    }
     <% end %>
 </script>
 <script type="text/javascript" charset="utf-8">
@@ -43,7 +36,6 @@
         datetime: "<%= visit.updated_at.to_i*1000 %>"
     })
     <% end %>
-
 </script>
 
 <script src="/js/bootstrap-datetimepicker.min.js"></script>
@@ -59,7 +51,6 @@
             source: <%= raw Visitor.pluck(:company).uniq %>
         });
     });
-
 </script>
 <link rel="stylesheet" href="/css/jquery-ui.min.css">
 <link rel="stylesheet" type="text/css" href="/css/basictable.css">
@@ -138,7 +129,7 @@
     </div>
   </div><!-- filter_btns_div  -->
   <%= render partial: 'visitor_log/partials/filter_form' %>
-  <div id="old-missed-signout" hidden>WARNING: Admin should complete <span id="missedPassThirty"></span><span id="total-missed"> total</span> Missed Sign Out(s) more than 30 days ago.</div>
+  <div id="old-missed-signout" hidden>WARNING: Admin should complete <span id="missedPassThirty"></span> Missed Sign Out(s) more than 30 days ago.</div>
   <div id="visitors_log_table_div">
   <!--   <p id="transaction_instruction"><strong>INSTRUCTIONS:</strong> Click on a transaction status icon to record the next appropriate transaction, until status symbol is <span class="nobr">All Visitor</span> Transactions <span class="nobr">Saved (<button id="saved_visit_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span> or <span class="nobr">All Missed</span> Signansactions <span class="n Out Visitor Trobr">Saved (<button id="saved_missed_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span></p>  -->
     <table id="visitors_log_table" class="table two-axis">
@@ -175,7 +166,6 @@
 <script>
     //  var visitors_signs = [];
     //  var visitors_transactions = [];
-
     var thisrow, thisdata, f, thesefilterbtns = document.querySelectorAll(".filter_btn");
     function validateExport() {
         validform = true;
@@ -184,28 +174,22 @@
     function thisIndex(x) {
         thisrow = x.rowIndex;
     }
-
     function resetFilterBtns() {
         for (f = 0; f < thesefilterbtns.length; f += 1) {
             $(thesefilterbtns[f]).removeClass("btn-grey");
         }
     }
-
     function convert_time(time_text){
         if(time_text !== '')
         {
-
             time = moment(time_text, 'MMM DD, YYYY at HH:mm')
             return (time.month() + 1)+'/'+ time.dates() +'/'+time.year()+', '+ time.format('hh')+':'+time.format('mm')+ ':'+time.format('ss')+ ' ' + time.format('A') + ""
         }
     }
-
-
-
     $(document).ready(function () {
         //  visitors_signs = localStorage.getItem("visitors_signs");
         //  visitors_transactions = localStorage.getItem("visitors_transactions");
-        var v, newinput, thisreason, d, e, thistimein, thistimeout, t, transfound, transstatus, old_missed_signout = 0;
+        var v, newinput, thisreason, d, e, thistimein, thistimeout, t, transfound, transstatus, plusThirty, old_missed_signout = 0, today = new Date();
         const monthNames = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sept.", "Oct.", "Nov.", "Dec."];
         //  for (v = 0; v < visitors_signs.length; v += 1) {
         for (v = visitors_signs.length - 1; v >= 0; v -= 1) {
@@ -220,7 +204,6 @@
             } else {
                 thistimeout = "";
             }
-
             t = visitors_transactions.length;
             //  alert('t = ' + t);
             transfound = false;
@@ -248,7 +231,6 @@
                     newinput = newinput + '<td><span class="return_user_btn">';
                 }
                 newinput = newinput + '<span class="glyphicon glyphicon-user" aria-hidden="true"></span></span></td>';
-
                 // 00000
                 // 00002
                 // 20000
@@ -291,28 +273,14 @@
                         showEmptyCells: true
                     });
                 }, 1200);
-                if (total_old_missed_signout > 0) {
-                    if (window.location.href = "https://vms.microhealthllc.com/visitor_log") {
-                        document.getElementById("missedPassThirty").innerHTML = total_old_missed_signout;
-                        document.getElementById("old-missed-signout").style.color = "red";
-                        $("#total-missed").show();
-                        $("#old-missed-signout").show();
-                    } else {
-                        if (old_missed_signout > 0) {
-                            document.getElementById("missedPassThirty").innerHTML = old_missed_signout;
-                            document.getElementById("old-missed-signout").style.color = "black";
-                            $("#total-missed").hide();
-                            $("#old-missed-signout").show();
-                        } else {
-                            $("#old-missed-signout").hide();
-                        }
-                    }
+                if (old_missed_signout > 0) {
+                    document.getElementById("missedPassThirty").innerHTML = old_missed_signout;
+                    $("#old-missed-signout").show();
                 } else {
                     $("#old-missed-signout").hide();
-                }                 
+                }                    
             }
         }
-
         var r, thisbtnclass, thistd, newco = 0, not_signedout = 0, signedout = 0, allsaved = 0, firstvisitor = 0, returnvisitor = 0, updatevisitor = 0, missed_signout = 0, newcompany = 0, theserows = $("#visitors_log_table tr");
         for (r = 1; r < theserows.length; r += 1) {
             theserows[r].addEventListener("click", function () {
@@ -354,8 +322,6 @@
                 }
             */
         }
-
-
 //        document.getElementById("count_all").innerHTML = theserows.length - 1;
 //        document.getElementById("count_signedin").innerHTML = not_signedout;
 //        document.getElementById("count_signedout").innerHTML = signedout;
@@ -365,8 +331,6 @@
 //        document.getElementById("count_return").innerHTML = returnvisitor;
 //        document.getElementById("count_update").innerHTML = updatevisitor;
         //  document.getElementById("count_newco").innerHTML = newco;
-
-
         $("#view_all_btn").click(function () {
             resetFilterBtns();
             setTimeout(function () {
@@ -377,8 +341,6 @@
                 }
             }, 600);
         });
-
-
         $("#signedout_filter").click(function () {
             // NOTE: Only displays visitors that signed out, but record not saved.");
             resetFilterBtns();
@@ -395,7 +357,6 @@
                 }
             }, 600);
         });
-
         $("#not_signedout_filter").click(function () {
             resetFilterBtns();
             setTimeout(function () {
@@ -411,7 +372,6 @@
                 }
             }, 600);
         });
-
         $("#all_saved_filter").click(function () {
             resetFilterBtns();
             setTimeout(function () {
@@ -427,7 +387,6 @@
                 }
             }, 600);
         });
-
         $("#missed_signout_filter").click(function () {
             resetFilterBtns();
             setTimeout(function () {
@@ -443,7 +402,6 @@
                 }
             }, 600);
         });
-
         $("#first_visitor_filter").click(function () {
             resetFilterBtns();
             setTimeout(function () {
@@ -459,7 +417,6 @@
                 }
             }, 600);
         });
-
         $("#return_visitor_filter").click(function () {
             resetFilterBtns();
             setTimeout(function () {
@@ -475,7 +432,6 @@
                 }
             }, 600);
         });
-
         $("#update_visitor_filter").click(function () {
             resetFilterBtns();
             setTimeout(function () {
@@ -491,7 +447,6 @@
                 }
             }, 600);
         });
-
         /*
             $("#new_company_filter").click(function () {
               resetFilterBtns();
@@ -519,7 +474,6 @@
               });
             }
         */
-
         $("#filter_visitors_btn").click(function () {
             $("#visitor_form_div, #record_visit_form_div, #export_form_div").hide();
             $("#filter_form_div").show();
@@ -528,7 +482,6 @@
             document.getElementById("filter_signlog_form").reset();
             $("#filter_form_div").hide();
         });
-
         $("#export_report_btn").click(function () {
             $("#visitor_form_div, #record_visit_form_div, #filter_form_div").hide();
             $("#export_form_div").show();
@@ -537,9 +490,6 @@
             document.getElementById("export_form").reset();
             $("#export_form_div").hide();
         });
-
-
-
         $("#close_visitor_form_btn, #visitor_cancel_btn").click(function (e) {
             e.preventDefault();
             document.getElementById("visitor_form").reset();
@@ -551,8 +501,6 @@
             document.getElementById("visitor_submit_btn").innerHTML = "Create";
             $("#visitor_form_div").hide();
         });
-
-
         $("#close_record_visit_form_btn, #record_visit_cancel_btn").click(function (e) {
             e.preventDefault();
             document.getElementById("citizen_no").disabled = false;
@@ -562,18 +510,12 @@
             document.getElementById("record_visit_form").reset();
             $("#record_visit_form_div").hide();
         });
-
-
         $(".saved_visit_btn, .saved_missed_btn").click(function () {
             alert("VISIT COMPLETE: All transactions were saved!");
         });
-
-
         $(".visitin_recorded_btn").click(function () {
             alert("Visitor Sign In already recorded!");
         });
-
-
         $(".first_visitin_btn, .first_visitout_btn, .update_visitin_btn, " +
             ".update_visitout_btn, .missed_signout_key, .missed_uv_btn").click(function () {
             setTimeout(function () {
@@ -593,8 +535,6 @@
                 window.scrollTo(0,0);
             }, 800);
         });
-
-
         $(".return_visitin_btn, .missed_signout_btn, .return2_visitout_btn, .missed_cr_btn, .missed_ur_btn").click(function () {
 //            if ($(this).hasClass("missed_signout_btn")) {
                 document.getElementById("record_datetime_out").readOnly = false;
@@ -610,7 +550,6 @@
                 $("#record_visit_form #record_person_id").val(document.getElementById("visitors_log_table").rows[thisrow].cells[1].innerText);
                 $("#record_visit_form #record_person_name").val(document.getElementById("visitors_log_table").rows[thisrow].cells[2].innerText);
                 $("#record_visit_form").attr('action', '/update_visitor/');
-
                 $("#reason_visiting").val(document.getElementById("visitors_log_table").rows[thisrow].cells[7].innerText);
                 document.getElementById("record_reason").value = document.getElementById("visitors_log_table").rows[thisrow].cells[6].innerText;
                 $("#record_visit_form #person_visiting").find('option[value="'+ document.getElementById("visitors_log_table").rows[thisrow].cells[8].innerText+'"]').attr('selected', 'selected');
@@ -641,8 +580,6 @@
                 window.scrollTo(0,0);
             }, 800);
         });
-
-
         $("#record_visit_submit_btn").click(function (e) {
             e.preventDefault();
             var thistime;
@@ -652,7 +589,6 @@
             $("#record_visit_form #record_datetime_out").val(thistime);
             $("#record_visit_form").submit();
         });
-
     });
 </script>
 <style>
@@ -661,5 +597,6 @@
   }
   #old-missed-signout {
     font-weight: bold;
+    color: red;
   }
 </style>
