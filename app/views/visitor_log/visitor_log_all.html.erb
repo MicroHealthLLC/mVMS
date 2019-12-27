@@ -1,0 +1,141 @@
+
+<script type="text/javascript" src="/js/jquery.basictable.min.js"></script>
+
+<script src="/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#filter_date_from, #filter_date_to, #record_datetime_in, #record_datetime_out, #export_date_from, #export_date_to').datetimepicker({
+            format: 'l, LTS'
+        });
+        $("#person_visiting_filter").autocomplete({
+            source: <%= raw Person.pluck :name %>
+        });
+        $("#company_filter").autocomplete({
+            source: <%= raw Visitor.pluck(:company).uniq %>
+        });
+    });
+</script>
+<link rel="stylesheet" href="/css/jquery-ui.min.css">
+<link rel="stylesheet" type="text/css" href="/css/basictable.css">
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/bootstrap-theme2.css">
+<link rel="stylesheet" href="/css/autocomplete.css">
+<link rel="stylesheet" href="/css/mvms_style.css">
+
+
+<div id="main3" class="container">
+
+
+
+  <%= render 'visitor_log/partials/visitor_form_div' %>
+
+  <!-- ***********************************************************************************************   -->
+
+  <%= render 'visitor_log/partials/record_visit_form_div' %>
+
+  <!--- *******************************************************************************************  -->
+
+  <%#= render 'visitor_log/partials/filter_from_div' %>
+
+
+  <!-- ***********************************************************************************************   -->
+
+
+  <%#= render 'visitor_log/partials/export_from_div' %>
+
+
+  <!--- *******************************************************************************************  -->
+
+
+  <%= link_to 'export CSV',
+              { controller: "visitor_log", action: 'visitor_log', format: 'csv', params: {filter: params[:filter] ? params[:filter].permit! : {}} } ,
+              class: 'btn btn-default pull-right'%>
+  <h2>Visitors Log</h2>
+
+  <!-- l<p>*If applicable, visitor was created/updated</p>  -->
+
+  <div id="log_key" class="row">
+    <div class="col-xs-12 col-sm-4">
+      <button id="new_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> First Time Visitor<br>
+      <button id="return_user_key"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></button> Return Visitor<br>
+      <button id="visitin_recorded_key"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></button> Visitor Signed In<br>
+    </div>
+    <div class="col-xs-12 col-sm-8">
+      <button id="visitor_signout_recored_key"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></button> Visitor Signed Out<br>
+      <button id="missed_signout_key"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></button> Visitor Missed Sign Out<br>
+      <button id="missed2_signout_key"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></button> Missed Sign Out Completed<br>
+
+    </div>
+  </div><!-- log_key  -->
+
+  <div id="filter_btns_div">
+    <div class="row">
+      <div class="col-xs-12">
+        <!--<button id="view_all_btn" class="btn btn-default btn-grey filter_btn">(<span id="count_all">0</span>) View All</button>-->
+        <!--<button id="first_visitor_filter" class="btn btn-default filter_btn">(<span id="count_first">0</span>) First Time Visitors</button>-->
+        <!--<button id="return_visitor_filter" class="btn btn-default filter_btn">(<span id="count_return">0</span>) Return Visitors</button>-->
+        <!--<button id="update_visitor_filter" class="btn btn-default filter_btn">(<span id="count_update">0</span>) Update Visitors</button>-->
+        <!--<button id="not_signedout_filter" class="btn btn-default filter_btn">(<span id="count_signedin">0</span>) Not Signed Out</button>-->
+        <!--<button id="signedout_filter" class="btn btn-default filter_btn">(<span id="count_signedout">0</span>) Signed Out / Unsaved</button>-->
+        <!--<button id="all_saved_filter" class="btn btn-default btn-default filter_btn">(<span id="count_saved">0</span>) All Saved</button>-->
+        <!--<button id="missed_signout_filter" class="btn btn-default filter_btn">(<span id="count_missed">0</span>) Missed Sign Out</button>-->
+        <!--  <button id="new_company_filter" class="btn btn-default filter_btn">(<span id="count_newco">0</span>) New Companies</button> -->
+      </div>
+    </div>
+  </div><!-- filter_btns_div  -->
+  <%= render partial: 'visitor_log/partials/filter_form' %>
+  <div id="old-missed-signout" hidden>WARNING: Admin should complete <span id="missedPassThirty"></span> Missed Sign Out(s) more than 30 days ago.</div>
+  <div id="visitors_log_table_div">
+    <!--   <p id="transaction_instruction"><strong>INSTRUCTIONS:</strong> Click on a transaction status icon to record the next appropriate transaction, until status symbol is <span class="nobr">All Visitor</span> Transactions <span class="nobr">Saved (<button id="saved_visit_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span> or <span class="nobr">All Missed</span> Signansactions <span class="n Out Visitor Trobr">Saved (<button id="saved_missed_key"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></button>)</span></p>  -->
+    <table id="visitors_log_table" class="table two-axis">
+      <thead>
+      <tr>
+        <th scope="col">Photo</th>
+        <th scope="col" class="hideme" hidden>Visitor ID</th>
+        <th scope="col">Person Name</th>
+        <th scope="col">Company</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Email</th>
+        <th scope="col" class="hideme" hidden>Visit Reason value</th>
+        <th scope="col">Visit Reason</th>
+        <th scope="col">Person Visiting</th>
+        <th scope="col">U.S. Citizen</th>
+        <th scope="col">Classified</th>
+        <th scope="col">Date/Time In</th>
+        <th scope="col">Date/Time Out</th>
+        <th scope="col">Sign In Status</th>
+        <th scope="col">Visit Status</th>
+        <th scope="col" class="hideme" hidden>Trans ID</th>
+      </tr>
+      </thead>
+      <tbody id="trans_content">
+        <% @visitor_informations.each do |v| %>
+        <tr>
+          <td><img class="thumbpict" src="<%= v.visitor.avatar %>" style="width: 75px;"></td>
+          <td><%= v.visitor.name %></td>
+          <td><%= v.visitor.company %></td>
+          <td><%= v.visitor.phone %></td>
+          <td><%= v.visitor.email %></td>
+
+
+          <td><%= v.visit_reason %></td>
+          <td><%= v.person.try(:name) %></td>
+          <td><%= v.us_citizen.to_s.in?( ['true', '1']) ? 'yes' : 'no' %></td>
+          <td><%= v.classified  ? 'yes' : 'no'  %></td>
+          <td><%= v.sign_in_date&.in_time_zone('Eastern Time (US & Canada)').strftime('%B %d, %Y at %H:%M')  %></td>
+          <td><%= v.sign_out_date ? v.sign_out_date.in_time_zone('Eastern Time (US & Canada)').strftime('%B %d, %Y at %H:%M'): ''%></td>
+
+
+
+          <td><%= show_sign_in_status(v) %></td>
+          <td><%= show_visit_status(v) %></td>
+
+
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= will_paginate @visitor_informations, params: { filter: params['filter'] }, renderer: BootstrapPagination::Rails %>
+  </div><!-- visitors_log_table_div -->
+
+</div><!-- main  -->

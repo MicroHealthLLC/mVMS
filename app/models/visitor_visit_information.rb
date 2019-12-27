@@ -29,8 +29,60 @@ class VisitorVisitInformation < ApplicationRecord
   MUST_SIGN_OUT = '0100'
   ADMIN_SIGN_IN_OUT_RECORDED = '0011'
 
+  include Filterable
 
+  scope :f_name, ->(name) { where('LOWER(visitors.name) LIKE :name_search', name_search: "%#{name.downcase}%") }
+  scope :f_company, ->(company) { where('LOWER(visitors.company) LIKE :company', company: "%#{company.downcase}%") }
+  scope :f_email, ->(email) { where('LOWER(visitors.email) LIKE :email', email: "%#{email.downcase}%") }
+  scope :f_phone, ->(phone) { where('LOWER(visitors.phone) LIKE :phone', phone: "%#{phone.downcase}%") }
+  scope :f_date_range, ->(range) {
+    dates = range.split('-').map(&:strip)
+    date_from = Date.strptime(dates[0], '%m/%d/%Y') rescue nil
+    date_to = Date.strptime(dates[1], '%m/%d/%Y') rescue nil
+    if date_from && date_to
+      where("sign_in_date BETWEEN ? AND ?", date_from.to_time, date_to.to_time.end_of_day)
+    else
+      where(nil)
+    end
+  }
+  scope :f_visit_reason, ->(reason) do
+    if reason == 'Other'
+      where.not(visitor_visit_informations: {visit_reason: Reason.pluck(:name)})
+    else
+      where(visitor_visit_informations: {visit_reason: reason})
+    end
+  end
+  scope :f_person_visiting, ->(person_id) { where(visitor_visit_informations: {person_visiting_id: person_id}) }
+  scope :f_us_citizen, ->(us_citizen) { where('visitors.us_citizen = :value', value: us_citizen) }
+  scope :f_classified, ->(classified) { where(visitor_visit_informations: {classified: classified}) }
+  scope :sorted_by, ->(sort) { order("#{ sort.present? ? "#{sort}" : 'visitor_visit_informations.sign_in_date DESC, visitor_visit_informations.sign_out_date DESC'}") }
 
+  scope :f_status, ->(status){
+    case status
+    when "#{VisitorVisitInformation::SIGN_IN_RECORDED}" then sign_in_present
+    when  "#{VisitorVisitInformation::SIGN_IN_OUT_RECORDED}" then sign_out_recorded
+    when  "#{VisitorVisitInformation::MUST_SIGN_OUT}" then must_sign_out
+    when  "#{VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED}" then admin_sign_out_recorded
+    else
+      where(nil)
+    end
+  }
+
+  scope :f_visits, ->(status){
+    case status
+    when 'first_visit' then
+      v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) = 1')
+      where(id: v.pluck(:visitor_id))
+    when 'return_visitor' then
+      v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
+      where(id: v.pluck(:visitor_id))
+    when 'need_info' then
+      v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
+      where(id: v.pluck(:visitor_id)).where({info_updated: false})
+    else
+      where(nil)
+    end
+  }
 
   validate :check_time
   # validate :check_signout
