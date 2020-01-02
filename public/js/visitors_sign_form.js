@@ -19,11 +19,16 @@ function validateEmail(email) {
 function validatePhoto() {
     validform = true;
     var thisimage = $(document.getElementById("person_image")).find('img').attr("src");
+    var thisemail = $(document.getElementById("email_row"));
     if(thisimage === undefined)
         return 'You must provide picture screenshot'
     if ($("#capture_person_email").val().trim() === "") {
-        $('#email_row').show()
-        return validform = 'Email should not be blank';
+        if (thisemail.style.display == "block") {
+            return validform = 'Email should not be blank';
+        } else {
+            $('#email_row').show();
+            return;
+        }
     }
     if (!validateEmail($("#capture_person_email").val().trim())){
         return validform = 'Email is not valid';
