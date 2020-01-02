@@ -196,7 +196,7 @@ $(document).ready(function () {
         // init_face_api()
         $("#signin_capture_msg").show();
         $("#signin_check_visit").show();
-        $("#signout_capture_msg").hide();
+        $("#email_capture_msg").hide();
         signoutbtn.style.display = "none";
         $("#capture_photo").show();
 
@@ -204,7 +204,7 @@ $(document).ready(function () {
     else {
         $("#signin_capture_msg").hide();
         $("#signin_check_visit").hide();
-        $("#signout_capture_msg").show();
+        $("#email_capture_msg").show();
         missedbtn.style.display = "none";
         signinbtn.style.display = "none";
         $("#capture_photo").show();
