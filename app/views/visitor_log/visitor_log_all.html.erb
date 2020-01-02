@@ -114,7 +114,10 @@
         <% @visitor_informations.each do |v| %>
         <tr>
           <td><img class="thumbpict" src="<%= v.visitor.avatar %>" style="width: 75px;"></td>
-          <td><%= v.visitor.name %></td>
+          <td><a href="/visitor_log/visitor_transactions?personid=<%= v.visitor.id %>&visitorsignid=recent">
+          <%= v.visitor.name %>
+          </a>
+          </td>
           <td><%= v.visitor.company %></td>
           <td><%= v.visitor.phone %></td>
           <td><%= v.visitor.email %></td>

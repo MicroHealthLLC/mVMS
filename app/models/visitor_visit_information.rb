@@ -69,20 +69,42 @@ class VisitorVisitInformation < ApplicationRecord
   }
 
   scope :f_visits, ->(status){
+   
     case status
     when 'first_visit' then
-      v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) = 1')
-      where(id: v.pluck(:visitor_id))
+      exec = VisitorVisitInformation.group(:visitor_id).count
+    
+      v = exec.select{|_, v| v == 1}.map(&:first)
+      where(visitor_id: v)
     when 'return_visitor' then
-      v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
-      where(id: v.pluck(:visitor_id))
+      exec = VisitorVisitInformation.group(:visitor_id).count
+      v = exec.select{|_, v| v > 1}.map(&:first)
+      where(visitor_id: v)
     when 'need_info' then
-      v = VisitorVisitInformation.select(" visitor_id, COUNT(*)").group('visitor_id').having('COUNT(*) > 1')
-      where(id: v.pluck(:visitor_id)).where({info_updated: false})
-    else
       where(nil)
     end
   }
+
+
+  def self.sign_in_present
+    where("visitor_visit_informations.sign_in_date >= ? AND visitor_visit_informations.sign_out_date IS NULL", Date.today.to_date)
+  end
+
+  def self.must_sign_out
+    where("visitor_visit_informations.sign_in_date < ? AND visitor_visit_informations.sign_out_date IS NULL", Date.today.to_date )
+  end
+
+  def self.sign_out_recorded
+    where("visitor_visit_informations.sign_out_date IS NOT NULL" ).where(visitor_visit_informations: {recorded_by: [nil, '']})
+  end
+
+  def self.admin_sign_out_recorded
+    where("visitor_visit_informations.sign_out_date IS NOT NULL" ).where.not(visitor_visit_informations: {recorded_by: [nil, '']})
+  end
+
+  def self.sign_out_outdate
+    where("visitor_visit_informations.sign_out_date IS NULL AND (visitor_visit_informations.sign_in_date IS NULL OR visitor_visit_informations.sign_in_date < ?) ", Date.today.to_date )
+  end
 
   validate :check_time
   # validate :check_signout
