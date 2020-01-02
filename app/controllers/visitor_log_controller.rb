@@ -32,7 +32,7 @@ class VisitorLogController < BaseController
             csv<< visitor.to_csv
           end
         end
-        send_data @csv, filename: 'visitor_log.csv'
+        send_data @csv, filename: 'visitor_log_all.csv'
       }
     end
   end
