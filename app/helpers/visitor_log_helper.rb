@@ -8,6 +8,7 @@ module VisitorLogHelper
   end
  def show_visit_status(visit)
    case visit.status[1..-1]
+   when  VisitorVisitInformation::SIGN_IN_RECORDED  then '<span class="visitin_recorded_btn"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></span>'.html_safe   
    when  VisitorVisitInformation::SIGN_IN_OUT_RECORDED  then '<span class="visitor_signout_recored_btn"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span></span>'.html_safe
    when  VisitorVisitInformation::MUST_SIGN_OUT  then '<span class="missed_signout_btn"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></span>'.html_safe
    when  VisitorVisitInformation::ADMIN_SIGN_IN_OUT_RECORDED  then '<span class="missed2_signout_btn"><span class="glyphicon glyphicon-circle-arrow-left" aria-hidden="true"></span></span>'.html_safe
