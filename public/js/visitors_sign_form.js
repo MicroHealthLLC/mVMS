@@ -22,6 +22,7 @@ function validatePhoto() {
     if(thisimage === undefined)
         return 'You must provide picture screenshot'
     if ($("#capture_person_email").val().trim() === "") {
+        $('#email_row').show()
         return validform = 'Email should not be blank';
     }
     if (!validateEmail($("#capture_person_email").val().trim())){
