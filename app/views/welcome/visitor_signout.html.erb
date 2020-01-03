@@ -159,19 +159,14 @@
         var faceMatchers = null
         var descriptor = null
         var retries = 0;
-
         /* TODO add processing */
-
         async function updateQueryImageResults() {
             retries++;
             $('#loading').show()
-
             canvas = $('#overlay').get(0);
-
             results = await faceapi.detectAllFaces($('#inputImgq').get(0), getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
             if(results.length > 0)
             {
-
                 resizedResults = resizeCanvasAndResults($('#inputImgq').get(0), canvas, results)
                 descriptor = resizedResults[0].descriptor;
                 if (faceMatchers) { await fetch_matcher(); }
@@ -193,9 +188,7 @@
                 }
             }
             $('#loading').hide()
-
         }
-
         async function fetch_matcher(){
             found = false;
             for(i=0; i<faceMatchers.length;i++)
@@ -212,7 +205,6 @@
                 $('#capture_next_btn').show()
             }
         }
-
         async function populate_and_fetch_matcher(){
             faceMatchers = []
             labels = [];
@@ -227,7 +219,6 @@
                             label = $(imgEl).data('label')
                             const fullFaceDescriptions = await
                             faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
-
                             if (fullFaceDescriptions.length) {
                                 faceMatcher = new faceapi.FaceMatcher(fullFaceDescriptions, 0.5)
                                 faceMatcher.labeledDescriptors[0]['_label'] = label
@@ -237,16 +228,12 @@
                         }
                         catch(err)
                         {
-
                         }
                     }
-
                 }
                 else {
                     break;
                 }
-
-
             }
             console.log(' FINSIH time = '+ (new Date().getTime() / 1000))
             if(!found)
@@ -256,16 +243,13 @@
                 $('#email_row').show()
                 $('#capture_next_btn').show()
             }
-
         }
-
         async function test(imgEl) {
             console.log('time = '+ (new Date().getTime() / 1000))
             try{
                 l = $(imgEl).data('label')
                 const fullFaceDescriptions = await
                 faceapi.detectAllFaces(imgEl, getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors()
-
                 if (fullFaceDescriptions.length) {
 //                      labels.push(l)
                     fm = new faceapi.FaceMatcher(fullFaceDescriptions, 0.5)
@@ -278,10 +262,8 @@
             }
             catch(err)
             {
-
             }
         }
-
         function drawFaceRecognitionResults() {
             f = false
             best_match = faceMatcher.findBestMatch(descriptor).toString();
@@ -293,35 +275,27 @@
                 $('#email_row').show();
                 $('#capture_next_btn').show();
             }
-
             return(f)
         }
-
         async function run() {
             await changeFaceDetector(selectedFaceDetector)
             await faceapi.loadFaceLandmarkModel('/')
             await faceapi.loadFaceRecognitionModel('/')
-
         }
-
         function initWebCam() {
             picked_photo = false;
             // init_face_api()
             $("#signin_capture_msg").show();
             $("#signin_check_visit").show();
-            $("#email_capture_msg").hide();
-
+            $("#signout_capture_msg").hide();
             iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream
             if (iOS) {
                 var width = 320;
                 var height = 240;
-
                 if(screen.width < screen.height) {
                     width = 240;
                     height = 320;
                 }
-
-
                 Webcam.set({
                     constraints: { facingMode: { exact: "user" }  },
                     width: width,
@@ -341,7 +315,6 @@
                     }
                 });
             }
-
             else {
                 Webcam.set({
                     width: 320,
@@ -360,12 +333,8 @@
                     updateQueryImageResults()
                 })
             }
-
-
             Webcam.attach('#person_image_camera');
-
             $("#capture_photo").show();
-
         }
         $(document).ready(function() {
             initFaceDetectionControls()
@@ -378,7 +347,6 @@
                 // $('#open_picture').trigger('click')
             }
         })
-
     </script>
     <script src="/js/webcam.min.js" type="text/javascript"></script>
     <script src="/js/face-api.js"></script>
