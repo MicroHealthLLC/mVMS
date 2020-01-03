@@ -19,16 +19,11 @@ function validateEmail(email) {
 function validatePhoto() {
     validform = true;
     var thisimage = $(document.getElementById("person_image")).find('img').attr("src");
-    var thisemail = $(document.getElementById("email_row"));
     if(thisimage === undefined)
         return 'You must provide picture screenshot'
     if ($("#capture_person_email").val().trim() === "") {
-        if (thisemail.style.display == "block") {
-            return validform = 'Email should not be blank';
-        } else {
-            $('#email_row').show();
-            return;
-        }
+        $('#email_row').show()
+        return validform = 'Email should not be blank';
     }
     if (!validateEmail($("#capture_person_email").val().trim())){
         return validform = 'Email is not valid';
@@ -201,7 +196,7 @@ $(document).ready(function () {
         // init_face_api()
         $("#signin_capture_msg").show();
         $("#signin_check_visit").show();
-        $("#email_capture_msg").hide();
+        $("#signout_capture_msg").hide();
         signoutbtn.style.display = "none";
         $("#capture_photo").show();
 
@@ -209,7 +204,7 @@ $(document).ready(function () {
     else {
         $("#signin_capture_msg").hide();
         $("#signin_check_visit").hide();
-        $("#email_capture_msg").show();
+        $("#signout_capture_msg").show();
         missedbtn.style.display = "none";
         signinbtn.style.display = "none";
         $("#capture_photo").show();
