@@ -54,7 +54,7 @@ table tr td {font-size:1.25em;}
 #signin_message h4, #signout_message h4 {margin:30px auto 20px auto;font-size:1.5em;font-family:Arial,Helvetica,sans-serif;text-align:center;color:#333333;}
 
 #capture_person_msg {font-size:1.5em;color:#eb9316;}
-#signin_capture_msg, #email_capture_msg {font-size:1.5em;display:none;}
+#signin_capture_msg, #signout_capture_msg {font-size:1.5em;display:none;}
 #capture_instructions {margin-bottom:30px;}
 #signature_agreement {background-color:#ffffff;font-size:1.25em;}
 #missed_signout_msg {clear:both;margin-top:0;margin-bottom:20px;font-size:1.5em;color:#c12e2a;display:none;}
