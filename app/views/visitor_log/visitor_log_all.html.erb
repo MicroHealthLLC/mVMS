@@ -48,7 +48,7 @@
 
 
   <%= link_to 'export CSV',
-              { controller: "visitor_log", action: 'visitor_log', format: 'csv', params: {filter: params[:filter] ? params[:filter].permit! : {}} } ,
+              { controller: "visitor_log", action: 'visitor_log_all', format: 'csv', params: {filter: params[:filter] ? params[:filter].permit! : {}} } ,
               class: 'btn btn-default pull-right'%>
   <%= link_to 'View Most Recent Visitors Transactions', '/visitor_log', class: 'btn btn-default pull-right' %>
     
@@ -125,7 +125,7 @@
 
           <td><%= v.visit_reason %></td>
           <td><%= v.person.try(:name) %></td>
-          <td><%= v.us_citizen.to_s.in?( ['true', '1']) ? 'yes' : 'no' %></td>
+          <td><%= v.visitor.us_citizen.to_s.in?( ['true', '1']) ? 'yes' : 'no' %></td>
           <td><%= v.classified  ? 'yes' : 'no'  %></td>
           <td><%= v.sign_in_date&.in_time_zone('Eastern Time (US & Canada)').strftime('%B %d, %Y at %H:%M')  %></td>
           <td><%= v.sign_out_date ? v.sign_out_date.in_time_zone('Eastern Time (US & Canada)').strftime('%B %d, %Y at %H:%M'): ''%></td>

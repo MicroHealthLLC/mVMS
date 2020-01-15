@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resources :people
   get 'visitor_log/index'
   get '/visitor_log', to: 'visitor_log#index'
+  get '/visitor_log_all', to: 'visitor_log#visitor_log_all'
   get 'admin', to: 'visitor_log#admin'
   get 'visitor_log/:action', controller: 'visitor_log'
   resources :companies

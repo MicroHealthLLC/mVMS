@@ -28,8 +28,8 @@ class VisitorLogController < BaseController
       format.csv{
         @csv =  CSV.generate do |csv|
           csv << Visitor.csv_header
-          Visitor.unscoped.includes(visitor_visit_informations: [:person]).references(visitor_visit_informations: [:person]).filter(filter_params).sorted_by(params[:sort_by]).signed_in.each do |visitor|
-            csv<< visitor.to_csv
+          @visitor_informations = VisitorVisitInformation.includes(:visitor).references(:visitor).filter(filter_params).sorted_by(params[:sort_by]).each do |visitor_information|
+            csv<< visitor_information.to_csv
           end
         end
         send_data @csv, filename: 'visitor_log_all.csv'

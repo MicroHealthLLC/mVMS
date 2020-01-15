@@ -69,22 +69,21 @@ class VisitorVisitInformation < ApplicationRecord
   }
 
   scope :f_visits, ->(status){
-   
     case status
     when 'first_visit' then
-      exec = VisitorVisitInformation.group(:visitor_id).count
-    
-      v = exec.select{|_, v| v == 1}.map(&:first)
-      where(visitor_id: v)
+      where(first_visit: true)
     when 'return_visitor' then
-      exec = VisitorVisitInformation.group(:visitor_id).count
-      v = exec.select{|_, v| v > 1}.map(&:first)
-      where(visitor_id: v)
+      where(first_visit: false)
     when 'need_info' then
       where(nil)
     end
   }
 
+  before_create do
+    if VisitorVisitInformation.where(visitor_id: self.visitor_id).present?
+      self.first_visit = false
+    end
+  end
 
   def self.sign_in_present
     where("visitor_visit_informations.sign_in_date >= ? AND visitor_visit_informations.sign_out_date IS NULL", Date.today.to_date)
@@ -165,14 +164,30 @@ class VisitorVisitInformation < ApplicationRecord
     VisitorVisitInformation.where(visitor_id: visitor.id).where('id <= ?', self.id).count > 1 ? "1#{visitor_status}" : "0#{visitor_status}"
   end
 
+  def to_json
+    {
+        display_name: visitor.name,
+        display_company: visitor.company,
+        display_phone: visitor.phone,
+        avatar: visitor.avatar,
+        display_email: visitor.email,
+
+        display_reason: visit_reason,
+        display_personvisit: person.try(:name),
+        display_citizen: (visitor.us_citizen.to_s.in?( ['true', '1']) ? 'yes' : 'no' ),
+
+        display_classified: classified.to_s.in?( ['true', '1']) ? 'yes' : 'no',
+        display_date_in: sign_in_date.try(:to_date),
+        display_time_in: sign_in_date&.strftime('%I:%M %p'),
+        display_date_out: sign_out_date.try(:to_date),
+        display_time_out: sign_out_date&.strftime('%I:%M %p')
+    }
+  end
 
 
-#  def self.missed_sign_out
-#    where("(visitor_visit_informations.sign_in_date IS NOT NULL AND visitor_visit_informations.sign_out_date IS NULL AND visitor_visit_informations.sign_in_date < ?) OR ( visitor_visit_informations.sign_in_date < visitor_visit_informations.sign_out_date )   OR (visitor_visit_informations.sign_in_date IS NULL)
-# ",
-#
-#          Date.today)
-#  end
+  def to_csv
+    to_json.except(:avatar).values
+  end
 
 
   def self.missed_sign_out
