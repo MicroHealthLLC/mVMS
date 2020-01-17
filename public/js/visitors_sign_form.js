@@ -58,16 +58,18 @@ function validateVisitInfo() {
     validform = true;
     // if (document.getElementById("reason").selectedIndex === 0)
     //     validform = 'Reason should not be empty';
-    if ($("#person_visiting").val().trim() === "")
-        validform = 'Person visiting should not be empty';
-    if ((document.getElementById("citizen_yes").checked === false) && (document.getElementById("citizen_no").checked === false))
-        validform = 'Citizen visiting should not be empty';
-    if ((document.getElementById("classified_yes").checked === false) && (document.getElementById("classified_no").checked === false)) {
-        validform = 'Classified visiting should not be empty';
+    if ($("#person_visiting").val().trim() === "") {
+        validform = 'Person Visiting should not be empty.';
+    } else {
+        if (personnel.toLowerCase().indexOf($("#person_visiting").val().trim().toLowerCase()) < 0) {
+            $("#person_visiting").val("");
+            validform = 'Invalid input for Person Visiting.';
+        }
     }
-    if (personnel.indexOf($("#person_visiting").val().trim()) < 0) {
-        $("#person_visiting").val("");
-        validform = 'Person visiting should not be empty';
+    if ((document.getElementById("citizen_yes").checked === false) && (document.getElementById("citizen_no").checked === false))
+        validform = 'Must check yes or no for U.S. Citizen.';
+    if ((document.getElementById("classified_yes").checked === false) && (document.getElementById("classified_no").checked === false)) {
+        validform = 'Must check yes or no for Classified.';
     }
     return validform;
 }
