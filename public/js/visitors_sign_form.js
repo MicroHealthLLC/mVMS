@@ -66,8 +66,9 @@ function validateVisitInfo() {
             validform = 'Invalid input for Person Visiting.';
         }
     }
-    if ((document.getElementById("citizen_yes").checked === false) && (document.getElementById("citizen_no").checked === false))
+    if ((document.getElementById("citizen_yes").checked === false) && (document.getElementById("citizen_no").checked === false)) {
         validform = 'Must check yes or no for U.S. Citizen.';
+    }
     if ((document.getElementById("classified_yes").checked === false) && (document.getElementById("classified_no").checked === false)) {
         validform = 'Must check yes or no for Classified.';
     }
