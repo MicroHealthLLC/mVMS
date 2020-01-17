@@ -33,6 +33,7 @@ function validatePhoto() {
 
 function validateContactInfo() {
     validform = true;
+/*
     if ($("#person_name").val().trim() === "")
         validform = 'Name field should not be empty.';
     if ($("#company").val().trim() === "")
@@ -42,6 +43,11 @@ function validateContactInfo() {
     if($("#email").val().trim() === "")
     {
         validform = 'Email field should not be empty.';
+    }
+*/
+    if (($("#person_name").val().trim() === "") || ($("#company").val().trim() === "") || ($("#phone").val().trim() === "") || ($("#email").val().trim() === ""))
+    {
+        validform = 'All input fields must be filled in.';
     }
     return validform;
 }
