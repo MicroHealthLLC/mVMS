@@ -61,7 +61,7 @@ function validateVisitInfo() {
     if ($("#person_visiting").val().trim() === "") {
         validform = 'Person Visiting should not be empty.';
     } else {
-        if (personnel.toLowerCase().indexOf($("#person_visiting").val().trim().toLowerCase()) < 0) {
+        if (personnel.indexOf($("#person_visiting").val().trim()) < 0) {
             $("#person_visiting").val("");
             validform = 'Invalid input for Person Visiting.';
         }
