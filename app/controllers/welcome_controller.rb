@@ -33,9 +33,9 @@ class WelcomeController < ApplicationController
         @visitor = Visitor.find(params[:visitor_id])
         @visitor.visitor_visit_informations.where( sign_out_date: nil ).each do |vvi|
           if vvi.visitor_status == VisitorVisitInformation::MUST_SIGN_OUT
-            vvi.update_all({ sign_out_date: Time.now , recorded_by: @visitor.email })
+            vvi.update_columns({ sign_out_date: Time.now , recorded_by: @visitor.email })
           else
-            vvi.update_all({ sign_out_date: Time.now })
+            vvi.update_columns({ sign_out_date: Time.now })
           end
 
         end
