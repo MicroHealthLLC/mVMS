@@ -31,7 +31,14 @@ class WelcomeController < ApplicationController
     else
       if params[:visitor_id]
         @visitor = Visitor.find(params[:visitor_id])
-        @visitor.visitor_visit_informations.where( sign_out_date: nil ).update_all({sign_out_date: Time.now })
+        @visitor.visitor_visit_informations.where( sign_out_date: nil ).each do |vvi|
+          if vvi.visitor_status == VisitorVisitInformation::MUST_SIGN_OUT
+            vvi.update_all({ sign_out_date: Time.now , recorded_by: @visitor.email })
+          else
+            vvi.update_all({ sign_out_date: Time.now })
+          end
+
+        end
         redirect_to root_path
         return
       end
@@ -55,7 +62,7 @@ class WelcomeController < ApplicationController
         last_visits = visitor.visitor_visit_informations.where( sign_out_date: nil )
         options = {
             visit_reason: params[:record_reason],
-            classified: params[:classified],
+            classified: params[:classified] != 'no',
             person_visiting_id: Person.find_by_name( params[:person_visiting]).id,
             recorded_by: current_user.full_name
         }
