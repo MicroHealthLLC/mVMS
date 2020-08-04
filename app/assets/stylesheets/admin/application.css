@@ -34,7 +34,7 @@
   <!-- Scoped Style -->
 
   <!-- Application-wide Style -->
-  *= require admin/global.scss
+  *= require admin/global
 
  *
  * Lock screen related styles
