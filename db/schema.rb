@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190326063445) do
+ActiveRecord::Schema.define(version: 2020_01_15_104348) do
 
-  create_table "admin_login_pages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "admin_login_pages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "section_1_image"
     t.text "section_1_body"
     t.string "section_1_file"
@@ -25,25 +25,29 @@ ActiveRecord::Schema.define(version: 20190326063445) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "companies", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "companies", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "people", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "images", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  end
+
+  create_table "people", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "email"
+  end
+
+  create_table "reasons", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "reasons", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "settings", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "settings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.text "value"
     t.datetime "created_at", null: false
@@ -51,7 +55,7 @@ ActiveRecord::Schema.define(version: 20190326063445) do
     t.string "setting_type"
   end
 
-  create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -70,12 +74,15 @@ ActiveRecord::Schema.define(version: 20190326063445) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "avatar"
+    t.string "provider", limit: 50, default: "", null: false
+    t.string "uid", limit: 500, default: "", null: false
+    t.boolean "state", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
   end
 
-  create_table "visitor_visit_informations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "visitor_visit_informations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "visitor_id"
     t.datetime "date"
     t.string "visit_reason"
@@ -87,10 +94,16 @@ ActiveRecord::Schema.define(version: 20190326063445) do
     t.datetime "sign_in_date"
     t.datetime "sign_out_date"
     t.string "recorded_by"
+    t.string "name"
+    t.string "phone"
+    t.string "company"
+    t.boolean "updated", default: false
+    t.boolean "info_updated", default: false
+    t.boolean "first_visit", default: true
     t.index ["visitor_id"], name: "index_visitor_visit_informations_on_visitor_id"
   end
 
-  create_table "visitors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "visitors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.string "company"
     t.string "phone"
@@ -98,8 +111,9 @@ ActiveRecord::Schema.define(version: 20190326063445) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "us_citizen"
-    t.text "avatar"
+    t.binary "avatar"
     t.text "person_signature"
+    t.boolean "info_updated", default: false
   end
 
 end

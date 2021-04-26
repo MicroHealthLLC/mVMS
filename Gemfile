@@ -88,7 +88,7 @@ gem 'prawn-print'
 # Environment variables
 gem 'figaro'
 gem 'elastic-apm'
- gem 'letter_opener'
+gem 'letter_opener'
 gem 'pry-rails'
 gem 'rails-pry'
 gem "jquery-fileupload-rails"

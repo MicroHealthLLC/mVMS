@@ -44,6 +44,7 @@
         $('#filter_date_from, #filter_date_to, #record_datetime_in, #record_datetime_out, #export_date_from, #export_date_to').datetimepicker({
             format: 'l, LTS'
         });
+        debugger
         $("#person_visiting_filter").autocomplete({
             source: <%= raw Person.pluck :name %>
         });
@@ -96,7 +97,7 @@
               { controller: "visitor_log", action: 'visitor_log', format: 'csv', params: {filter: params[:filter] ? params[:filter].permit! : {}} } ,
               class: 'btn btn-default pull-right'%>
   <%= link_to 'View All Visitors Transactions', '/visitor_log/visitor_log_all', class: 'btn btn-default pull-right' %>
-    
+
   <h2>Visitors Log</h2>
 
   <!-- l<p>*If applicable, visitor was created/updated</p>  -->
