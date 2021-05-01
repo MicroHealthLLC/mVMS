@@ -162,34 +162,55 @@
         var retries = 0;
         /* TODO add processing */
         async function updateQueryImageResults() {
-            retries++;
-            $('#loading').show()
-            canvas = $('#overlay').get(0);
-            results = await faceapi.detectAllFaces($('#inputImgq').get(0), getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
-            if(results.length > 0)
-            {
-                resizedResults = resizeCanvasAndResults($('#inputImgq').get(0), canvas, results)
-                descriptor = resizedResults[0].descriptor;
-                if (faceMatchers) { await fetch_matcher(); }
-                else{ await populate_and_fetch_matcher(); }
+          $('#loading').show()
+          console.log('time = '+ (new Date().getTime() / 1000))
+          canvas = $('#overlay').get(0);
+          console.log('time = '+ (new Date().getTime() / 1000))
+          var params = {
+            person_image_url: $('#inputImg')[0]['src']
+          };
+          $.ajax({
+            contentType: "application/json; charset=utf-8",
+            url: "/recognize_visitor.json",
+            type: "POST",
+            data: JSON.stringify(params),
+            dataType: "json",
+            success: function(result){
+              console.log(result);
+              if(result['success']){
+                $('#capture_person_name').val(result.visitor.email)
+                $('#email_row').show().val(result.visitor.email);
+                $('#capture_next_btn').show();
+              }
+              else
+              {
+                alert('Your face was not recognized. Please enter your email in the box below.')
+                $('#email_row').show()
+                $('#capture_next_btn').show()
+              }
             }
-            else
-            {
-                if( retries < 3)
-                {
-                    alert('We did not detect your face. please try again')
-                    $( '#person_image' ).hide()
-                    $('#person_image_camera').show();
-                }
-                else
-                {
-                    alert('Your face was not recognized. Please enter your email in the box below.')
-                    $('#email_row').show()
-                    $('#capture_next_btn').show()
-                }
-            }
-            $('#loading').hide()
-        }
+          })
+          // results = await faceapi.detectAllFaces($('#inputImg').get(0), getFaceDetectorOptions()).withFaceLandmarks().withFaceDescriptors();
+          // if(results.length > 0)
+          // {
+          //     console.log('time = '+ (new Date().getTime() / 1000))
+          //     resizedResults = resizeCanvasAndResults($('#inputImg').get(0), canvas, results)
+          //     descriptor = resizedResults[0].descriptor;
+          //     console.log('time = '+ (new Date().getTime() / 1000))
+          //     if (faceMatchers) { await fetch_matcher(results); }
+          //     else{ await populate_and_fetch_matcher(results); }
+          // }
+          // else
+          // {
+          //     alert('We did not detect your face. please try again')
+          //     $( '#person_image' ).hide()
+          //     $('#person_image_camera').show();
+          //     $('#email_row').show();
+          //     $('.webcamjs-ios-placeholder').css('background-image', "url('/images/camera.png')")
+          // }
+          $('#loading').hide()
+          console.log('time = '+ (new Date().getTime() / 1000))
+      }
         async function fetch_matcher(){
             found = false;
             for(i=0; i<faceMatchers.length;i++)
