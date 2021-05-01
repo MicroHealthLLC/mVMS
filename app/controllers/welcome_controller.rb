@@ -250,4 +250,31 @@ class WelcomeController < ApplicationController
       }
     end
   end
+
+  def recognize_visitor
+    save_temp_image
+    result = LuxandCloudFaceRecognitionService.new.recognize("#{ENV["BASE_URL"]}/temp/temp_img.jpg")
+    File.delete(File.join(Rails.root, 'public', 'temp', "temp_img.jpg"))
+    if result.present?
+      visitor = Visitor.find_by(luxand_cloud_person_id: result[0]["id"])
+      render json: {success: true, visitor: visitor }
+    else
+      render json: {success: false, errors: 'Visitor Not found or no missed visit found' }
+    end
+  end
+
+  private
+
+  def save_temp_image
+    storage_path = File.join(Rails.root, "public")
+    path = storage_path + "/temp"
+    FileUtils.mkdir_p(path) unless File.directory?(path)
+    image = path + "/temp_img.jpg"
+    unless FileTest.exist?(image)
+      if params["person_image_url"]
+        data = StringIO.new( Base64.decode64(params["person_image_url"].sub('data:image/jpeg;base64', '') ))
+        File.open(File.join(Rails.root, 'public', 'temp', "temp_img.jpg"), 'wb') { |f| f.write data.read }
+      end
+    end
+  end
 end

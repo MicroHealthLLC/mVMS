@@ -75,6 +75,7 @@ class Visitor < ApplicationRecord
 
   after_create do
     save_image_avatar
+    create_luxand_cloud_person
   end
 
   def name
@@ -203,4 +204,9 @@ class Visitor < ApplicationRecord
     end
   end
 
+  def create_luxand_cloud_person
+    person = LuxandCloudFaceRecognitionService.new.create_person(self.name)
+    self.update(luxand_cloud_person_id: person["id"])
+    face_details = LuxandCloudFaceRecognitionService.new.add_face_to_person(self.luxand_cloud_person_id, "#{ENV["BASE_URL"]}/visitors/visitor_#{self.id}.jpg")
+  end
 end

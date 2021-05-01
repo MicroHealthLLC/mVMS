@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   root to: 'welcome#visitors'
 
   match '/create_visitor', to: 'welcome#create_visitor', via: [:get, :post]
+  match '/recognize_visitor', to: 'welcome#recognize_visitor', via: [:get, :post]
 
   get '/check_email', to: 'welcome#check_email'
   match '/update_visitor', to: 'welcome#update_visitor', via: [:post, :get]

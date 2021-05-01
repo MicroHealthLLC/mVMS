@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_15_104348) do
+ActiveRecord::Schema.define(version: 2021_04_30_124531) do
 
   create_table "admin_login_pages", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "section_1_image"
@@ -114,6 +114,7 @@ ActiveRecord::Schema.define(version: 2020_01_15_104348) do
     t.binary "avatar"
     t.text "person_signature"
     t.boolean "info_updated", default: false
+    t.integer "luxand_cloud_person_id"
   end
 
 end
