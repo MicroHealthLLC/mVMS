@@ -3,7 +3,7 @@ production:
   database: mvms_prod
   host: localhost
   username: root
-  password:
+  password: admin
   encoding: utf8
 
 development:
@@ -11,7 +11,7 @@ development:
   database: mvms_dev
   host: localhost
   username: root
-  password:
+  password: admin
   encoding: utf8
   pool: 25
 

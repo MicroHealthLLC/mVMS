@@ -44,7 +44,7 @@
         $('#filter_date_from, #filter_date_to, #record_datetime_in, #record_datetime_out, #export_date_from, #export_date_to').datetimepicker({
             format: 'l, LTS'
         });
-        debugger
+
         $("#person_visiting_filter").autocomplete({
             source: <%= raw Person.pluck :name %>
         });

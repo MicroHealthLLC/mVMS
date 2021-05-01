@@ -6,8 +6,8 @@ class Devise::SessionsController < DeviseController
     prepend_before_action :verify_signed_out_user, only: :destroy
     prepend_before_action(only: [:create, :destroy]) { request.env["devise.skip_timeout"] = true }
     # prepend_before_action :check_captcha, only: [:create] if ENV['RECAPTCHA_PUBLIC_KEY'].present?
-    # prepend_before_action :check_whitelists, only: [:create]
-    # prepend_before_action :check_blacklists, only: [:create]
+    prepend_before_action :check_whitelists, only: [:create]
+    prepend_before_action :check_blacklists, only: [:create]
 
     # GET /resource/sign_in
     def new
